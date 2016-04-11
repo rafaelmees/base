@@ -1,0 +1,16 @@
+{
+    "name": "raivieira/base-api-php",
+    "description": "Pacote com funcionalidades básicas para criar uma API PHP",
+    "authors": [ 
+        {
+            "name": "Raí Vieira Adriano",
+            "email": "rai.vieira@bludata.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "laravel/lumen-framework": "5.2.*",
+        "vlucas/phpdotenv": "~2.2",
+        "laravel-doctrine/orm": "1.1.*"
+    }
+ }
