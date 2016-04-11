@@ -1,7 +1,9 @@
 {
     "name": "raivieira/base-api-php",
-    "description": "Pacote com funcionalidades básicas para criar uma API PHP",
     "type": "library",
+    "description": "Pacote com funcionalidades básicas para criar uma API PHP",
+    "keywords": ["bludata","api","rest"],
+    "homepage": "https://github.com/raivieira/base-api-php",
     "license": "MIT",
     "authors": [ 
         {
@@ -16,7 +18,7 @@
         "laravel-doctrine/orm": "1.1.*"
     },
     "autoload": {
-        "psr-4": {
+        "psr-0": {
             "Bludata\\": "src/"
         }
     }
