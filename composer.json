@@ -1,6 +1,8 @@
 {
     "name": "raivieira/base-api-php",
     "description": "Pacote com funcionalidades básicas para criar uma API PHP",
+    "type": "library",
+    "license": "MIT",
     "authors": [ 
         {
             "name": "Raí Vieira Adriano",
