@@ -12,5 +12,10 @@
         "laravel/lumen-framework": "5.2.*",
         "vlucas/phpdotenv": "~2.2",
         "laravel-doctrine/orm": "1.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bludata\\": "src/"
+        }
     }
  }
