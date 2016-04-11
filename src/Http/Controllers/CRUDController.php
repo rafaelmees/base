@@ -24,7 +24,7 @@ abstract class CRUDController extends BaseController
 
 	public function index(Request $request)
 	{
-		return response()->json($this->mainService->findAll()->toArray());
+		return response()->json($this->mainService->findAll($this->translateFilters($request))->toArray());
 	}
 
 	public function store(Request $request)

@@ -233,11 +233,11 @@ abstract class QueryWorker
     }
 
     /**
-     * Load filters to current QueryBuilder.
+     * Aplica filtros em $this->queryBuilder
      *
      * @param array $filters
      *
-     * @return $this
+     * @return Bludata\Repositories\QueryWorker
      */
     public function withFilters(array $filters)
     {

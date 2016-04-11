@@ -8,9 +8,9 @@ abstract class CRUDService extends BaseService
 {
 	abstract public function prePersistEntity(BaseEntity $entity);
 
-	public function findAll()
+	public function findAll(array $filters)
 	{
-		return $this->mainRepository->findAll();
+		return $this->mainRepository->findAll()->withFilters($filters);
 	}
 
 	public function store(array $data)
