@@ -32,7 +32,7 @@ abstract class CRUDController extends BaseController
 		$input = $request->all();
 		if (is_array($this->getOnlyStore()))
 		{
-			$input = $request->only($this->getOnlyStore());
+			$input = array_intersect_key($request->all(), array_flip($this->getOnlyUpdate()));
 		}
 
 		$entity = $this->mainService->store($input);
@@ -47,7 +47,7 @@ abstract class CRUDController extends BaseController
 		$input = $request->all();
 		if (is_array($this->getOnlyUpdate()))
 		{
-			$input = $request->only($this->getOnlyUpdate());
+			$input = array_intersect_key($request->all(), array_flip($this->getOnlyUpdate()));
 		}
 
 		$entity = $this->mainService->update($id, $input);
