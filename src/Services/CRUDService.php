@@ -15,7 +15,7 @@ abstract class CRUDService extends BaseService
 
 	public function store(array $data)
 	{
-		$entity = $this->mainRepository->getNewInstanceEntity();
+		$entity = $this->mainRepository->getEntity();
 
         $entity->setPropertiesEntity($data);
 

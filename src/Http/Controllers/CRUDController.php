@@ -32,7 +32,7 @@ abstract class CRUDController extends BaseController
 		$input = $request->all();
 		if (is_array($this->getOnlyStore()))
 		{
-			$input = $this->getOnlyStore();
+			$input = $request->only($this->getOnlyStore());
 		}
 
 		$entity = $this->mainService->store($input);
@@ -47,10 +47,10 @@ abstract class CRUDController extends BaseController
 		$input = $request->all();
 		if (is_array($this->getOnlyUpdate()))
 		{
-			$input = $this->getOnlyUpdate();
+			$input = $request->only($this->getOnlyUpdate());
 		}
 
-		$entity = $this->mainService->update($id, $request->all());
+		$entity = $this->mainService->update($id, $input);
 
 		$this->mainService->getMainRepository()->flush();
 		
