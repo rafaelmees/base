@@ -15,23 +15,23 @@ abstract class BaseEntity
 {
 	/**
      * @ORM\Id 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="createdAt")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", name="updatedAt", nullable=true)
      */
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", name="deletedAt", nullable=true)
      */
     private $deletedAt;
 
