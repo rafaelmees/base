@@ -6,22 +6,6 @@ use Illuminate\Http\Request;
 
 abstract class CRUDController extends BaseController
 {
-	/**
-     * @return '*' | array
-     */
-	protected function getOnlyStore()
-	{
-		return '*';
-	}
-
-	/**
-     * @return '*' | array
-     */
-	protected function getOnlyUpdate()
-	{
-		return '*';
-	}
-
 	public function index(Request $request)
 	{
 		return response()->json($this->mainService->findAll($this->translateFilters($request))->toArray());
@@ -29,13 +13,7 @@ abstract class CRUDController extends BaseController
 
 	public function store(Request $request)
 	{
-		$input = $request->all();
-		if (is_array($this->getOnlyStore()))
-		{
-			$input = array_intersect_key($request->all(), array_flip($this->getOnlyUpdate()));
-		}
-
-		$entity = $this->mainService->store($input);
+		$entity = $this->mainService->store($this->filterRequest($request->all(), $this->mainService->getMainRepository()->getEntity()->getOnlyStore()));
 
 		$this->mainService->getMainRepository()->flush();
 
@@ -44,13 +22,7 @@ abstract class CRUDController extends BaseController
 
 	public function update(Request $request, $id)
 	{
-		$input = $request->all();
-		if (is_array($this->getOnlyUpdate()))
-		{
-			$input = array_intersect_key($request->all(), array_flip($this->getOnlyUpdate()));
-		}
-
-		$entity = $this->mainService->update($id, $input);
+		$entity = $this->mainService->update($id, $this->filterRequest($request->all(), $this->mainService->getMainRepository()->getEntity()->getOnlyUpdate()));
 
 		$this->mainService->getMainRepository()->flush();
 		

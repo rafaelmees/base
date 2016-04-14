@@ -33,4 +33,9 @@ abstract class BaseController extends Controller
 
         return $filters;
     }
+
+    public function filterRequest($allInputs, $only)
+    {
+        return array_intersect_key($allInputs, array_flip($only));
+    }
 }

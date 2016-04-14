@@ -1,8 +1,29 @@
 <?php
 
-namespace Bludata\Tests;
+namespace Bludata\Tests\Services;
 
-class BaseServiceTest extends BaseTest
+use Bludata\Tests\BaseTest;
+
+abstract class BaseServiceTest extends BaseTest
 {
-    protected $mainRepository;
+    abstract public function getServiceName();
+
+    abstract public function getMockArray();
+
+	abstract public function getFlushedMockArray();
+
+	public function getService()
+	{
+		return app($this->getServiceName());
+	}
+
+	public function getRepository()
+	{
+		return $this->getService()->getMainRepository();
+	}
+
+	public function getEntityName()
+	{
+		return $this->getRepository()->getEntityName();
+	}
 }

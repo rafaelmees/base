@@ -1,26 +1,74 @@
 <?php
 
-namespace Bludata\Tests;
+namespace Bludata\Tests\Services;
 
-class CRUDServiceTest extends BaseServiceTest
+use Bludata\Tests\BaseTest;
+
+abstract class CRUDServiceTest extends BaseServiceTest
 {
-     public function testFindAll()
+    public function testFindAll()
 	{
-		echo "findAll";
+		$entity = $this->getService()->store($this->getMockArray());
+
+		$this->getService()->getMainRepository()->flush();
+
+		$findAll = $this->getService()->findAll()->getResult();
+
+		$this->assertGreaterThan(0, count($findAll));
+		$this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $findAll[0]);
 	}
 
 	public function testStore()
 	{
-		echo "store";
+		$entity = $this->getService()->store($this->getMockArray());
+
+		$repository = $this->getService()->getMainRepository();
+
+		$repository->flush();
+
+		$find = $repository->find($entity->getId());
+
+		$this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
+		$this->assertEquals($entity->getId(), $find->getId());
 	}
 
 	public function testUpdate()
 	{
-		echo "update";
+		$flushedMockArray = $this->getFlushedMockArray();
+		$mockArray = $this->getMockArray();
+
+		foreach ($this->getService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
+			$flushedMockArray[$key] = $mockArray[$key];
+		}
+
+		$entity = $this->getService()->update($flushedMockArray['id'], $flushedMockArray);
+
+		$repository = $this->getService()->getMainRepository();
+
+		$repository->flush();
+
+		$find = $repository->find($entity->getId());
+
+		$this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
+		$this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+		$this->assertEquals($entity->getId(), $find->getId());
 	}
 
+	/**
+     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
 	public function testRemove()
 	{
-		echo "remove";
+		$entity = $this->getService()->store($this->getMockArray());
+
+		$repository = $this->getService()->getMainRepository();
+
+		$repository->flush();
+
+		$this->getService()->remove($entity->getId());
+
+		$repository->flush();
+
+		$find = $repository->find($entity->getId());
 	}
 }

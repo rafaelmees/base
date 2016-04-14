@@ -5,7 +5,7 @@ namespace Bludata\Tests;
 use Faker\Factory;
 use Laravel\Lumen\Testing\TestCase;
 
-class BaseTest extends TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * Creates the application.
@@ -14,7 +14,7 @@ class BaseTest extends TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../bootstrap/app.php';
+        
     }
 
     public function getFaker($locale = 'pt_BR')

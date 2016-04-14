@@ -225,9 +225,9 @@ abstract class QueryWorker
     /**
      * @return Bludata\Repositories\QueryWorker
      */
-    public function flush()
+    public function flush($entity = null)
     {
-        EntityManager::flush();
+        EntityManager::flush($entity);
 
         return $this;
     }
@@ -239,45 +239,43 @@ abstract class QueryWorker
      *
      * @return Bludata\Repositories\QueryWorker
      */
-    public function withFilters(array $filters)
+    public function withFilters(array $filters = null)
     {
-        if (!$filters) {
-            return $this;
-        }
-
-        foreach ($filters as $filter) {
-            switch ($filter['type']) {
-                case 'select':
-                    $this->select($filter['fields']);
-                    break;
-                case 'andWhere':
-                    $this->andWhere($filter['field'], $filter['operation'], $filter['value']);
-                    break;
-                case 'orWhere':
-                    $this->orWhere($filter['field'], $filter['operation'], $filter['value']);
-                    break;
-                case 'andHaving':
-                    $this->andHaving($filter['field'], $filter['operation'], $filter['value']);
-                    break;
-                case 'orHaving':
-                    $this->orHaving($filter['field'], $filter['operation'], $filter['value']);
-                    break;
-                case 'addGroupBy':
-                    $this->addGroupBy($filter['field']);
-                    break;
-                case 'addOrderBy':
-                    $this->addOrderBy($filter['field'], $filter['order']);
-                    break;
-                case 'fkAddOrderBy':
-                    $this->fkAddOrderBy($filter['field'], $filter['fkField'], $filter['order']);
-                    break;
-                case 'paginate':
-                    if (isset($filter['page'])) {
-                        $this->paginate($filter['limit'], $filter['page']);
-                    } else {
-                        $this->paginate($filter['limit']);
-                    }
-                    break;
+        if ($filters) {
+            foreach ($filters as $filter) {
+                switch ($filter['type']) {
+                    case 'select':
+                        $this->select($filter['fields']);
+                        break;
+                    case 'andWhere':
+                        $this->andWhere($filter['field'], $filter['operation'], $filter['value']);
+                        break;
+                    case 'orWhere':
+                        $this->orWhere($filter['field'], $filter['operation'], $filter['value']);
+                        break;
+                    case 'andHaving':
+                        $this->andHaving($filter['field'], $filter['operation'], $filter['value']);
+                        break;
+                    case 'orHaving':
+                        $this->orHaving($filter['field'], $filter['operation'], $filter['value']);
+                        break;
+                    case 'addGroupBy':
+                        $this->addGroupBy($filter['field']);
+                        break;
+                    case 'addOrderBy':
+                        $this->addOrderBy($filter['field'], $filter['order']);
+                        break;
+                    case 'fkAddOrderBy':
+                        $this->fkAddOrderBy($filter['field'], $filter['fkField'], $filter['order']);
+                        break;
+                    case 'paginate':
+                        if (isset($filter['page'])) {
+                            $this->paginate($filter['limit'], $filter['page']);
+                        } else {
+                            $this->paginate($filter['limit']);
+                        }
+                        break;
+                }
             }
         }
 

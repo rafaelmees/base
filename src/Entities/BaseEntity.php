@@ -83,21 +83,40 @@ abstract class BaseEntity
         return ['id', 'createdAt', 'updatedAt', 'deletedAt'];
     }
 
-    public function setPropertiesEntity(array $data, array $options = null)
+    /**
+     * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
+     * 
+     * @return array
+     */
+    abstract public function getOnlyStore();
+
+    /**
+     * Retona um array com o nome das propriedade que o cliente pode setar para realizar o update
+     * Por padrão retornar os mesmos valores de $this->getOnlyStore().
+     * Este método pode ser sobrescrito nas classes filhas.
+     * 
+     * @return array
+     */
+    public function getOnlyUpdate()
+    {
+        return $this->getOnlyStore();
+    }
+
+    public function setPropertiesEntity(array $data)
     {
         foreach ($data as $key => $value)
         {
-            $method = 'set'.ucfirst($key);
-
             $set = true;
 
-            if (isset($options['except']) && count($options['except']))
-            {
-                if (in_array($key, $options['except']))
-                {
-                    $set = false;
-                }
+            if (
+                ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore())) 
+                || 
+                (isset($data['id']) && is_numeric($data['id']) && !in_array($key, $this->getOnlyUpdate()))
+            ){
+                $set = false;
             }
+
+            $method = 'set'.ucfirst($key);
 
             if (method_exists($this, $method) && $set)
             {
