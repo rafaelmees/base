@@ -8,7 +8,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 {
     public function testFindAll()
 	{
-		$entity = $this->getService()->store($this->getMockArray());
+		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
 
 		$this->getService()->getMainRepository()->flush();
 
@@ -20,7 +20,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 	public function testStore()
 	{
-		$entity = $this->getService()->store($this->getMockArray());
+		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
 
 		$repository = $this->getService()->getMainRepository();
 
@@ -34,8 +34,8 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 	public function testUpdate()
 	{
-		$flushedMockArray = $this->getFlushedMockArray();
-		$mockArray = $this->getMockArray();
+		$flushedMockArray = $this->getRepositoryTest()->getFlushedMockArray();
+		$mockArray = $this->getRepositoryTest()->getMockArray();
 
 		foreach ($this->getService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
 			$flushedMockArray[$key] = $mockArray[$key];
@@ -59,7 +59,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
      */
 	public function testRemove()
 	{
-		$entity = $this->getService()->store($this->getMockArray());
+		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
 
 		$repository = $this->getService()->getMainRepository();
 

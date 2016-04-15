@@ -85,15 +85,19 @@ abstract class BaseEntity
 
     /**
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
+     * É usado principalmente em $this->setPropertiesEntity e nos Controllers.
+     * Este método não evita que uma propriedade seja alterada caso tenha seu método set().
      * 
      * @return array
      */
     abstract public function getOnlyStore();
 
     /**
-     * Retona um array com o nome das propriedade que o cliente pode setar para realizar o update
-     * Por padrão retornar os mesmos valores de $this->getOnlyStore().
+     * Retona um array com o nome das propriedade que o cliente pode setar para realizar o update.
+     * Por padrão retorna os mesmos valores de $this->getOnlyStore().
      * Este método pode ser sobrescrito nas classes filhas.
+     * É usado principalmente em $this->setPropertiesEntity e nos Controllers.
+     * Este método não evita que uma propriedade seja alterada caso tenha seu método set().
      * 
      * @return array
      */

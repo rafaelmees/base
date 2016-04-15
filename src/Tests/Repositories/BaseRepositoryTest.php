@@ -6,22 +6,27 @@ use Bludata\Tests\BaseTest;
 
 abstract class BaseRepositoryTest extends BaseTest
 {
-	abstract public function getRepositoryName();
+	abstract public function getRepository();
 
-	abstract public function getMockObject();
+	abstract public function getMockObject(array $except = []);
 
-	public function getRepository()
+	public function getFlushedMockObject(array $except = [])
 	{
-		return app($this->getRepositoryName());
-	}
+		$entity = $this->getMockObject($except);
 
-	public function getFlushedMockObject()
-	{
-		$entity = $this->getMockObject();
-
-		$this->getRepository()->save($entity)->flush();
+		$this->getRepository()->save($entity)->flush($entity);
 
 		return $entity;
+	}
+
+	public function getMockArray(array $except = [])
+	{
+		return $this->getMockObject($except)->toArray();
+	}
+
+	public function getFlushedMockArray(array $except = [])
+	{
+		return $this->getFlushedMockObject($except)->toArray();
 	}
 
 	public function testFindAll()
