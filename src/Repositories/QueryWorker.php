@@ -147,7 +147,7 @@ abstract class QueryWorker
      */
     public function find($id, $abort = true)
     {
-        return $this->findOneBy([$this->getPrimaryKeyEntity() => $id], $abort);
+        return is_object($id) ? $id : $this->findOneBy([$this->getPrimaryKeyEntity() => $id], $abort);
     }
 
     /**
@@ -230,6 +230,21 @@ abstract class QueryWorker
         EntityManager::flush($entity);
 
         return $this;
+    }
+
+    /**
+     * Retorna a quantidade de elementos em $this->getResult()
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        return count($this->getResult());
+    }
+
+    public function getFilters()
+    {
+        return EntityManager::getFilters();
     }
 
     /**

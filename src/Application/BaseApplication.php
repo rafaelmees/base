@@ -2,29 +2,19 @@
 
 namespace Bludata\Application;
 
-use Bludata\Entities\BaseEntity;
 use Closure;
 use Laravel\Lumen\Application;
 
 abstract class BaseApplication extends Application
 {
-    /**
-     * @var Bludata\Entities\BaseEntity
-     */
     protected $currentUser;
 
-    /**
-     * @return Bludata\Entities\BaseEntity
-     */
     public function getCurrentUser()
     {
         return $this->currentUser;
     }
 
-    /**
-     * @return Bludata\Application\BaseApplication
-     */
-    public function setCurrentUser(BaseEntity $currentUser)
+    public function setCurrentUser($currentUser)
     {
         $this->currentUser = $currentUser;
 

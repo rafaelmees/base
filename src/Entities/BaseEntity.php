@@ -36,6 +36,13 @@ abstract class BaseEntity
     private $deletedAt;
 
     /**
+     * Se marcado como true, remove das propriedade do tipo ArrayCollection ou PersistentCollection, todos os registros que tiverem deletedAt
+     * 
+     * @var boolean
+     */
+    protected $removeDeletedAt = true;
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
