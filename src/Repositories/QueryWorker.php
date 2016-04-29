@@ -2,6 +2,7 @@
 
 namespace Bludata\Repositories;
 
+use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\Query;
 use EntityManager;
 
@@ -140,7 +141,7 @@ abstract class QueryWorker
     /**
      * Busca um registro pelo id
      *
-     * @param int $id
+     * @param int | object $id
      * @param boolean $abort Se for true e nenhum registro for encontrado executa a função abort()
      *
      * @return Bludata\Entities\BaseEntity | null
@@ -203,19 +204,25 @@ abstract class QueryWorker
     }
 
     /**
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
      * @return Bludata\Repositories\QueryWorker
      */
-    public function save($entity)
+    public function save(BaseEntity $entity)
     {
+        $this->validate($entity);
+
         EntityManager::persist($entity);
 
         return $this;
     }
 
     /**
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
      * @return Bludata\Repositories\QueryWorker
      */
-    public function remove($entity)
+    public function remove(BaseEntity $entity)
     {
         EntityManager::remove($entity);
 
@@ -223,9 +230,11 @@ abstract class QueryWorker
     }
 
     /**
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
      * @return Bludata\Repositories\QueryWorker
      */
-    public function flush($entity = null)
+    public function flush(BaseEntity $entity = null)
     {
         EntityManager::flush($entity);
 
