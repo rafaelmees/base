@@ -13,6 +13,11 @@ abstract class CRUDService extends BaseService
 		return $this->mainRepository->findAll()->withFilters($filters);
 	}
 
+	public function find($id)
+	{
+		return $this->mainRepository->find($id);
+	}
+
 	public function store(array $data)
 	{
 		$entity = $this->mainRepository->getEntity();

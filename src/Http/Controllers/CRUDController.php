@@ -11,6 +11,11 @@ abstract class CRUDController extends BaseController
 		return response()->json($this->mainService->findAll($this->translateFilters($request))->toArray());
 	}
 
+	public function show($id)
+	{
+		return response()->json($this->mainService->find($id)->toArray());
+	}
+
 	public function store(Request $request)
 	{
 		$entity = $this->mainService->store($this->filterRequest($request->all(), $this->mainService->getMainRepository()->getEntity()->getOnlyStore()));

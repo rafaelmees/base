@@ -38,10 +38,20 @@ abstract class BaseApplication extends Application
             if (!in_array('index', $except))
             {
                 $this->get($prefix, [
-                	'as' => $prefix.'.index', 
-                	'uses' => $controller.'@index', 
-                	'description' => 'Buscar todos',
-                	'descriptionGroup' => $descriptionGroup
+                    'as' => $prefix.'.index', 
+                    'uses' => $controller.'@index', 
+                    'description' => 'Buscar todos',
+                    'descriptionGroup' => $descriptionGroup
+                ]);
+            }
+
+            if (!in_array('show', $except))
+            {
+                $this->get($prefix.'/{id:[0-9]+}', [
+                    'as' => $prefix.'.show', 
+                    'uses' => $controller.'@show', 
+                    'description' => 'Buscar um',
+                    'descriptionGroup' => $descriptionGroup
                 ]);
             }
 
