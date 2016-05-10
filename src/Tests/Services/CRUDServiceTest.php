@@ -38,7 +38,14 @@ abstract class CRUDServiceTest extends BaseServiceTest
 		$mockArray = $this->getRepositoryTest()->getMockArray();
 
 		foreach ($this->getService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
-			$flushedMockArray[$key] = $mockArray[$key];
+			if (is_bool($flushedMockArray[$key]))
+			{
+				$flushedMockArray[$key] = !$flushedMockArray[$key];
+			}
+			else 
+			{
+				$flushedMockArray[$key] = $mockArray[$key];
+			}
 		}
 
 		$entity = $this->getService()->update($flushedMockArray['id'], $flushedMockArray);

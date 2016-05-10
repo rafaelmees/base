@@ -32,7 +32,14 @@ abstract class CRUDControllerTest extends BaseControllerTest
 		$mockArray = $this->getServiceTest()->getRepositoryTest()->getMockArray();
 
 		foreach ($this->getController()->getMainService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
-			$flushedMockArray[$key] = $mockArray[$key];
+			if (is_bool($flushedMockArray[$key]))
+			{
+				$flushedMockArray[$key] = !$flushedMockArray[$key];
+			}
+			else 
+			{
+				$flushedMockArray[$key] = $mockArray[$key];
+			}
 		}
 
         $this->response = $this->getController()->update($this->createRequest($flushedMockArray), $flushedMockArray['id']);

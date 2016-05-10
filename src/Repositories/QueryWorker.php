@@ -204,13 +204,39 @@ abstract class QueryWorker
     }
 
     /**
+     * Este método pode ser utilizado para inserir registros complementares a $entity por exemplo
+     * Método executado antes dos métodos $this->validate() e $this->save()
+     * 
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
+     * @return Bludata\Repositories\BaseRepository
+     */    
+    public function preSave(BaseEntity $entity)
+    {
+        return $this;
+    }
+
+    /**
+     * Valida se existe algum dado da entidade que precisa ser corrigido
+     * 
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
+     * @return Bludata\Repositories\BaseRepository
+     */ 
+    public function validate(BaseEntity $entity)
+    {
+        return $this;
+    }
+
+    /**
      * @param Bludata\Entities\BaseEntity $entity
      * 
      * @return Bludata\Repositories\QueryWorker
      */
     public function save(BaseEntity $entity)
     {
-        $this->validate($entity);
+        $this->preSave($entity)
+             ->validate($entity);
 
         EntityManager::persist($entity);
 
@@ -218,6 +244,8 @@ abstract class QueryWorker
     }
 
     /**
+     * Remove permanentemente um registro do banco de dados
+     * 
      * @param Bludata\Entities\BaseEntity $entity
      * 
      * @return Bludata\Repositories\QueryWorker

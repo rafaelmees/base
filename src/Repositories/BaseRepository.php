@@ -16,17 +16,5 @@ abstract class BaseRepository extends QueryWorker
 		$entity->onRemove();
 
 		return $this->save($entity);
-	}
-
-	/**
-	 * Valida se existe algum dado da entidade que precisa ser corrigido
-	 * 
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\BaseRepository
-     */ 
-	public function validate(BaseEntity $entity)
-	{
-		return $this;
-	}
+	}	
 }
