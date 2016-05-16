@@ -161,7 +161,7 @@ abstract class QueryWorker
      *
      * @throws InvalidArgumentException Se $input não for null | string | int | array é lançada a exceção
      */
-    public function storeOrUpdate($input)
+    public function findOrCreate($input)
     {
         if (is_null($input))
         {
@@ -190,7 +190,9 @@ abstract class QueryWorker
             }
 
             $object->setPropertiesEntity($input);
-            $this->save($object);
+            
+            $this->preSave($object)
+                 ->validate($object);
 
             return $object;
         }
