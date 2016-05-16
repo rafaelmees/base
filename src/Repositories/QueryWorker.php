@@ -5,6 +5,7 @@ namespace Bludata\Repositories;
 use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\Query;
 use EntityManager;
+use InvalidArgumentException;
 
 abstract class QueryWorker
 {
@@ -149,6 +150,52 @@ abstract class QueryWorker
     public function find($id, $abort = true)
     {
         return is_object($id) ? $id : $this->findOneBy([$this->getPrimaryKeyEntity() => $id], $abort);
+    }
+
+    /**
+     * Inseri ou atualiza um registro
+     *
+     * @param null | string | int | array
+     *
+     * @return null | Bludata\Entities\BaseEntity
+     *
+     * @throws InvalidArgumentException Se $input não for null | string | int | array é lançada a exceção
+     */
+    public function storeOrUpdate($input)
+    {
+        if (is_null($input))
+        {
+            return $input;
+        }
+
+        if (is_string($input))
+        {
+            $input = json_decode($input, true);
+        }
+
+        if (is_numeric($input))
+        {
+            return $this->find($input);
+        }
+
+        if (is_array($input))
+        {
+            if (array_key_exists('id', $input) && $input['id'])
+            {
+                $object = $this->find($input['id']);
+            }
+            else 
+            {
+                $object = $this->getEntity();
+            }
+
+            $object->setPropertiesEntity($input);
+            $this->save($object);
+
+            return $object;
+        }
+
+        throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
     }
 
     /**
