@@ -190,9 +190,6 @@ abstract class QueryWorker
             }
 
             $object->setPropertiesEntity($input);
-            
-            $this->preSave($object)
-                 ->validate($object);
 
             return $object;
         }
@@ -254,7 +251,7 @@ abstract class QueryWorker
 
     /**
      * Este método pode ser utilizado para inserir registros complementares a $entity por exemplo
-     * Método executado antes dos métodos $this->validate() e $this->save()
+     * Método executado no método validateAndPreSave() em BaseEntity
      * 
      * @param Bludata\Entities\BaseEntity $entity
      * 
@@ -267,6 +264,7 @@ abstract class QueryWorker
 
     /**
      * Valida se existe algum dado da entidade que precisa ser corrigido
+     * Método executado no método validateAndPreSave() em BaseEntity
      * 
      * @param Bludata\Entities\BaseEntity $entity
      * 
@@ -284,9 +282,6 @@ abstract class QueryWorker
      */
     public function save(BaseEntity $entity)
     {
-        $this->preSave($entity)
-             ->validate($entity);
-
         EntityManager::persist($entity);
 
         return $this;

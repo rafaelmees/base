@@ -58,6 +58,19 @@ abstract class BaseEntity
         $this->updatedAt = new DateTime();
     }
 
+    /**
+     * @ORM\PreUpdate @ORM\PrePersist
+     */
+    final public function validateAndPreSave()
+    {
+        $this->updatedAt = new DateTime();
+
+        $className = explode('\\', get_class($this));
+        $repository = app('Plutus\Interfaces\\'.array_pop($className).'RepositoryInterface');
+        $repository->validate($this)
+                   ->preSave($this);
+    }
+
     public function getId()
     {
     	return $this->id;
