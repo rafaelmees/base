@@ -9,9 +9,9 @@ abstract class CRUDServiceTest extends BaseServiceTest
 {
     public function testFindAll()
 	{
-		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
-
-		EntityManager::flush();
+		$entity = $this->getService()
+					   ->store($this->getRepositoryTest()->getMockArray())
+					   ->flush();
 
 		$findAll = $this->getService()->findAll()->getResult();
 
@@ -21,15 +21,16 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 	public function testStore()
 	{
-		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
+		$entity = $this->getService()
+					   ->store($this->getRepositoryTest()->getMockArray())
+					   ->flush();
 
-		$repository = $this->getService()->getMainRepository();
-
-		EntityManager::flush();
+		$repository = $this->getService()
+						   ->getMainRepository();
 
 		$find = $repository->find($entity->getId());
 
-		$this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
+		$this->assertInstanceOf($repository->getEntityName(), $entity);
 		$this->assertEquals($entity->getId(), $find->getId());
 	}
 
@@ -49,15 +50,15 @@ abstract class CRUDServiceTest extends BaseServiceTest
 			}
 		}
 
-		$entity = $this->getService()->update($flushedMockArray['id'], $flushedMockArray);
+		$entity = $this->getService()
+					   ->update($flushedMockArray['id'], $flushedMockArray)
+					   ->flush();
 
 		$repository = $this->getService()->getMainRepository();
 
-		EntityManager::flush();
-
 		$find = $repository->find($entity->getId());
 
-		$this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
+		$this->assertInstanceOf($repository->getEntityName(), $entity);
 		$this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
 		$this->assertEquals($entity->getId(), $find->getId());
 	}
@@ -67,16 +68,14 @@ abstract class CRUDServiceTest extends BaseServiceTest
      */
 	public function testRemove()
 	{
-		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
+		$entity = $this->getService()
+					   ->store($this->getRepositoryTest()->getMockArray())
+					   ->flush();
 
-		$repository = $this->getService()->getMainRepository();
+		$this->getService()
+			 ->remove($entity->getId())
+			 ->flush();
 
-		EntityManager::flush();
-
-		$this->getService()->remove($entity->getId());
-
-		EntityManager::flush();
-
-		$find = $repository->find($entity->getId());
+		$find = $this->getService()->getMainRepository()->find($entity->getId());
 	}
 }

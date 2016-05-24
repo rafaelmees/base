@@ -27,7 +27,7 @@ abstract class CRUDService extends BaseService
 
         $this->prePersistEntity($entity);
 
-        EntityManager::persist($entity);
+        $entity->save();
 
         return $entity;
 	}
@@ -40,19 +40,16 @@ abstract class CRUDService extends BaseService
         
         $this->prePersistEntity($entity);
 
-        EntityManager::persist($entity);
+        $entity->save();
 
         return $entity;
 	}
 
 	public function remove($id)
 	{
-		$entity = $this->mainRepository->find($id);
-
-		$this->mainRepository->remove($entity);
-
-		EntityManager::persist($entity);
-
-		return $entity;
+		return $this->mainRepository
+					->find($id)
+					->remove()
+					->save();
 	}
 }

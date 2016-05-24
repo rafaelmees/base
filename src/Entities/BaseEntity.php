@@ -50,9 +50,9 @@ abstract class BaseEntity
     {
         $this->createdAt = new DateTime();
 
-        EntityManager::getRepository(get_class($this))
-                     ->preSave($this)
-                     ->validate($this);
+        $this->getRepository()
+             ->preSave($this)
+             ->validate($this);
     }
 
     /**
@@ -62,9 +62,9 @@ abstract class BaseEntity
     {
         $this->updatedAt = new DateTime();
 
-        EntityManager::getRepository(get_class($this))
-                     ->preSave($this)
-                     ->validate($this);
+        $this->getRepository()
+             ->preSave($this)
+             ->validate($this);
     }
 
     /**
@@ -77,18 +77,31 @@ abstract class BaseEntity
         return $this;
     }
 
-    /**
-     * @ORM\PreUpdate @ORM\PrePersist
-     */
-    // final public function validateAndPreSave()
-    // {
-    //     $this->updatedAt = new DateTime();
+    public function getRepository()
+    {
+        return EntityManager::getRepository(get_class($this));
+    }
 
-    //     $className = explode('\\', get_class($this));
-    //     $repository = app('Plutus\v1\Interfaces\\'.array_pop($className).'RepositoryInterface');
-    //     $repository->validate($this)
-    //                ->preSave($this);
-    // }
+    public function remove()
+    {
+        $this->getRepository()->remove($this);
+
+        return $this;
+    }
+
+    public function save($flush = false)
+    {
+        $this->getRepository()->save($this);
+
+        return $this;
+    }
+
+    public function flush($all = true)
+    {
+        $this->getRepository()->flush($all ? null : $this);
+
+        return $this;
+    }
 
     public function getId()
     {

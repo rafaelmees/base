@@ -4,6 +4,7 @@ namespace Bludata\Repositories;
 
 use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\EntityRepository;
+use EntityManager;
 
 abstract class BaseRepository extends EntityRepository
 {
@@ -115,4 +116,28 @@ abstract class BaseRepository extends EntityRepository
 		return $this->find($target)
 					->preRemove();
 	}
+
+    /**
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
+     * @return Bludata\Repositories\QueryWorker
+     */
+    public function save(BaseEntity $entity)
+    {
+        EntityManager::persist($entity);
+
+        return $this;
+    }
+
+    /**
+     * @param Bludata\Entities\BaseEntity $entity
+     * 
+     * @return Bludata\Repositories\QueryWorker
+     */
+    public function flush(BaseEntity $entity = null)
+    {
+        EntityManager::flush($entity);
+
+        return $this;
+    }
 }

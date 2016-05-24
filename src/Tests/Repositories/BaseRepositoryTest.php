@@ -15,8 +15,9 @@ abstract class BaseRepositoryTest extends BaseTest
 	{
 		$entity = $this->getMockObject($except);
 
-		EntityManager::persist($entity);
-		EntityManager::flush($entity);
+		$this->getRepository()
+			 ->save($entity)
+			 ->flush($entity);
 
 		return $entity;
 	}
@@ -50,7 +51,7 @@ abstract class BaseRepositoryTest extends BaseTest
 		$findBy = $repository->findBy(['id' => $entity->getId()]);
 
 		$this->assertGreaterThan(0, count($findBy));
-		$this->assertInstanceOf($this->getRepository()->getEntityName(), $findBy[0]);
+		$this->assertInstanceOf($repository->getEntityName(), $findBy[0]);
 	}
 
 	public function testFindOneBy()
@@ -61,7 +62,7 @@ abstract class BaseRepositoryTest extends BaseTest
 
 		$findOneBy = $repository->findOneBy(['id' => $entity->getId()]);
 
-		$this->assertInstanceOf($this->getRepository()->getEntityName(), $findOneBy);
+		$this->assertInstanceOf($repository->getEntityName(), $findOneBy);
 		$this->assertEquals($entity->getId(), $findOneBy->getId());
 	}
 
@@ -69,9 +70,11 @@ abstract class BaseRepositoryTest extends BaseTest
 	{
 		$entity = $this->getFlushedMockObject();
 
-		$find = $this->getRepository()->find($entity->getId());
+		$repository = $this->getRepository();
 
-		$this->assertInstanceOf($this->getRepository()->getEntityName(), $find);
+		$find = $repository->find($entity->getId());
+
+		$this->assertInstanceOf($repository->getEntityName(), $find);
 		$this->assertEquals($entity->getId(), $find->getId());
 	}
 
@@ -80,15 +83,15 @@ abstract class BaseRepositoryTest extends BaseTest
      */
 	public function testRemove()
 	{
+		$repository = $this->getRepository();
+
 		$entity = $this->getFlushedMockObject();
+		
+		$repository->remove($entity);
 
-		$this->getRepository()
-			 ->remove($entity);
+		$repository->save($entity)
+			 	   ->flush($entity);
 
-		EntityManager::persist($entity);
-		EntityManager::flush($entity);
-
-		$this->getRepository()
-			 ->find($entity->getId());
+		$repository->find($entity->getId());
 	}
 }
