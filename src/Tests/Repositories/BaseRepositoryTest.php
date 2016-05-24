@@ -3,6 +3,7 @@
 namespace Bludata\Tests\Repositories;
 
 use Bludata\Tests\BaseTest;
+use EntityManager;
 
 abstract class BaseRepositoryTest extends BaseTest
 {
@@ -14,7 +15,8 @@ abstract class BaseRepositoryTest extends BaseTest
 	{
 		$entity = $this->getMockObject($except);
 
-		$this->getRepository()->save($entity)->flush($entity);
+		EntityManager::persist($entity);
+		EntityManager::flush($entity);
 
 		return $entity;
 	}
@@ -45,7 +47,7 @@ abstract class BaseRepositoryTest extends BaseTest
 
 		$repository = $this->getRepository();
 
-		$findBy = $repository->findBy([$repository->getPrimaryKeyEntity() => $entity->getId()])->getResult();
+		$findBy = $repository->findBy(['id' => $entity->getId()]);
 
 		$this->assertGreaterThan(0, count($findBy));
 		$this->assertInstanceOf($this->getRepository()->getEntityName(), $findBy[0]);
@@ -57,7 +59,7 @@ abstract class BaseRepositoryTest extends BaseTest
 
 		$repository = $this->getRepository();
 
-		$findOneBy = $repository->findOneBy([$repository->getPrimaryKeyEntity() => $entity->getId()]);
+		$findOneBy = $repository->findOneBy(['id' => $entity->getId()]);
 
 		$this->assertInstanceOf($this->getRepository()->getEntityName(), $findOneBy);
 		$this->assertEquals($entity->getId(), $findOneBy->getId());
@@ -81,7 +83,12 @@ abstract class BaseRepositoryTest extends BaseTest
 		$entity = $this->getFlushedMockObject();
 
 		$this->getRepository()
-			 ->remove($entity)->flush()
+			 ->remove($entity);
+
+		EntityManager::persist($entity);
+		EntityManager::flush($entity);
+
+		$this->getRepository()
 			 ->find($entity->getId());
 	}
 }

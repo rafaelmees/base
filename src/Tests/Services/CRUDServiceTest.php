@@ -3,6 +3,7 @@
 namespace Bludata\Tests\Services;
 
 use Bludata\Tests\BaseTest;
+use EntityManager;
 
 abstract class CRUDServiceTest extends BaseServiceTest
 {
@@ -10,7 +11,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 	{
 		$entity = $this->getService()->store($this->getRepositoryTest()->getMockArray());
 
-		$this->getService()->getMainRepository()->flush();
+		EntityManager::flush();
 
 		$findAll = $this->getService()->findAll()->getResult();
 
@@ -24,7 +25,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 		$repository = $this->getService()->getMainRepository();
 
-		$repository->flush();
+		EntityManager::flush();
 
 		$find = $repository->find($entity->getId());
 
@@ -37,7 +38,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 		$flushedMockArray = $this->getRepositoryTest()->getFlushedMockArray();
 		$mockArray = $this->getRepositoryTest()->getMockArray();
 
-		foreach ($this->getService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
+		foreach ($this->getService()->getMainRepository()->createEntity()->getOnlyUpdate() as $key) {
 			if (is_bool($flushedMockArray[$key]))
 			{
 				$flushedMockArray[$key] = !$flushedMockArray[$key];
@@ -52,7 +53,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 		$repository = $this->getService()->getMainRepository();
 
-		$repository->flush();
+		EntityManager::flush();
 
 		$find = $repository->find($entity->getId());
 
@@ -70,11 +71,11 @@ abstract class CRUDServiceTest extends BaseServiceTest
 
 		$repository = $this->getService()->getMainRepository();
 
-		$repository->flush();
+		EntityManager::flush();
 
 		$this->getService()->remove($entity->getId());
 
-		$repository->flush();
+		EntityManager::flush();
 
 		$find = $repository->find($entity->getId());
 	}

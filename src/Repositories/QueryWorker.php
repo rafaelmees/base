@@ -3,11 +3,13 @@
 namespace Bludata\Repositories;
 
 use Bludata\Entities\BaseEntity;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use EntityManager;
 use InvalidArgumentException;
 
-abstract class QueryWorker
+class QueryWorker
 {
     const CUSTOM_FILTERS_KEY = 'custom';
     const DEFAULT_TABLE_ALIAS = 't';
@@ -15,7 +17,7 @@ abstract class QueryWorker
     /**
      * @var Doctrine\ORM\EntityRepository
      */
-    protected $entityRepository;
+    protected $repository;
 
     /**
      * @var Doctrine\ORM\QueryBuilder
@@ -37,10 +39,11 @@ abstract class QueryWorker
      */
     protected $queryFields = [];
 
-    public function __construct()
+    public function __construct($repository)
     {
-        $this->classMetadata = EntityManager::getClassMetadata($this->getEntityName());
-        $this->entityRepository = EntityManager::getRepository($this->getEntityName());
+        $this->repository = $repository;
+        $this->queryBuilder = $this->repository->createQueryBuilder(self::DEFAULT_TABLE_ALIAS);
+        $this->classMetadata = $this->repository->getClassMetadata();
     }
 
     /**
@@ -48,23 +51,9 @@ abstract class QueryWorker
      *
      * @return string
      */
-    abstract public function getEntityName();
-
-    /**
-     * Retorna a mensagem usada caso nenhum registro seja encontrado
-     *
-     * @return string
-     */
-    abstract public function getMessageNotFound();
-
-    /**
-     * Retorna uma nova instancia da entity
-     *
-     * @return object
-     */
-    public function getEntity()
+    public function getEntityName()
     {
-        return app($this->getEntityName());
+        $this->repository->getEntityName();
     }
 
     /**
@@ -75,126 +64,6 @@ abstract class QueryWorker
     public function getPrimaryKeyEntity()
     {
         return $this->getClassMetaData()->identifier[0];
-    }
-
-    /**
-     * Seta $this->queryBuilder com uma nova instancia de Doctrine\ORM\QueryBuilder
-     * 
-     * @return Bludata\Repositories\QueryWorker
-     */
-    protected function createQueryBuilder()
-    {
-        $this->queryBuilder = $this->entityRepository->createQueryBuilder(self::DEFAULT_TABLE_ALIAS);
-        
-        return $this;
-    }
-
-    /**
-     * Busca todos os registros da entity
-     *
-     * @return Bludata\Repositories\QueryWorker
-     */
-    public function findAll()
-    {
-        $this->createQueryBuilder();
-
-        return $this;
-    }
-
-    /**
-     * Busca uma coleção de registros com filtros
-     *
-     * @param array $filters
-     *
-     * @return Bludata\Repositories\QueryWorker
-     */
-    public function findBy(array $filters)
-    {
-        $this->findAll();
-
-        foreach ($filters as $key => $value) {
-            $this->andWhere($key, '=', $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Busca um registro com filtros
-     *
-     * @param array $filters
-     * @param boolean $abort Se for true e nenhum registro for encontrado executa a função abort()
-     *
-     * @return Bludata\Entities\BaseEntity | null
-     */
-    public function findOneBy(array $filters, $abort = true)
-    {
-        $entity = $this->findBy($filters)->getOneResult();
-
-        if (!$entity && $abort)
-        {
-            abort(404, $this->getMessageNotFound());
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Busca um registro pelo id
-     *
-     * @param int | object $id
-     * @param boolean $abort Se for true e nenhum registro for encontrado executa a função abort()
-     *
-     * @return Bludata\Entities\BaseEntity | null
-     */
-    public function find($id, $abort = true)
-    {
-        return is_object($id) ? $id : $this->findOneBy([$this->getPrimaryKeyEntity() => $id], $abort);
-    }
-
-    /**
-     * Inseri ou atualiza um registro
-     *
-     * @param null | string | int | array
-     *
-     * @return null | Bludata\Entities\BaseEntity
-     *
-     * @throws InvalidArgumentException Se $input não for null | string | int | array é lançada a exceção
-     */
-    public function findOrCreate($input)
-    {
-        if (is_null($input))
-        {
-            return $input;
-        }
-
-        if (is_string($input))
-        {
-            $input = json_decode($input, true);
-        }
-
-        if (is_numeric($input))
-        {
-            return $this->find($input);
-        }
-
-        if (is_array($input))
-        {
-            if (array_key_exists('id', $input) && $input['id'])
-            {
-                $object = $this->find($input['id']);
-            }
-            else 
-            {
-                $object = $this->getEntity();
-            }
-
-            $object->setPropertiesEntity($input);
-
-            return $object;
-        }
-
-        throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
     }
 
     /**
@@ -250,70 +119,6 @@ abstract class QueryWorker
     }
 
     /**
-     * Este método pode ser utilizado para inserir registros complementares a $entity por exemplo
-     * Método executado no método validateAndPreSave() em BaseEntity
-     * 
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\BaseRepository
-     */    
-    public function preSave(BaseEntity $entity)
-    {
-        return $this;
-    }
-
-    /**
-     * Valida se existe algum dado da entidade que precisa ser corrigido
-     * Método executado no método validateAndPreSave() em BaseEntity
-     * 
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\BaseRepository
-     */ 
-    public function validate(BaseEntity $entity)
-    {
-        return $this;
-    }
-
-    /**
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\QueryWorker
-     */
-    public function save(BaseEntity $entity)
-    {
-        EntityManager::persist($entity);
-
-        return $this;
-    }
-
-    /**
-     * Remove permanentemente um registro do banco de dados
-     * 
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\QueryWorker
-     */
-    public function remove(BaseEntity $entity)
-    {
-        EntityManager::remove($entity);
-
-        return $this;
-    }
-
-    /**
-     * @param Bludata\Entities\BaseEntity $entity
-     * 
-     * @return Bludata\Repositories\QueryWorker
-     */
-    public function flush(BaseEntity $entity = null)
-    {
-        EntityManager::flush($entity);
-
-        return $this;
-    }
-
-    /**
      * Retorna a quantidade de elementos em $this->getResult()
      *
      * @return integer
@@ -321,11 +126,6 @@ abstract class QueryWorker
     public function count()
     {
         return count($this->getResult());
-    }
-
-    public function getFilters()
-    {
-        return EntityManager::getFilters();
     }
 
     /**

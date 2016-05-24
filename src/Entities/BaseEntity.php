@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\ORM\PersistentCollection;
+use EntityManager;
 
 /**
  * @ORM\MappedSuperclass
@@ -48,6 +49,10 @@ abstract class BaseEntity
     public function prePersist()
     {
         $this->createdAt = new DateTime();
+
+        EntityManager::getRepository(get_class($this))
+                     ->preSave($this)
+                     ->validate($this);
     }
 
     /**
@@ -56,20 +61,34 @@ abstract class BaseEntity
     public function preUpdate()
     {
         $this->updatedAt = new DateTime();
+
+        EntityManager::getRepository(get_class($this))
+                     ->preSave($this)
+                     ->validate($this);
+    }
+
+    /**
+     * Como um registro nunca será de fato deletado do banco de dados, este método terá de ser chamado manualmente, não podendo ser um evento.
+     */
+    public function preRemove()
+    {
+        $this->deletedAt = new DateTime();
+
+        return $this;
     }
 
     /**
      * @ORM\PreUpdate @ORM\PrePersist
      */
-    final public function validateAndPreSave()
-    {
-        $this->updatedAt = new DateTime();
+    // final public function validateAndPreSave()
+    // {
+    //     $this->updatedAt = new DateTime();
 
-        $className = explode('\\', get_class($this));
-        $repository = app('Plutus\Interfaces\\'.array_pop($className).'RepositoryInterface');
-        $repository->validate($this)
-                   ->preSave($this);
-    }
+    //     $className = explode('\\', get_class($this));
+    //     $repository = app('Plutus\v1\Interfaces\\'.array_pop($className).'RepositoryInterface');
+    //     $repository->validate($this)
+    //                ->preSave($this);
+    // }
 
     public function getId()
     {
@@ -89,13 +108,6 @@ abstract class BaseEntity
     public function getDeletedAt()
     {
     	return $this->deletedAt;
-    }
-
-    public function onRemove()
-    {
-        $this->deletedAt = new DateTime();
-
-        return $this;
     }
 
     protected function getFillable()

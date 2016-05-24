@@ -23,7 +23,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
         $json = json_decode($this->response->getContent(), true);
 
         $this->assertResponseOk();
-        $this->assertGreaterThan(0, $json[$this->getController()->getMainService()->getMainRepository()->getPrimaryKeyEntity()]);
+        $this->assertGreaterThan(0, $json['id']);
 	}
 
 	public function testUpdate()
@@ -31,7 +31,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
         $flushedMockArray = $this->getServiceTest()->getRepositoryTest()->getFlushedMockArray();
 		$mockArray = $this->getServiceTest()->getRepositoryTest()->getMockArray();
 
-		foreach ($this->getController()->getMainService()->getMainRepository()->getEntity()->getOnlyUpdate() as $key) {
+		foreach ($this->getController()->getMainService()->getMainRepository()->createEntity()->getOnlyUpdate() as $key) {
 			if (is_bool($flushedMockArray[$key]))
 			{
 				$flushedMockArray[$key] = !$flushedMockArray[$key];
@@ -47,7 +47,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
         $json = json_decode($this->response->getContent(), true);
 
         $this->assertResponseOk();
-        $this->assertEquals($flushedMockArray['id'], $json[$this->getController()->getMainService()->getMainRepository()->getPrimaryKeyEntity()]);
+        $this->assertEquals($flushedMockArray['id'], $json['id']);
         $this->assertEquals(true, strtotime($json['updatedAt']));
 	}
 
@@ -60,7 +60,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
 		$json = json_decode($this->response->getContent(), true);
 
         $this->assertResponseOk();
-        $this->assertEquals($flushedMockArray['id'], $json[$this->getController()->getMainService()->getMainRepository()->getPrimaryKeyEntity()]);
+        $this->assertEquals($flushedMockArray['id'], $json['id']);
         $this->assertEquals(true, strtotime($json['deletedAt']));
 	}
 }

@@ -3,6 +3,7 @@
 namespace Bludata\Http\Controllers;
 
 use Illuminate\Http\Request;
+use EntityManager;
 
 abstract class CRUDController extends BaseController
 {
@@ -18,18 +19,18 @@ abstract class CRUDController extends BaseController
 
 	public function store(Request $request)
 	{
-		$entity = $this->mainService->store($this->filterRequest($request->all(), $this->mainService->getMainRepository()->getEntity()->getOnlyStore()));
+		$entity = $this->mainService->store($this->filterRequest($request->all(), $this->mainService->getMainRepository()->createEntity()->getOnlyStore()));
 
-		$this->mainService->getMainRepository()->flush();
+		EntityManager::flush();
 
 		return response()->json($entity->toArray());
 	}
 
 	public function update(Request $request, $id)
 	{
-		$entity = $this->mainService->update($id, $this->filterRequest($request->all(), $this->mainService->getMainRepository()->getEntity()->getOnlyUpdate()));
+		$entity = $this->mainService->update($id, $this->filterRequest($request->all(), $this->mainService->getMainRepository()->createEntity()->getOnlyUpdate()));
 
-		$this->mainService->getMainRepository()->flush();
+		EntityManager::flush();
 		
 		return response()->json($entity->toArray());
 	}
@@ -38,7 +39,7 @@ abstract class CRUDController extends BaseController
 	{
 		$entity = $this->mainService->remove($id);
 
-		$this->mainService->getMainRepository()->flush();
+		EntityManager::flush();
 
 		return response()->json($entity->toArray());
 	}

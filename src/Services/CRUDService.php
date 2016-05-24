@@ -3,6 +3,7 @@
 namespace Bludata\Services;
 
 use Bludata\Entities\BaseEntity;
+use EntityManager;
 
 abstract class CRUDService extends BaseService
 {
@@ -20,13 +21,13 @@ abstract class CRUDService extends BaseService
 
 	public function store(array $data)
 	{
-		$entity = $this->mainRepository->getEntity();
+		$entity = $this->mainRepository->createEntity();
 
         $entity->setPropertiesEntity($data);
 
         $this->prePersistEntity($entity);
 
-        $this->mainRepository->save($entity);
+        EntityManager::persist($entity);
 
         return $entity;
 	}
@@ -39,7 +40,7 @@ abstract class CRUDService extends BaseService
         
         $this->prePersistEntity($entity);
 
-        $this->mainRepository->save($entity);
+        EntityManager::persist($entity);
 
         return $entity;
 	}
@@ -49,6 +50,8 @@ abstract class CRUDService extends BaseService
 		$entity = $this->mainRepository->find($id);
 
 		$this->mainRepository->remove($entity);
+
+		EntityManager::persist($entity);
 
 		return $entity;
 	}
