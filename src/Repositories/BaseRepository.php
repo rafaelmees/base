@@ -32,6 +32,11 @@ abstract class BaseRepository extends EntityRepository
 		return new QueryWorker($this);
 	}
 
+    public function query()
+    {
+        return $this->createQueryBuilder('t');
+    }
+
 	/**
 	 * @return QueryWorker
 	 */
