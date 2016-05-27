@@ -4,7 +4,6 @@ namespace Bludata\Repositories;
 
 use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\EntityRepository;
-use EntityManager;
 
 abstract class BaseRepository extends EntityRepository
 {
@@ -129,7 +128,7 @@ abstract class BaseRepository extends EntityRepository
      */
     public function save(BaseEntity $entity)
     {
-        EntityManager::persist($entity);
+        $this->em()->persist($entity);
 
         return $this;
     }
@@ -141,8 +140,13 @@ abstract class BaseRepository extends EntityRepository
      */
     public function flush(BaseEntity $entity = null)
     {
-        EntityManager::flush($entity);
+        $this->em()->flush($entity);
 
         return $this;
+    }
+
+    public function em()
+    {
+        return parent::getEntityManager();
     }
 }
