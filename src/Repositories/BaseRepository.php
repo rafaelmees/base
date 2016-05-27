@@ -27,7 +27,7 @@ abstract class BaseRepository extends EntityRepository
 		return app($this->getEntityName());
 	}
 
-	protected function createQueryWorker()
+	public function createQueryWorker()
 	{
 		return new QueryWorker($this);
 	}
