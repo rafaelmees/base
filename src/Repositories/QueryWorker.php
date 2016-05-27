@@ -104,7 +104,11 @@ class QueryWorker
         $array = [];
 
         foreach ($this->getResult() as $item) {
-            $array[] = $item->toArray();
+            if (method_exists($item, 'toArray')) {
+                array_push($array, $item->toArray());
+            } else {
+                array_push($array, $item);
+            }
         }
 
         return $array;
