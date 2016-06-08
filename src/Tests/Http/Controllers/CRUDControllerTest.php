@@ -36,7 +36,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
 			{
 				$flushedMockArray[$key] = !$flushedMockArray[$key];
 			}
-			else 
+			else
 			{
 				$flushedMockArray[$key] = $mockArray[$key];
 			}

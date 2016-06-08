@@ -37,7 +37,7 @@ abstract class CRUDService extends BaseService
 		$entity = $this->mainRepository->find($id);
 
         $entity->setPropertiesEntity($data);
-        
+
         $this->prePersistEntity($entity);
 
         $entity->save();
@@ -49,7 +49,6 @@ abstract class CRUDService extends BaseService
 	{
 		return $this->mainRepository
 					->find($id)
-					->remove()
-					->save();
+					->remove();
 	}
 }

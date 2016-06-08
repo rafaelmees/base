@@ -7,49 +7,68 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\ORM\PersistentCollection;
 use EntityManager;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 abstract class BaseEntity
 {
 	/**
-     * @ORM\Id 
+     * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue
      */
     protected $id;
 
     /**
+     * @var \DateTime $createdAt
+     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="createdAt")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", name="updatedAt", nullable=true)
+     * @var \DateTime $updatedAt
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime", name="updatedAt")
      */
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime", name="deletedAt", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, name="deletedAt")
      */
     private $deletedAt;
 
-    /**
-     * Se marcado como true, remove das propriedade do tipo ArrayCollection ou PersistentCollection, todos os registros que tiverem deletedAt
-     * 
-     * @var boolean
-     */
-    protected $removeDeletedAt = true;
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
 
     /**
      * @ORM\PrePersist
      */
     public function prePersist()
     {
-        $this->createdAt = new DateTime();
-
         $this->getRepository()
              ->preSave($this)
              ->validate($this);
@@ -60,21 +79,9 @@ abstract class BaseEntity
      */
     public function preUpdate()
     {
-        $this->updatedAt = new DateTime();
-
         $this->getRepository()
              ->preSave($this)
              ->validate($this);
-    }
-
-    /**
-     * Como um registro nunca será de fato deletado do banco de dados, este método terá de ser chamado manualmente, não podendo ser um evento.
-     */
-    public function preRemove()
-    {
-        $this->deletedAt = new DateTime();
-
-        return $this;
     }
 
     public function getRepository()
@@ -108,21 +115,6 @@ abstract class BaseEntity
     	return $this->id;
     }
 
-    public function getCreatedAt()
-    {
-    	return $this->createdAt;
-    }
-
-    public function getUpdatedAt()
-    {
-    	return $this->updatedAt;
-    }
-
-    public function getDeletedAt()
-    {
-    	return $this->deletedAt;
-    }
-
     protected function getFillable()
     {
         return ['id', 'createdAt', 'updatedAt', 'deletedAt'];
@@ -132,7 +124,7 @@ abstract class BaseEntity
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
      * É usado principalmente em $this->setPropertiesEntity e nos Controllers.
      * Este método não evita que uma propriedade seja alterada caso tenha seu método set().
-     * 
+     *
      * @return array
      */
     abstract public function getOnlyStore();
@@ -143,7 +135,7 @@ abstract class BaseEntity
      * Este método pode ser sobrescrito nas classes filhas.
      * É usado principalmente em $this->setPropertiesEntity e nos Controllers.
      * Este método não evita que uma propriedade seja alterada caso tenha seu método set().
-     * 
+     *
      * @return array
      */
     public function getOnlyUpdate()
@@ -158,8 +150,8 @@ abstract class BaseEntity
             $set = true;
 
             if (
-                ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore())) 
-                || 
+                ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore()))
+                ||
                 (isset($data['id']) && is_numeric($data['id']) && !in_array($key, $this->getOnlyUpdate()))
             ){
                 $set = false;

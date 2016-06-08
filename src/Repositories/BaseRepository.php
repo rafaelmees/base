@@ -41,7 +41,7 @@ abstract class BaseRepository extends EntityRepository
 	 */
 	public function findAll()
 	{
-		return $this->createQueryWorker();
+        return $this->createQueryWorker();
 	}
 
 	public function findOneBy(array $filters, $abort = true)
@@ -93,7 +93,7 @@ abstract class BaseRepository extends EntityRepository
             {
                 $object = $this->find($input['id']);
             }
-            else 
+            else
             {
                 $object = $this->createEntity();
             }
@@ -117,13 +117,16 @@ abstract class BaseRepository extends EntityRepository
      */
 	public function remove($target)
 	{
-		return $this->find($target)
-					->preRemove();
+        $entity = $this->find($target);
+
+        $this->em()->remove($entity);
+
+		return $entity;
 	}
 
     /**
      * @param Bludata\Entities\BaseEntity $entity
-     * 
+     *
      * @return Bludata\Repositories\QueryWorker
      */
     public function save(BaseEntity $entity)
@@ -135,7 +138,7 @@ abstract class BaseRepository extends EntityRepository
 
     /**
      * @param Bludata\Entities\BaseEntity $entity
-     * 
+     *
      * @return Bludata\Repositories\QueryWorker
      */
     public function flush(BaseEntity $entity = null)

@@ -86,11 +86,9 @@ abstract class BaseRepositoryTest extends BaseTest
 		$repository = $this->getRepository();
 
 		$entity = $this->getFlushedMockObject();
-		
-		$repository->remove($entity);
 
-		$repository->save($entity)
-			 	   ->flush($entity);
+		$repository->remove($entity)
+				   ->flush($entity);
 
 		$repository->find($entity->getId());
 	}
