@@ -99,13 +99,13 @@ class QueryWorker
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(array $options = null)
     {
         $array = [];
 
         foreach ($this->getResult() as $item) {
             if (method_exists($item, 'toArray')) {
-                array_push($array, $item->toArray());
+                array_push($array, $item->toArray($options));
             } else {
                 array_push($array, $item);
             }

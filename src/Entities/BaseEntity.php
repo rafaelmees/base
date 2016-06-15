@@ -168,35 +168,52 @@ abstract class BaseEntity
         return $this;
     }
 
-    public function toArray()
+    public function toArray(array $options = null)
     {
         $array = [];
 
         foreach ($this->getFillable() as $key)
         {
-            if (is_object($this->$key))
+            $show = true;
+
+            if (
+                $options
+                &&
+                (
+                    (isset($options['only']) && is_array($options['only']) && !in_array($key, $options['only']))
+                    ||
+                    (isset($options['except']) && is_array($options['except']) && in_array($key, $options['except']))
+                )
+            ){
+                $show = false;
+            }
+
+            if ($show)
             {
-                if ($this->$key  instanceof DateTime)
+                if (is_object($this->$key))
                 {
-                    $array[$key] = $this->$key->format('Y-m-d H:i');
-                }
-                elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
-                {
-                    $ids = [];
-                    foreach ($this->$key->getValues() as $item)
+                    if ($this->$key  instanceof DateTime)
                     {
-                        $ids[] = $item->getId();
+                        $array[$key] = $this->$key->format('Y-m-d H:i');
                     }
-                    $array[$key] = $ids;
+                    elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
+                    {
+                        $ids = [];
+                        foreach ($this->$key->getValues() as $item)
+                        {
+                            $ids[] = $item->getId();
+                        }
+                        $array[$key] = $ids;
+                    }
+                    else
+                    {
+                        $array[$key] = $this->$key->getId();
+                    }
                 }
                 else
                 {
-                    $array[$key] = $this->$key->getId();
+                    $array[$key] = $this->$key;
                 }
-            }
-            else
-            {
-                $array[$key] = $this->$key;
             }
         }
 
