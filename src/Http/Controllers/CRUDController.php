@@ -3,7 +3,6 @@
 namespace Bludata\Http\Controllers;
 
 use Illuminate\Http\Request;
-use EntityManager;
 
 abstract class CRUDController extends BaseController
 {
@@ -31,7 +30,7 @@ abstract class CRUDController extends BaseController
 		$entity = $this->mainService
 					   ->update($id, $this->filterRequest($request->all(), $this->mainService->getMainRepository()->createEntity()->getOnlyUpdate()))
 					   ->flush();
-		
+
 		return response()->json($entity->toArray());
 	}
 

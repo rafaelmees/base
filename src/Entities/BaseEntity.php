@@ -170,6 +170,7 @@ abstract class BaseEntity
 
     public function toArray(array $options = null)
     {
+        $classMetadata = $this->getRepository()->getClassMetadata();
         $array = [];
 
         foreach ($this->getFillable() as $key)
@@ -192,11 +193,34 @@ abstract class BaseEntity
             {
                 if (is_object($this->$key))
                 {
-                    if ($this->$key  instanceof DateTime)
+                    if ($this->$key instanceof DateTime)
                     {
-                        $array[$key] = $this->$key->format('Y-m-d H:i');
+                        $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+
+                        if ($this->$key)
+                        {
+                            $dateFormat = 'Y-m-d H:i:s';
+
+                            if ($metaDataKey)
+                            {
+                                switch ($metaDataKey['type'])
+                                {
+                                    case 'date':
+                                        $dateFormat = 'Y-m-d';
+                                        break;
+
+                                    case 'time':
+                                        $dateFormat = 'H:i:s';
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                            $array[$key] = $this->$key->format($dateFormat);
+                        }
                     }
-                    elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
+                    else if ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
                     {
                         $ids = [];
                         foreach ($this->$key->getValues() as $item)
