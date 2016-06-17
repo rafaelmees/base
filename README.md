@@ -13,7 +13,7 @@ $app->routeMiddleware([
     'auth' => Bludata\Authentication\JWT\Middleware\AuthMiddleware::class
 ]);
 
-$app->register(Bludata\Authentication\JWT\Providers\AuthServiceProvider::class);
-
-$app->register(Bludata\Authentication\JWT\Providers\RepositoryServiceProvider::class);
+$app->register(Bludata\Authentication\JWT\Providers\JWTServiceProvider::class);
 ```
+
+Agora nos `headers` da sua requisição basta adicionar `Authorization: seu-token`
