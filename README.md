@@ -16,4 +16,11 @@ $app->routeMiddleware([
 $app->register(Bludata\Authentication\JWT\Providers\JWTServiceProvider::class);
 ```
 
+Não esqueça de adicionar a middleware `auth` nas suas rotas:
+```
+$app->get('minha-rota', ['middleware' => 'auth', function () {
+    //
+}]);
+```
+
 Agora nos `headers` da sua requisição basta adicionar `Authorization: seu-token`
