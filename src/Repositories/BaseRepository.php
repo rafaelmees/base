@@ -4,12 +4,33 @@ namespace Bludata\Repositories;
 
 use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\ValidatorBuilder;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 abstract class BaseRepository extends EntityRepository
 {
 	abstract function preSave(BaseEntity $entity);
 
-	abstract function validate(BaseEntity $entity);
+	public function validate(BaseEntity $entity)
+    {
+        $validator = (new ValidatorBuilder())
+                    ->enableAnnotationMapping()
+                    ->getValidator();
+
+        $violations = $validator->validate($entity);
+
+        $errors = [];
+
+        if (count($violations))
+        {
+            foreach ($violations as $violation)
+            {
+                $errors[] = $violation->getMessage();
+            }
+
+            abort(404, json_encode($errors));
+        }
+    }
 
 	public function getClassMetadata()
 	{
