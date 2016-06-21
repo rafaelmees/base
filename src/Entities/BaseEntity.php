@@ -168,6 +168,23 @@ abstract class BaseEntity
         return $this;
     }
 
+    protected final function checkOnyExceptInArray($key, array $options = null)
+    {
+        if (
+            $options
+            &&
+            (
+                (isset($options['only']) && is_array($options['only']) && !in_array($key, $options['only']))
+                ||
+                (isset($options['except']) && is_array($options['except']) && in_array($key, $options['except']))
+            )
+        ){
+            return false;
+        }
+
+        return true;
+    }
+
     public function toArray(array $options = null)
     {
         $classMetadata = $this->getRepository()->getClassMetadata();
@@ -175,21 +192,7 @@ abstract class BaseEntity
 
         foreach ($this->getFillable() as $key)
         {
-            $show = true;
-
-            if (
-                $options
-                &&
-                (
-                    (isset($options['only']) && is_array($options['only']) && !in_array($key, $options['only']))
-                    ||
-                    (isset($options['except']) && is_array($options['except']) && in_array($key, $options['except']))
-                )
-            ){
-                $show = false;
-            }
-
-            if ($show)
+            if ($this->checkOnyExceptInArray($key, $options))
             {
                 if (is_object($this->$key))
                 {

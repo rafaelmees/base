@@ -44,7 +44,7 @@ abstract class CRUDServiceTest extends BaseServiceTest
 			{
 				$flushedMockArray[$key] = !$flushedMockArray[$key];
 			}
-			else 
+			else
 			{
 				$flushedMockArray[$key] = $mockArray[$key];
 			}
