@@ -44,6 +44,12 @@ abstract class BaseEntity
      */
     private $deletedAt;
 
+    public function __clone()
+    {
+        $this->id = null;
+        unset($this->_entityPersister, $this->_identifier);
+    }
+
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -96,7 +102,7 @@ abstract class BaseEntity
         return $this;
     }
 
-    public function save($flush = false)
+    public function save()
     {
         $this->getRepository()->save($this);
 

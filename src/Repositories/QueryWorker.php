@@ -74,6 +74,11 @@ class QueryWorker
         return $this->queryBuilder->getQuery()->useResultCache(false)->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
     }
 
+    public function getDQL()
+    {
+        return $this->queryBuilder->getDQL();
+    }
+
     /**
      * Retorna um array com os objetos do resultado de $this->queryBuilder
      *
