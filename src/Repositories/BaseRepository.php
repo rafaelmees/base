@@ -28,7 +28,7 @@ abstract class BaseRepository extends EntityRepository
                 $errors[] = $violation->getMessage();
             }
 
-            abort(404, json_encode($errors));
+            abort(400, json_encode($errors));
         }
     }
 
