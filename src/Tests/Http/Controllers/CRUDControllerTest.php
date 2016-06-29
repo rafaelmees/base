@@ -6,24 +6,45 @@ abstract class CRUDControllerTest extends BaseControllerTest
 {
     public function testIndex()
 	{
-		$this->getServiceTest()->getRepositoryTest()->getFlushedMockArray();
+		$this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
-		$this->response = $this->getController()->index($this->createRequest());
+		$response = $this->curlHelper->send()->getResponse();
 
-		$json = json_decode($this->response->getContent(), true);
+		$this->assertEquals(200, $response['code']);
 
-        $this->assertResponseOk();
-        $this->assertGreaterThan(0, count($json));
+		$data = json_decode($response['data'], true);
+
+		$this->assertGreaterThan(0, count($data));
+		$this->assertGreaterThan(0, $data[0]['id']);
+	}
+
+	public function testShow()
+	{
+        $entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+
+        $response = $this->curlHelper->setPosFixUrl('/'.$entity->getId())->send()->getResponse();
+
+        $this->assertEquals(200, $response['code']);
+
+        $data = json_decode($response['data'], true);
+
+        $this->assertEquals($entity->getId(), $data['id']);
 	}
 
 	public function testStore()
 	{
-        $this->response = $this->getController()->store($this->createRequest($this->getServiceTest()->getRepositoryTest()->getMockArray()));
+		$response = $this->curlHelper
+						 ->post(
+						 	$this->getServiceTest()->getRepositoryTest()->getFlushedMockArray()
+						 )
+						 ->send()
+						 ->getResponse();
 
-        $json = json_decode($this->response->getContent(), true);
+		$this->assertEquals(200, $response['code']);
 
-        $this->assertResponseOk();
-        $this->assertGreaterThan(0, $json['id']);
+		$data = json_decode($response['data'], true);
+
+		$this->assertGreaterThan(0, $data['id']);
 	}
 
 	public function testUpdate()
@@ -42,25 +63,36 @@ abstract class CRUDControllerTest extends BaseControllerTest
 			}
 		}
 
-        $this->response = $this->getController()->update($this->createRequest($flushedMockArray), $flushedMockArray['id']);
+        $response = $this->curlHelper
+        				 ->setPosFixUrl('/'.$flushedMockArray['id'])
+						 ->put($flushedMockArray)
+						 ->send()
+						 ->getResponse();
 
-        $json = json_decode($this->response->getContent(), true);
+		$this->assertEquals(200, $response['code']);
 
-        $this->assertResponseOk();
-        $this->assertEquals($flushedMockArray['id'], $json['id']);
-        $this->assertEquals(true, strtotime($json['updatedAt']));
+		$data = json_decode($response['data'], true);
+
+		$this->assertEquals($flushedMockArray['id'], $data['id']);
+
+		$this->assertEquals(true, strtotime($data['updatedAt']));
 	}
 
 	public function testDestroy()
 	{
-		$flushedMockArray = $this->getServiceTest()->getRepositoryTest()->getFlushedMockArray();
+		$entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
-		$this->response = $this->getController()->destroy($flushedMockArray['id']);
+		$response = $this->curlHelper
+        				 ->setPosFixUrl('/'.$entity->getId())
+						 ->delete()
+						 ->send()
+						 ->getResponse();
 
-		$json = json_decode($this->response->getContent(), true);
+		$this->assertEquals(200, $response['code']);
 
-        $this->assertResponseOk();
-        $this->assertEquals($flushedMockArray['id'], $json['id']);
-        $this->assertEquals(true, strtotime($json['deletedAt']));
+		$data = json_decode($response['data'], true);
+
+		$this->assertEquals($entity->getId(), $data['id']);
+        $this->assertEquals(true, strtotime($data['deletedAt']));
 	}
 }
