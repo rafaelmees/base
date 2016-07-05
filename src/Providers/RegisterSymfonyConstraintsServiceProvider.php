@@ -2,8 +2,6 @@
 
 namespace Bludata\Providers;
 
-use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class RegisterSymfonyConstraintsServiceProvider extends ServiceProvider
@@ -12,19 +10,16 @@ class RegisterSymfonyConstraintsServiceProvider extends ServiceProvider
     {
         $path = base_path().'/vendor/symfony/validator/Constraints';
 
-		if ($handle = opendir($path))
-		{
-		    while (false !== ($file = readdir($handle)))
-		    {
-		        $pathFile = $path.'/'.$file;
+        if ($handle = opendir($path)) {
+            while (false !== ($file = readdir($handle))) {
+                $pathFile = $path.'/'.$file;
 
-		        if (pathinfo($pathFile)['extension'] == 'php')
-		        {
-		            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile($pathFile);
-		        }
-		    }
+                if (pathinfo($pathFile)['extension'] == 'php') {
+                    \Doctrine\Common\Annotations\AnnotationRegistry::registerFile($pathFile);
+                }
+            }
 
-		    closedir($handle);
-		}
+            closedir($handle);
+        }
     }
 }

@@ -3,93 +3,92 @@
 namespace Bludata\Tests\Repositories;
 
 use Bludata\Tests\BaseTest;
-use EntityManager;
 
 abstract class BaseRepositoryTest extends BaseTest
 {
-	abstract public function getRepository();
+    abstract public function getRepository();
 
-	abstract public function getMockObject(array $except = []);
+    abstract public function getMockObject(array $except = []);
 
-	public function getFlushedMockObject(array $except = [])
-	{
-		$entity = $this->getMockObject($except);
+    public function getFlushedMockObject(array $except = [])
+    {
+        $entity = $this->getMockObject($except);
 
-		$this->getRepository()
-			 ->save($entity)
-			 ->flush($entity);
+        $this->getRepository()
+             ->save($entity)
+             ->flush($entity);
 
-		return $entity;
-	}
+        return $entity;
+    }
 
-	public function getMockArray(array $except = [])
-	{
-		return $this->getMockObject($except)->toArray();
-	}
+    public function getMockArray(array $except = [])
+    {
+        return $this->getMockObject($except)->toArray();
+    }
 
-	public function getFlushedMockArray(array $except = [])
-	{
-		return $this->getFlushedMockObject($except)->toArray();
-	}
+    public function getFlushedMockArray(array $except = [])
+    {
+        return $this->getFlushedMockObject($except)->toArray();
+    }
 
-	public function testFindAll()
-	{
-		$entity = $this->getFlushedMockObject();
+    public function testFindAll()
+    {
+        $entity = $this->getFlushedMockObject();
 
-		$findAll = $this->getRepository()->findAll()->getResult();
+        $findAll = $this->getRepository()->findAll()->getResult();
 
-		$this->assertGreaterThan(0, count($findAll));
-		$this->assertInstanceOf($this->getRepository()->getEntityName(), $findAll[0]);
-	}
+        $this->assertGreaterThan(0, count($findAll));
+        $this->assertInstanceOf($this->getRepository()->getEntityName(), $findAll[0]);
+    }
 
-	public function testFindBy()
-	{
-		$entity = $this->getFlushedMockObject();
+    public function testFindBy()
+    {
+        $entity = $this->getFlushedMockObject();
 
-		$repository = $this->getRepository();
+        $repository = $this->getRepository();
 
-		$findBy = $repository->findBy(['id' => $entity->getId()]);
+        $findBy = $repository->findBy(['id' => $entity->getId()]);
 
-		$this->assertGreaterThan(0, count($findBy));
-		$this->assertInstanceOf($repository->getEntityName(), $findBy[0]);
-	}
+        $this->assertGreaterThan(0, count($findBy));
+        $this->assertInstanceOf($repository->getEntityName(), $findBy[0]);
+    }
 
-	public function testFindOneBy()
-	{
-		$entity = $this->getFlushedMockObject();
+    public function testFindOneBy()
+    {
+        $entity = $this->getFlushedMockObject();
 
-		$repository = $this->getRepository();
+        $repository = $this->getRepository();
 
-		$findOneBy = $repository->findOneBy(['id' => $entity->getId()]);
+        $findOneBy = $repository->findOneBy(['id' => $entity->getId()]);
 
-		$this->assertInstanceOf($repository->getEntityName(), $findOneBy);
-		$this->assertEquals($entity->getId(), $findOneBy->getId());
-	}
+        $this->assertInstanceOf($repository->getEntityName(), $findOneBy);
+        $this->assertEquals($entity->getId(), $findOneBy->getId());
+    }
 
-	public function testFind()
-	{
-		$entity = $this->getFlushedMockObject();
+    public function testFind()
+    {
+        $entity = $this->getFlushedMockObject();
 
-		$repository = $this->getRepository();
+        $repository = $this->getRepository();
 
-		$find = $repository->find($entity->getId());
+        $find = $repository->find($entity->getId());
 
-		$this->assertInstanceOf($repository->getEntityName(), $find);
-		$this->assertEquals($entity->getId(), $find->getId());
-	}
+        $this->assertInstanceOf($repository->getEntityName(), $find);
+        $this->assertEquals($entity->getId(), $find->getId());
+    }
 
-	/**
+    /**
      * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-	public function testRemove()
-	{
-		$repository = $this->getRepository();
+    public function testRemove()
+    {
+        $repository = $this->getRepository();
 
-		$entity = $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
-		$repository->remove($entity)
-				   ->flush($entity);
+        $repository->remove($entity)
+                   ->flush($entity);
 
-		$repository->find($entity->getId());
-	}
+        $repository->find($entity->getId());
+    }
 }

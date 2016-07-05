@@ -5,13 +5,12 @@ namespace Bludata\Repositories;
 use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
-use Symfony\Component\Validator\ConstraintViolationList;
 
 abstract class BaseRepository extends EntityRepository
 {
-	abstract function preSave(BaseEntity $entity);
+    abstract public function preSave(BaseEntity $entity);
 
-	public function validate(BaseEntity $entity)
+    public function validate(BaseEntity $entity)
     {
         $validator = (new ValidatorBuilder())
                     ->enableAnnotationMapping()
@@ -21,10 +20,8 @@ abstract class BaseRepository extends EntityRepository
 
         $errors = [];
 
-        if (count($violations))
-        {
-            foreach ($violations as $violation)
-            {
+        if (count($violations)) {
+            foreach ($violations as $violation) {
                 $errors[] = $violation->getMessage();
             }
 
@@ -32,90 +29,80 @@ abstract class BaseRepository extends EntityRepository
         }
     }
 
-	public function getClassMetadata()
-	{
-		return parent::getClassMetadata();
-	}
+    public function getClassMetadata()
+    {
+        return parent::getClassMetadata();
+    }
 
-	public function getEntityName()
-	{
-		return parent::getEntityName();
-	}
+    public function getEntityName()
+    {
+        return parent::getEntityName();
+    }
 
-	public function createEntity()
-	{
-		return app($this->getEntityName());
-	}
+    public function createEntity()
+    {
+        return app($this->getEntityName());
+    }
 
-	public function createQueryWorker()
-	{
-		return new QueryWorker($this);
-	}
+    public function createQueryWorker()
+    {
+        return new QueryWorker($this);
+    }
 
     public function query()
     {
         return $this->createQueryBuilder('t');
     }
 
-	/**
-	 * @return QueryWorker
-	 */
-	public function findAll()
-	{
+    /**
+     * @return QueryWorker
+     */
+    public function findAll()
+    {
         return $this->createQueryWorker();
-	}
+    }
 
-	public function findOneBy(array $filters, $abort = true)
-	{
-		$entity = parent::findOneBy($filters);
+    public function findOneBy(array $filters, $abort = true)
+    {
+        $entity = parent::findOneBy($filters);
 
-        if (!$entity && $abort)
-        {
+        if (!$entity && $abort) {
             abort(404, $this->getMessageNotFound());
         }
 
         return $entity;
-	}
+    }
 
-	public function find($id, $abort = true)
-	{
-		return is_object($id) ? $id : $this->findOneBy(['id' => $id], $abort);
-	}
+    public function find($id, $abort = true)
+    {
+        return is_object($id) ? $id : $this->findOneBy(['id' => $id], $abort);
+    }
 
     /**
-     * Inseri ou atualiza um registro
+     * Inseri ou atualiza um registro.
      *
      * @param null | string | int | array
-     *
-     * @return null | Bludata\Entities\BaseEntity
      *
      * @throws InvalidArgumentException Se $input não for null | string | int | array é lançada a exceção
      */
     public function findOrCreate($input)
     {
-        if (is_null($input))
-        {
+        if (is_null($input)) {
             return $input;
         }
 
-        if (is_string($input))
-        {
+        if (is_string($input)) {
             $input = json_decode($input, true);
         }
 
-        if (is_numeric($input))
-        {
+        if (is_numeric($input)) {
             return $this->find($input);
         }
 
-        if (is_array($input))
-        {
-            if (array_key_exists('id', $input) && $input['id'])
-            {
+        if (is_array($input)) {
+            if (array_key_exists('id', $input) && $input['id']) {
                 $object = $this->find($input['id']);
-            }
-            else
-            {
+            } else {
                 $object = $this->createEntity();
             }
 
@@ -127,8 +114,8 @@ abstract class BaseRepository extends EntityRepository
         throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
     }
 
-	/**
-     * Marca um registro como deletado
+    /**
+     * Marca um registro como deletado.
      *
      * @param object | int $target
      *
@@ -136,14 +123,14 @@ abstract class BaseRepository extends EntityRepository
      *
      * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException Se $target não for encontrado
      */
-	public function remove($target)
-	{
+    public function remove($target)
+    {
         $entity = $this->find($target);
 
         $this->em()->remove($entity);
 
-		return $entity;
-	}
+        return $entity;
+    }
 
     /**
      * @param Bludata\Entities\BaseEntity $entity

@@ -4,13 +4,13 @@ namespace Bludata\Services;
 
 abstract class BaseService
 {
-	/**
+    /**
      * @var Bludata\Repositories\BaseRepository
      */
-	protected $mainRepository;
+    protected $mainRepository;
 
-	public function getMainRepository()
-	{
-		return $this->mainRepository;
-	}
+    public function getMainRepository()
+    {
+        return $this->mainRepository;
+    }
 }

@@ -3,7 +3,6 @@
 namespace Bludata\Http\Middleware;
 
 use Closure;
-use Curl;
 
 class CorsMiddleware
 {
@@ -22,6 +21,7 @@ class CorsMiddleware
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
             header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, token, _');
+            header('Content-Type: application/json');
         }
 
         if ($request->getRealMethod() == 'OPTIONS') {
