@@ -7,7 +7,7 @@ use Bludata\Tests\BaseTest;
 
 abstract class BaseControllerTest extends BaseTest
 {
-	protected $curlHelper;
+    protected $curlHelper;
 
     public function __construct()
     {
