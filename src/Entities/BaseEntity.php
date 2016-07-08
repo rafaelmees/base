@@ -4,7 +4,7 @@ namespace Bludata\Entities;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use EntityManager;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 abstract class BaseEntity
 {
-	/**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue
@@ -24,7 +24,7 @@ abstract class BaseEntity
     protected $id;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="createdAt")
@@ -32,7 +32,7 @@ abstract class BaseEntity
     private $createdAt;
 
     /**
-     * @var \DateTime $updatedAt
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", name="updatedAt")
@@ -112,7 +112,7 @@ abstract class BaseEntity
 
     public function getId()
     {
-    	return $this->id;
+        return $this->id;
     }
 
     protected function getFillable()
@@ -145,22 +145,20 @@ abstract class BaseEntity
 
     public function setPropertiesEntity(array $data)
     {
-        foreach ($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $set = true;
 
             if (
                 ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore()))
                 ||
                 (isset($data['id']) && is_numeric($data['id']) && !in_array($key, $this->getOnlyUpdate()))
-            ){
+            ) {
                 $set = false;
             }
 
             $method = 'set'.ucfirst($key);
 
-            if (method_exists($this, $method) && $set)
-            {
+            if (method_exists($this, $method) && $set) {
                 $this->$method($value);
             }
         }
@@ -168,7 +166,7 @@ abstract class BaseEntity
         return $this;
     }
 
-    protected final function checkOnyExceptInArray($key, array $options = null)
+    final protected function checkOnyExceptInArray($key, array $options = null)
     {
         if (
             $options
@@ -178,7 +176,7 @@ abstract class BaseEntity
                 ||
                 (isset($options['except']) && is_array($options['except']) && in_array($key, $options['except']))
             )
-        ){
+        ) {
             return false;
         }
 
@@ -190,24 +188,17 @@ abstract class BaseEntity
         $classMetadata = $this->getRepository()->getClassMetadata();
         $array = [];
 
-        foreach ($this->getFillable() as $key)
-        {
-            if ($this->checkOnyExceptInArray($key, $options))
-            {
-                if (is_object($this->$key))
-                {
-                    if ($this->$key instanceof DateTime)
-                    {
+        foreach ($this->getFillable() as $key) {
+            if ($this->checkOnyExceptInArray($key, $options)) {
+                if (is_object($this->$key)) {
+                    if ($this->$key instanceof DateTime) {
                         $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
-                        if ($this->$key)
-                        {
+                        if ($this->$key) {
                             $dateFormat = 'Y-m-d H:i:s';
 
-                            if ($metaDataKey)
-                            {
-                                switch ($metaDataKey['type'])
-                                {
+                            if ($metaDataKey) {
+                                switch ($metaDataKey['type']) {
                                     case 'date':
                                         $dateFormat = 'Y-m-d';
                                         break;
@@ -222,23 +213,16 @@ abstract class BaseEntity
                             }
                             $array[$key] = $this->$key->format($dateFormat);
                         }
-                    }
-                    else if ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
-                    {
+                    } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
                         $ids = [];
-                        foreach ($this->$key->getValues() as $item)
-                        {
+                        foreach ($this->$key->getValues() as $item) {
                             $ids[] = $item->getId();
                         }
                         $array[$key] = $ids;
-                    }
-                    else
-                    {
+                    } else {
                         $array[$key] = $this->$key->getId();
                     }
-                }
-                else
-                {
+                } else {
                     $array[$key] = $this->$key;
                 }
             }

@@ -2,12 +2,9 @@
 
 namespace Bludata\Repositories;
 
-use Bludata\Entities\BaseEntity;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use EntityManager;
-use InvalidArgumentException;
 
 class QueryWorker
 {
@@ -47,7 +44,7 @@ class QueryWorker
     }
 
     /**
-     * Retorna o nome da entity
+     * Retorna o nome da entity.
      *
      * @return string
      */
@@ -57,7 +54,7 @@ class QueryWorker
     }
 
     /**
-     * Retorna a chave primária da entity
+     * Retorna a chave primária da entity.
      *
      * @return string
      */
@@ -75,7 +72,7 @@ class QueryWorker
     }
 
     /**
-     * Retorna um array com os objetos do resultado de $this->queryBuilder
+     * Retorna um array com os objetos do resultado de $this->queryBuilder.
      *
      * @return array
      */
@@ -85,7 +82,7 @@ class QueryWorker
     }
 
     /**
-     * Retorna um objeto do resultado de $this->queryBuilder
+     * Retorna um objeto do resultado de $this->queryBuilder.
      *
      * @return Bludata\Entities\BaseEntity | null
      */
@@ -95,7 +92,7 @@ class QueryWorker
     }
 
     /**
-     * Converte os objetos de $this->getResult() em array
+     * Converte os objetos de $this->getResult() em array.
      *
      * @return array
      */
@@ -123,9 +120,9 @@ class QueryWorker
     }
 
     /**
-     * Retorna a quantidade de elementos em $this->getResult()
+     * Retorna a quantidade de elementos em $this->getResult().
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -133,7 +130,7 @@ class QueryWorker
     }
 
     /**
-     * Aplica filtros em $this->queryBuilder
+     * Aplica filtros em $this->queryBuilder.
      *
      * @param array $filters
      *
@@ -541,6 +538,7 @@ class QueryWorker
      *
      * @todo  ignorar registros com deletedAt == true
      * @todo  validar a associação a partir do aluno: processos.ordensServico.servicoOrdemServico.itensServicoOrdemServico.itemServico
+     *
      * @param $meta - getClassMetaData
      * @param $fk
      * @param $field

@@ -4,97 +4,95 @@ namespace Bludata\Helpers;
 
 class CurlHelper
 {
-	protected $init;
-	protected $headers = [];
-	protected $response;
-	protected $info;
-	protected $baseUrl;
-	protected $posFixUrl;
-	protected $options = [];
+    protected $init;
+    protected $headers = [];
+    protected $response;
+    protected $info;
+    protected $baseUrl;
+    protected $posFixUrl;
+    protected $options = [];
 
-	public function __construct($baseUrl, array $headers = [])
-	{
-		$this->init = curl_init();
+    public function __construct($baseUrl, array $headers = [])
+    {
+        $this->init = curl_init();
 
-		$this->baseUrl = $baseUrl;
+        $this->baseUrl = $baseUrl;
 
-		$this->headers = $headers;
-	}
+        $this->headers = $headers;
+    }
 
-	protected function exec()
-	{
-		curl_setopt($this->init, CURLOPT_URL, trim($this->baseUrl.$this->posFixUrl));
-		curl_setopt($this->init, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($this->init, CURLOPT_HTTPHEADER, $this->headers);
+    protected function exec()
+    {
+        curl_setopt($this->init, CURLOPT_URL, trim($this->baseUrl.$this->posFixUrl));
+        curl_setopt($this->init, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->init, CURLOPT_HTTPHEADER, $this->headers);
 
-        foreach ($this->options as $key => $value)
-        {
-        	curl_setopt($this->init, $key, $value);
+        foreach ($this->options as $key => $value) {
+            curl_setopt($this->init, $key, $value);
         }
 
         $this->response = curl_exec($this->init);
 
         $this->info = curl_getinfo($this->init);
-	}
+    }
 
-	public function send($close = true)
-	{
-		$this->exec();
+    public function send($close = true)
+    {
+        $this->exec();
 
-		if ($close === true)
-		{
-			curl_close($this->init);
-		}
+        if ($close === true) {
+            curl_close($this->init);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function addHeader($header)
-	{
-		$this->headers[] = $header;
+    public function addHeader($header)
+    {
+        $this->headers[] = $header;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getResponse()
-	{
-		return [
-			'code' => $this->info['http_code'],
-			'data' => $this->response
-		];
-	}
+    public function getResponse()
+    {
+        return [
+            'code' => $this->info['http_code'],
+            'data' => $this->response,
+        ];
+    }
 
-	public function getInfo()
-	{
-		return $this->info;
-	}
+    public function getInfo()
+    {
+        return $this->info;
+    }
 
-	public function setPosFixUrl($posFixUrl)
-	{
-		$this->posFixUrl = $posFixUrl;
+    public function setPosFixUrl($posFixUrl)
+    {
+        $this->posFixUrl = $posFixUrl;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function post(array $data)
-	{
-		$this->options[CURLOPT_POST] = true;
+    public function post(array $data)
+    {
+        $this->options[CURLOPT_POST] = true;
         $this->options[CURLOPT_POSTFIELDS] = json_encode($data);
 
         return $this;
-	}
+    }
 
-	public function put()
-	{
-		$this->options[CURLOPT_CUSTOMREQUEST] = 'PUT';
-
-        return $this;
-	}
-
-	public function delete()
-	{
-		$this->options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+    public function put()
+    {
+        $this->options[CURLOPT_CUSTOMREQUEST] = 'PUT';
 
         return $this;
-	}
+    }
+
+    public function delete()
+    {
+        $this->options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+
+        return $this;
+    }
 }

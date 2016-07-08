@@ -17,29 +17,19 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function getUserLoggedByToken($token)
     {
-        try
-        {
-            if (!$token = $this->jwt->decodeToken($token))
-            {
+        try {
+            if (!$token = $this->jwt->decodeToken($token)) {
                 throw new NotPermissionAccessException();
-            }
-            else if (!$this->jwt->isValidByToken($token))
-            {
+            } elseif (!$this->jwt->isValidByToken($token)) {
                 throw new NotPermissionAccessException();
-            }
-            else if (!$userLogged = $token->getClaim('user'))
-            {
+            } elseif (!$userLogged = $token->getClaim('user')) {
                 throw new NotPermissionAccessException();
-            }
-            else if (!isset($userLogged->usuarioId) || !isset($userLogged->empresaOrigemId))
-            {
+            } elseif (!isset($userLogged->usuarioId) || !isset($userLogged->empresaOrigemId)) {
                 throw new NotPermissionAccessException();
             }
 
             return $userLogged;
-        }
-        catch (NotPermissionAccessException $e)
-        {
+        } catch (NotPermissionAccessException $e) {
             abort(401, $e->getMessage());
         }
     }

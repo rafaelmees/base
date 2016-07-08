@@ -10,8 +10,8 @@ abstract class BaseServiceTest extends BaseTest
 
     abstract public function getRepositoryTest();
 
-	public function getEntityName()
-	{
-		return $this->getService()->getMainRepository()->getEntityName();
-	}
+    public function getEntityName()
+    {
+        return $this->getService()->getMainRepository()->getEntityName();
+    }
 }

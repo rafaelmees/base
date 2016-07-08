@@ -60,19 +60,15 @@ class JWT implements JWTInterface
      */
     public function decodeToken($token)
     {
-        try
-        {
+        try {
             $parser = new Parser();
 
-            if (!$token = $parser->parse((string) $token))
-            {
+            if (!$token = $parser->parse((string) $token)) {
                 throw new Exception('Token inválido');
             }
 
             return $token;
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             abort(401, 'Favor efetuar o login novamente');
         }
     }

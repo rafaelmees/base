@@ -10,23 +10,19 @@ abstract class BaseController extends Controller
     /**
      * @var Bludata\Services\BaseService
      */
-	protected $mainService;
+    protected $mainService;
 
-	public function getMainService()
-	{
-		return $this->mainService;
-	}
-
-	protected function translateFilters($filters)
+    public function getMainService()
     {
-        if ($filters instanceof Request)
-        {
-            if ($filters->has('filters'))
-            {
+        return $this->mainService;
+    }
+
+    protected function translateFilters($filters)
+    {
+        if ($filters instanceof Request) {
+            if ($filters->has('filters')) {
                 $filters = json_decode(base64_decode($filters->input('filters')), true);
-            }
-            else
-            {
+            } else {
                 $filters = [];
             }
         }
