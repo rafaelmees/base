@@ -12,17 +12,19 @@ class JWTServiceProvider extends ServiceProvider
     {
         $this->app->bind('Bludata\Authentication\JWT\Interfaces\JWTInterface', 'Bludata\Authentication\JWT\Libs\JWT');
 
-        $this->app->bind('Bludata\Authentication\JWT\Interfaces\AuthRepositoryInterface', 'Bludata\Authentication\JWT\Repositories\AuthRepository');
-
         $this->app['auth']->viaRequest(
             'api', function ($request) {
 
-                if ($token = $request->header('authorization')) {
+                if ($token = $request->header('authorization'))
+                {
                     $auth = app('Bludata\Authentication\JWT\Interfaces\AuthRepositoryInterface');
 
-                    try {
+                    try
+                    {
                         $user = $auth->getUserLoggedByToken($token);
-                    } catch (Exception $e) {
+                    }
+                    catch (Exception $e)
+                    {
                         abort(401, $e->getMessage());
                     }
 
