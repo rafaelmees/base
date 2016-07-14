@@ -528,8 +528,12 @@ class QueryWorker
                 }
             }
         } else {
+            $valor = $this->getFullFieldName($value);
+            if (!empty($this->getClassMetaData()->associationMappings[$value])){
+                $valor = "IDENTITY(".$valor.") ".$value;
+            }
             // acrescenta o campo ao select
-            $this->queryFields[] = $this->getFullFieldName($value);
+            $this->queryFields[] = $valor;
         }
     }
 
