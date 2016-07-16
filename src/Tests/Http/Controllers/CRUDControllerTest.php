@@ -35,7 +35,7 @@ abstract class CRUDControllerTest extends BaseControllerTest
     {
         $response = $this->curlHelper
                          ->post(
-                            $this->getServiceTest()->getRepositoryTest()->getFlushedMockArray()
+                            $this->getServiceTest()->getRepositoryTest()->getMockArray()
                          )
                          ->send()
                          ->getResponse();
