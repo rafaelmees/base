@@ -65,6 +65,16 @@ abstract class BaseEntity
     }
 
     /**
+     * Altera o campo updatedAt para forçar o persist da entity
+     */
+    public function forcePersist()
+    {
+        $this->updatedAt = new DateTime();
+
+        return $this;
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
