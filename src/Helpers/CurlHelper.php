@@ -82,9 +82,10 @@ class CurlHelper
         return $this;
     }
 
-    public function put()
+    public function put(array $data)
     {
         $this->options[CURLOPT_CUSTOMREQUEST] = 'PUT';
+        $this->options[CURLOPT_POSTFIELDS] = json_encode($data);
 
         return $this;
     }
