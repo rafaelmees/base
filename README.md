@@ -1,5 +1,6 @@
 # Classes e funções básicas para criação de API's com PHP
 
+[![StyleCI](https://styleci.io/repos/56002039/shield)](https://styleci.io/repos/56002039)
 [![Build Status](https://travis-ci.org/raivieira/base-api-php.svg?branch=master)](https://travis-ci.org/raivieira/base-api-php)
 [![GitHub issues](https://img.shields.io/github/issues/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/issues)
 [![GitHub forks](https://img.shields.io/github/forks/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/network)
