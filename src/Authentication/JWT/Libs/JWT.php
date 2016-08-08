@@ -5,8 +5,8 @@ namespace Bludata\Authentication\JWT\Libs;
 use Bludata\Authentication\JWT\Interfaces\JWTInterface;
 use Exception;
 use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Token;
 
 /**
