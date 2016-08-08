@@ -14,7 +14,6 @@ class JWTServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest(
             'api', function ($request) {
-
                 if ($token = $request->header('authorization')) {
                     $auth = app('Bludata\Authentication\JWT\Interfaces\AuthRepositoryInterface');
 

@@ -223,14 +223,14 @@ class QueryWorker
             $condicao = $this->makeExpression($tempField, $operation, $value, $alias);
             $this->queryBuilder->leftJoin($table, $alias, 'WITH', $condicao);
 
-            return array('alias' => $alias, 'field' => $tempField);
+            return ['alias' => $alias, 'field' => $tempField];
         }
             //monta os joins
             $this->associationQueryFields($field);
             //monta os dados do where
             $field = $tempField;
 
-        return array('alias' => $alias, 'field' => $field);
+        return ['alias' => $alias, 'field' => $field];
     }
 
     /**
@@ -436,6 +436,7 @@ class QueryWorker
 
         return $this;
     }
+
     /**
      * get the repository.
      *
@@ -445,6 +446,7 @@ class QueryWorker
     {
         return app()->getRepositoryInterface($newEntity);
     }
+
     /**
      * get the class metadata.
      *
@@ -690,7 +692,7 @@ class QueryWorker
         $meta = $this->getMetaRepository(end($repository));
         $alias = lcfirst(end($repository));
 
-        return array('meta' => $meta, 'alias' => $alias);
+        return ['meta' => $meta, 'alias' => $alias];
     }
 
     /**
