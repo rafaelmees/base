@@ -437,10 +437,7 @@ class QueryWorker
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> b96c5c5f869cec8295810b5a040a53eb062ee675
     /**
      * get the repository.
      *
