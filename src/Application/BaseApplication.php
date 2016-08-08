@@ -9,7 +9,7 @@ abstract class BaseApplication extends Application
 {
     protected $currentUser;
 
-    public abstract function getRepositoryInterface($entity);
+    abstract public function getRepositoryInterface($entity);
 
     public function getCurrentUser()
     {

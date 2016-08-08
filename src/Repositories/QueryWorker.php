@@ -335,7 +335,7 @@ class QueryWorker
                 $this->queryFields[] = $this->getFullFieldName($field, $alias);
             }
             foreach ($this->queryFields as $item) {
-                if (strpos($item, "(") === false) {
+                if (strpos($item, '(') === false) {
                     $this->queryBuilder->addGroupBy($item);
                 }
             }
@@ -414,10 +414,10 @@ class QueryWorker
         foreach ($fields as $key => $value) {
             if (is_int($key)) {
                 $valor = $value;
-                if (is_array($value)){
+                if (is_array($value)) {
                     if (!empty($value['expression'])) {
-                         //é uma expressão
-                        $expression = ['expression'=>$value['expression'], 'alias'=>$value['alias']];
+                        //é uma expressão
+                        $expression = ['expression' => $value['expression'], 'alias' => $value['alias']];
                         $valor = $value['field'];
                         $this->associationQueryFields($valor, $expression);
                     }
@@ -436,7 +436,7 @@ class QueryWorker
 
         return $this;
     }
-   /**
+    /**
      * get the repository.
      *
      * @param associationField.fkField
@@ -453,6 +453,7 @@ class QueryWorker
     private function getMetaRepository($entity)
     {
         $repository = $this->getPathRepository($entity);
+
         return $repository ? $repository->getClassMetaData() : [];
     }
 
@@ -480,7 +481,7 @@ class QueryWorker
                     if ($count == 0) {
                         $campo = $this->fkAssociation($this->getClassMetaData(), $entity, $arr[$count + 1], $entity, self::DEFAULT_TABLE_ALIAS);
                         if ($campo && !in_array($campo, $this->queryFields)) {
-                            if ($expression==0){
+                            if ($expression == 0) {
                                 $this->queryFields[] = $campo;
                             }
                         }
@@ -512,7 +513,7 @@ class QueryWorker
                             $meta = $this->getMetaRepository(ucfirst($fkTemp));
                             $campo = $this->fkAssociation($meta, $entity, $arr[$count + 1], $entity, $fkTemp);
                         }
-                        if ($campo && ($expression==0 || ($expression != 0 && $count == ($arrLength-1)))){
+                        if ($campo && ($expression == 0 || ($expression != 0 && $count == ($arrLength - 1)))) {
                             $this->addQueryField($campo, $expression);
                         }
                     }
@@ -530,30 +531,31 @@ class QueryWorker
             }
         } else {
             $valor = $this->getFullFieldName($value);
-            if (!empty($this->getClassMetaData()->associationMappings[$value])){
+            if (!empty($this->getClassMetaData()->associationMappings[$value])) {
                 // é uma FK, retorna o ID
-                $valor = "IDENTITY(".$valor.") ".$value;
+                $valor = 'IDENTITY('.$valor.') '.$value;
             }
             $this->addQueryField($valor, $expression);
         }
     }
 
-     /**
+    /**
      * Add a field or expression in the select array.
      *
      * @param string field
      * @param mix expression
      */
-    private function addQueryField($campo, $expression=0){
+    private function addQueryField($campo, $expression = 0)
+    {
         if ($campo && !in_array($campo, $this->queryFields)) {
-            if ($expression==0){
+            if ($expression == 0) {
                 $this->queryFields[] = $campo;
             } else {
                 //verifica se pode adicionar a expressão
-                if (strpos($campo, ')') === false){
+                if (strpos($campo, ')') === false) {
                     $this->getSelectExpression($expression['expression'], $campo, $expression['alias']);
                 } else {
-                    $parts = explode(')',$campo);
+                    $parts = explode(')', $campo);
                     //remove o alias
                     array_pop($parts);
                     $this->getSelectExpression($expression['expression'], implode(')', $parts), $expression['alias']);
@@ -589,11 +591,14 @@ class QueryWorker
                     if (!$association['mappedBy']) {
                         if (!empty($association['joinTable'])) {
                             $this->manyToManyJoin($meta, $fk, $defaultAlias);
+
                             return $this->getFullFieldName($field, $fk);
                         }
+
                         return;
                     }
                     $meta = $this->getMetaRepository(end($repository));
+
                     return $this->fkArrayAssociation($meta, $association['mappedBy'], $field, lcfirst(end($repository)), $defaultAlias, $association['targetEntity']);
                 }
             }
