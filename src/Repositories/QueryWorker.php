@@ -335,7 +335,9 @@ class QueryWorker
                 $this->queryFields[] = $this->getFullFieldName($field, $alias);
             }
             foreach ($this->queryFields as $item) {
-                $this->queryBuilder->addGroupBy($item);
+                if (strpos($item, "(") === false) {
+                    $this->queryBuilder->addGroupBy($item);
+                }
             }
         }
 
@@ -411,7 +413,17 @@ class QueryWorker
     {
         foreach ($fields as $key => $value) {
             if (is_int($key)) {
-                $this->associationQueryFields($value);
+                $valor = $value;
+                if (is_array($value)){
+                    if (!empty($value['expression'])) {
+                         //é uma expressão
+                        $expression = ['expression'=>$value['expression'], 'alias'=>$value['alias']];
+                        $valor = $value['field'];
+                        $this->associationQueryFields($valor, $expression);
+                    }
+                } else {
+                    $this->associationQueryFields($valor);
+                }
             } elseif (is_array($value)) {
                 $alias = $this->tableAlias();
                 $this->queryBuilder->join($this->getFullFieldName($key, self::DEFAULT_TABLE_ALIAS), $alias);
@@ -424,35 +436,24 @@ class QueryWorker
 
         return $this;
     }
-    /**
-     * get the repository path, the repositories need to be in the same namespace.
+   /**
+     * get the repository.
      *
      * @param associationField.fkField
      */
-    public function getPathRepository($newEntity)
+    private function getPathRepository($newEntity)
     {
-        $delimiter = '\\';
-        $path = explode($delimiter, get_class($this));
-        $entity = explode($delimiter, $this->getEntityName());
-        $repository = str_replace(end($entity), $newEntity, end($path));
-        array_pop($path);
-        $newPath = implode($delimiter, $path).$delimiter.$repository;
-        if (class_exists($newPath)) {
-            return $newPath;
-        }
-
-        return;
+        return app()->getRepositoryInterface($newEntity);
     }
     /**
      * get the class metadata.
      *
      * @param associationField.fkField
      */
-    public function getMetaRepository($entity)
+    private function getMetaRepository($entity)
     {
-        $class = $this->getPathRepository($entity);
-
-        return $class ? app($class)->getClassMetaData() : [];
+        $repository = $this->getPathRepository($entity);
+        return $repository ? $repository->getClassMetaData() : [];
     }
 
     /**
@@ -461,7 +462,7 @@ class QueryWorker
      * @param associationField.fkField
      * @param $field
      */
-    public function associationQueryFields($value)
+    public function associationQueryFields($value, $expression = 0)
     {
         $pos = strpos($value, '.');
         if ($pos > 0) {
@@ -479,7 +480,9 @@ class QueryWorker
                     if ($count == 0) {
                         $campo = $this->fkAssociation($this->getClassMetaData(), $entity, $arr[$count + 1], $entity, self::DEFAULT_TABLE_ALIAS);
                         if ($campo && !in_array($campo, $this->queryFields)) {
-                            $this->queryFields[] = $campo;
+                            if ($expression==0){
+                                $this->queryFields[] = $campo;
+                            }
                         }
                     } elseif (($count + 1) < $arrLength) {
                         if ($this->getPathRepository(ucfirst($fkTemp))) {
@@ -509,8 +512,8 @@ class QueryWorker
                             $meta = $this->getMetaRepository(ucfirst($fkTemp));
                             $campo = $this->fkAssociation($meta, $entity, $arr[$count + 1], $entity, $fkTemp);
                         }
-                        if ($campo && !in_array($campo, $this->queryFields)) {
-                            $this->queryFields[] = $campo;
+                        if ($campo && ($expression==0 || ($expression != 0 && $count == ($arrLength-1)))){
+                            $this->addQueryField($campo, $expression);
                         }
                     }
                     $fkTemp = $entity;
@@ -523,17 +526,39 @@ class QueryWorker
                 }
                 // realiza o join para retornar o valor do campo
                 $campo = $this->fkAssociation($this->getClassMetaData(), $fk, $field, $alias, self::DEFAULT_TABLE_ALIAS);
-                if ($campo && !in_array($campo, $this->queryFields)) {
-                    $this->queryFields[] = $campo;
-                }
+                $this->addQueryField($campo, $expression);
             }
         } else {
             $valor = $this->getFullFieldName($value);
             if (!empty($this->getClassMetaData()->associationMappings[$value])){
+                // é uma FK, retorna o ID
                 $valor = "IDENTITY(".$valor.") ".$value;
             }
-            // acrescenta o campo ao select
-            $this->queryFields[] = $valor;
+            $this->addQueryField($valor, $expression);
+        }
+    }
+
+     /**
+     * Add a field or expression in the select array.
+     *
+     * @param string field
+     * @param mix expression
+     */
+    private function addQueryField($campo, $expression=0){
+        if ($campo && !in_array($campo, $this->queryFields)) {
+            if ($expression==0){
+                $this->queryFields[] = $campo;
+            } else {
+                //verifica se pode adicionar a expressão
+                if (strpos($campo, ')') === false){
+                    $this->getSelectExpression($expression['expression'], $campo, $expression['alias']);
+                } else {
+                    $parts = explode(')',$campo);
+                    //remove o alias
+                    array_pop($parts);
+                    $this->getSelectExpression($expression['expression'], implode(')', $parts), $expression['alias']);
+                }
+            }
         }
     }
 
@@ -564,18 +589,14 @@ class QueryWorker
                     if (!$association['mappedBy']) {
                         if (!empty($association['joinTable'])) {
                             $this->manyToManyJoin($meta, $fk, $defaultAlias);
-
                             return $this->getFullFieldName($field, $fk);
                         }
-
                         return;
                     }
                     $meta = $this->getMetaRepository(end($repository));
-
                     return $this->fkArrayAssociation($meta, $association['mappedBy'], $field, lcfirst(end($repository)), $defaultAlias, $association['targetEntity']);
                 }
             }
-
             //verifica se o campo existe
             if ($this->getPathRepository(ucfirst($fk))) {
                 $meta = $this->getMetaRepository(ucfirst($fk));
