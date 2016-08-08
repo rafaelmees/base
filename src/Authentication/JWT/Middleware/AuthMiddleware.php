@@ -25,17 +25,13 @@ final class AuthMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        try
-        {
-            if ($this->auth->guard($guard)->guest())
-            {
+        try {
+            if ($this->auth->guard($guard)->guest()) {
                 throw new RestrictAccessException();
             }
 
             return $next($request);
-        }
-        catch (RestrictAccessException $e)
-        {
+        } catch (RestrictAccessException $e) {
             abort(401, $e->getMessage());
         }
     }
