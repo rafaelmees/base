@@ -2,15 +2,22 @@
     "name": "raivieira/base-api-php",
     "type": "library",
     "description": "Pacote com funcionalidades básicas para criar uma API PHP",
-    "keywords": ["bludata","api","rest"],
+    "keywords": ["bludata", "api", "rest"],
     "homepage": "https://github.com/raivieira/base-api-php",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Raí Vieira Adriano",
-            "email": "rai.vieira@bludata.com.br"
-        }
-    ],
+    "authors": [{
+        "name": "Raí Vieira Adriano",
+        "email": "rai.vieira@bludata.com.br"
+    }, {
+        "name": "Jonathan A. Schweder",
+        "email": "jonathan.schweder@bludata.com.br"
+    }, {
+        "name": "Cristian Santos",
+        "email": "cristian.santos@bludata.com.br"
+    }, {
+        "name": "Schasta Jensen",
+        "email": "schasta.jensen@bludata.com.br"
+    }],
     "require": {
         "php": ">=5.5.9",
         "laravel/lumen-framework": "5.2.*",
@@ -35,4 +42,4 @@
             "./src/Helpers/functions.php"
         ]
     }
- }
+}
