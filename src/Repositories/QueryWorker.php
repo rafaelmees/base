@@ -5,7 +5,6 @@ namespace Bludata\Repositories;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityManagerInterface;
 
 class QueryWorker
 {
@@ -697,16 +696,16 @@ class QueryWorker
         return ['meta' => $meta, 'alias' => $alias];
     }
 
-     /**
-     * @param mixed $field
+    /**
+     * @param mixed  $field
      * @param string $expression
      * @param string $alias
      */
-    private function getSelectExpression( $expression, $field, $alias, $fieldAlias = self::DEFAULT_TABLE_ALIAS){
-        $validExpressions = ['SUM','MIN','MAX','AVG','COUNT'];
-        if (in_array(trim(strtoupper($expression)), $validExpressions)){
-
-            if (strpos($field, '.') === false){
+    private function getSelectExpression($expression, $field, $alias, $fieldAlias = self::DEFAULT_TABLE_ALIAS)
+    {
+        $validExpressions = ['SUM', 'MIN', 'MAX', 'AVG', 'COUNT'];
+        if (in_array(trim(strtoupper($expression)), $validExpressions)) {
+            if (strpos($field, '.') === false) {
                 $field = getFullFieldName($field, $fieldAlias);
             }
             $this->queryFields[] = sprintf('%s(%s) AS %s', $expression, $field, $alias);
