@@ -2,6 +2,7 @@
 
 [![StyleCI](https://styleci.io/repos/56002039/shield)](https://styleci.io/repos/56002039)
 [![Build Status](https://travis-ci.org/raivieira/base-api-php.svg?branch=master)](https://travis-ci.org/raivieira/base-api-php)
+[![codecov](https://codecov.io/gh/raivieira/base-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/raivieira/base-api-php)
 [![GitHub issues](https://img.shields.io/github/issues/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/issues)
 [![GitHub forks](https://img.shields.io/github/forks/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/network)
 [![GitHub stars](https://img.shields.io/github/stars/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/stargazers)
