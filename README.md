@@ -1,5 +1,12 @@
 # Classes e funções básicas para criação de API's com PHP
 
+[![Build Status](https://travis-ci.org/raivieira/base-api-php.svg?branch=master)](https://travis-ci.org/raivieira/base-api-php)
+[![GitHub issues](https://img.shields.io/github/issues/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/issues)
+[![GitHub forks](https://img.shields.io/github/forks/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/network)
+[![GitHub stars](https://img.shields.io/github/stars/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/stargazers)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/raivieira/base-api-php/master/LICENSE.md)
+
+
 # Diretórios
 src
 ├── Application
