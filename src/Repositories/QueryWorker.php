@@ -5,6 +5,7 @@ namespace Bludata\Repositories;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 
 class QueryWorker
 {
@@ -66,7 +67,7 @@ class QueryWorker
     /**
      * @return Doctrine\ORM\Query
      */
-    protected function getQuery()
+    public function getQuery()
     {
         return $this->queryBuilder->getQuery()->useResultCache(false)->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
     }
@@ -436,7 +437,7 @@ class QueryWorker
 
         return $this;
     }
-   /**
+    /**
      * get the repository.
      *
      * @param associationField.fkField
@@ -589,14 +590,18 @@ class QueryWorker
                     if (!$association['mappedBy']) {
                         if (!empty($association['joinTable'])) {
                             $this->manyToManyJoin($meta, $fk, $defaultAlias);
+
                             return $this->getFullFieldName($field, $fk);
                         }
+
                         return;
                     }
                     $meta = $this->getMetaRepository(end($repository));
+
                     return $this->fkArrayAssociation($meta, $association['mappedBy'], $field, lcfirst(end($repository)), $defaultAlias, $association['targetEntity']);
                 }
             }
+
             //verifica se o campo existe
             if ($this->getPathRepository(ucfirst($fk))) {
                 $meta = $this->getMetaRepository(ucfirst($fk));
@@ -686,6 +691,22 @@ class QueryWorker
         $alias = lcfirst(end($repository));
 
         return array('meta' => $meta, 'alias' => $alias);
+    }
+
+     /**
+     * @param mixed $field
+     * @param string $expression
+     * @param string $alias
+     */
+    private function getSelectExpression( $expression, $field, $alias, $fieldAlias = self::DEFAULT_TABLE_ALIAS){
+        $validExpressions = ['SUM','MIN','MAX','AVG','COUNT'];
+        if (in_array(trim(strtoupper($expression)), $validExpressions)){
+
+            if (strpos($field, '.') === false){
+                $field = getFullFieldName($field, $fieldAlias);
+            }
+            $this->queryFields[] = sprintf('%s(%s) AS %s', $expression, $field, $alias);
+        }
     }
 
     /**
