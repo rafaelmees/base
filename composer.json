@@ -2,21 +2,28 @@
     "name": "raivieira/base-api-php",
     "type": "library",
     "description": "Pacote com funcionalidades básicas para criar uma API PHP",
-    "keywords": ["bludata","api","rest"],
+    "keywords": ["bludata", "api", "rest"],
     "homepage": "https://github.com/raivieira/base-api-php",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Raí Vieira Adriano",
-            "email": "rai.vieira@bludata.com.br"
-        }
-    ],
+    "authors": [{
+        "name": "Raí Vieira Adriano",
+        "email": "rai.vieira@bludata.com.br"
+    }, {
+        "name": "Jonathan A. Schweder",
+        "email": "jonathan.schweder@bludata.com.br"
+    }, {
+        "name": "Cristian Santos",
+        "email": "cristian.santos@bludata.com.br"
+    }, {
+        "name": "Schasta Jensen",
+        "email": "schasta.jensen@bludata.com.br"
+    }],
     "require": {
         "php": ">=5.5.9",
         "laravel/lumen-framework": "5.2.*",
+        "lcobucci/jwt": "^3.1",
         "vlucas/phpdotenv": "~2.2",
         "laravel-doctrine/orm": "1.2.*",
-        "lcobucci/jwt": "^3.1",
         "laravel-doctrine/migrations": "1.0.*",
         "gedmo/doctrine-extensions": "^2.4",
         "beberlei/DoctrineExtensions": "^1.0",
@@ -24,8 +31,9 @@
         "symfony/validator": "^3.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.3",
-        "fzaninotto/faker": "~1.6"
+        "phpunit/phpunit": "4.8.*",
+        "fzaninotto/faker": "~1.6",
+        "brianium/paratest": "^0.13.3"
     },
     "autoload": {
         "psr-4": {
@@ -35,4 +43,4 @@
             "./src/Helpers/functions.php"
         ]
     }
- }
+}
