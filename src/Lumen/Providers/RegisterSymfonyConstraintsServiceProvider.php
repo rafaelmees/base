@@ -1,6 +1,6 @@
 <?php
 
-namespace Bludata\LumenProviders;
+namespace Bludata\Lumen\Providers;
 
 class RegisterSymfonyConstraintsServiceProvider extends ServiceProvider
 {
