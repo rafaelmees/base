@@ -2,8 +2,6 @@
 
 namespace Bludata\LumenProviders;
 
-use Illuminate\Support\Service\Provider;
-
 class RegisterSymfonyConstraintsServiceProvider extends ServiceProvider
 {
     public function register()
