@@ -5,7 +5,7 @@ namespace Bludata\Lumen\Services;
 abstract class BaseService
 {
     /**
-     * @var Bludata\LumenRepositories\BaseRepository
+     * @var Bludata\Lumen\Repositories\BaseRepository
      */
     protected $mainRepository;
 
