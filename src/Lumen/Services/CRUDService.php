@@ -2,7 +2,7 @@
 
 namespace Bludata\Lumen\Services;
 
-use Bludata\LumenEntities\BaseEntity;
+use Bludata\Lumen\Entities\BaseEntity;
 
 abstract class CRUDService extends BaseService
 {
