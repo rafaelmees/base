@@ -2,8 +2,8 @@
 
 namespace Bludata\Lumen\Tests\Http\Controllers;
 
-use Bludata\Lumen\Tests\BaseTest;
 use Bludata\Lumen\Helpers\CurlHelper;
+use Bludata\Lumen\Tests\BaseTest;
 
 abstract class BaseControllerTest extends BaseTest
 {
