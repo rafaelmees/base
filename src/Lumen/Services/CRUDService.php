@@ -2,7 +2,11 @@
 
 namespace Bludata\Lumen\Services;
 
+<<<<<<< HEAD:src/Lumen/Services/CRUDService.php
 use Bludata\Doctrine\ORM\Entities\BaseEntity;
+=======
+use Bludata\Lumen\Entities\BaseEntity;
+>>>>>>> 23d05296dece732c2042b36ddf80c2de5961911d:src/Lumen/Services/CRUDService.php
 
 abstract class CRUDService extends BaseService
 {

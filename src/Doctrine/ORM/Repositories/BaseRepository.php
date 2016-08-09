@@ -121,7 +121,11 @@ abstract class BaseRepository extends EntityRepository
      *
      * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException Se $target não for encontrado
      *
+<<<<<<< HEAD:src/Doctrine/ORM/Repositories/BaseRepository.php
      * @return Bludata\Doctrine\ORM\Entities\BaseEntity
+=======
+     * @return Bludata\Entities\BaseEntity
+>>>>>>> 23d05296dece732c2042b36ddf80c2de5961911d:src/Doctrine/ORM/Repositories/BaseRepository.php
      */
     public function remove($target)
     {

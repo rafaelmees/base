@@ -1,6 +1,6 @@
 <?php
 
-class functionsTest extends PHPUnit_Framework_TestCase
+class FunctionsTest extends PHPUnit_Framework_TestCase
 {
     public function drProvider()
     {
@@ -22,7 +22,7 @@ EOF;
     }
 
     /**
-     * @dataProvider drProvider 
+     * @dataProvider drProvider
      */
     public function testDr($value, $expectedResult)
     {
