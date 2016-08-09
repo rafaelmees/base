@@ -1,6 +1,6 @@
 <?php
 
-namespace Bludata\LumenProviders;
+namespace Bludata\Lumen\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
