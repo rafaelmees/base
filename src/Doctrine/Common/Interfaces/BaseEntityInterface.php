@@ -41,17 +41,18 @@ interface BaseEntityInterface
     public function getOnlyUpdate();
 
     /**
-     * Set all attributes of the Entity with the values in $data
+     * Set all attributes of the Entity with the values in $data.
      *
      * @param array $data Key value pair to set attributes
      */
     public function setPropertiesEntity(array $data);
 
     /**
-     * Convert the Entity to array
+     * Convert the Entity to array.
      *
-     * @param  array $options [description]
-     * @return [type]          [description]
+     * @param array $options [description]
+     *
+     * @return [type] [description]
      */
     public function toArray(array $options = null);
 }
