@@ -17,7 +17,7 @@ before_install:
   - docker pull mongo
   - docker run -d -p 27017:27017 mongo
   - docker ps -a
-  - pecl install mongo
+  - printf "\n" | pecl install mongo
   - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
