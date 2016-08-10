@@ -46,9 +46,9 @@
         ]
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/"
-        ],
+        "psr-4": {
+            "Bludata\\Tests\\": "tests/"
+        },
         "files": [
             "./tests/functions.php"
         ]

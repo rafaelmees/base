@@ -1,10 +1,12 @@
 <?php
 
+namespace Bludata\Tests\Doctrine\ODM\MongoDB\Entities\Stubs;
+
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Bludata\Doctrine\ODM\MongoDB\Entities\BaseEntity;
 
 /**
- * @ODM\Document(repositoryClass="EntityStubRepository")
+ * @ODM\Document(repositoryClass="Bludata\Tests\Doctrine\ODM\MongoDB\Repositories\Stubs\EntityStubRepository")
  */
 class EntityStub extends BaseEntity
 {

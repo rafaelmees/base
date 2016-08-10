@@ -1,7 +1,12 @@
 <?php
 
+namespace Bludata\Tests\Doctrine\ODM\MongoDB\Entities;
+
+use Bludata\Tests\TestCase;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
+use Bludata\Tests\Doctrine\ODM\MongoDB\Entities\Stubs\EntityStub;
+use Bludata\Tests\Doctrine\ODM\MongoDB\Repositories\Stubs\EntityStubRepository;
 
 class BaseEntityTest extends Testcase
 {

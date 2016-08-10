@@ -1,8 +1,12 @@
 <?php
 
-use SebastianBergmann\PeekAndPoke\Proxy;
+namespace Bludata\Tests;
 
-class Testcase extends PHPUnit_Framework_TestCase {
+use PHPUnit_Framework_TestCase;
+use SebastianBergmann\PeekAndPoke\Proxy;
+use Faker\Factory;
+
+class TestCase extends PHPUnit_Framework_TestCase {
 
     protected $faker;
 
@@ -14,7 +18,7 @@ class Testcase extends PHPUnit_Framework_TestCase {
     public function faker()
     {
         if (is_null($this->faker)) {
-            $this->faker = Faker\Factory::create('pt_Br');
+            $this->faker = Factory::create('pt_Br');
         }
 
         return $this->faker;
