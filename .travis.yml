@@ -2,9 +2,6 @@ sudo: required
 
 language: php
 
-services:
-  - docker
-
 git:
   depth: 1
 
@@ -19,8 +16,6 @@ matrix:
   fast_finish: true
 
 before_install:
-  - docker run -d --name database -p 127.0.0.1:27017:27017 mongo
-  - docker ps -a
   - pecl install mongo
   - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
