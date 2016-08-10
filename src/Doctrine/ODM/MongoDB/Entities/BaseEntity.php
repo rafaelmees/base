@@ -2,10 +2,10 @@
 
 namespace Bludata\Doctrine\ODM\MongoDB\Entities;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
-use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
+use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
@@ -33,7 +33,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      */
     protected $deletedAt;
 
-
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -60,6 +59,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function forcePersist()
     {
         $this->updatedAt = new \DateTime();
+
         return $this;
     }
 
@@ -91,18 +91,21 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function save($flush = false)
     {
         $this->getRepository()->save($this);
+
         return $this;
     }
 
     public function remove()
     {
         $this->getRepository()->remove($this);
+
         return $this;
     }
 
     public function flush($all = true)
     {
         $this->getRepository()->flush($all ? null : $this);
+
         return $this;
     }
 

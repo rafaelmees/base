@@ -2,10 +2,10 @@
 
 namespace Bludata\Doctrine\ORM\Repositories;
 
-use Symfony\Component\Validator\ValidatorBuilder;
-use Doctrine\ORM\EntityRepository;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Entities\BaseEntityInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\ValidatorBuilder;
 
 abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
 {
