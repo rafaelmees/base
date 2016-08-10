@@ -9,6 +9,7 @@ git:
 
 matrix:
   include:
+    - php: 5.5
     - php: 5.6
     - php: 7.0
     - php: hhvm
@@ -21,8 +22,8 @@ before_install:
   - docker pull mongo
   - docker run -d --name database -p 27017:27017 mongo
   - docker ps -a
-  - pecl install mongo
-  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - pecl install mongodb
+  - echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
   - travis_retry composer self-update
