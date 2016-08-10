@@ -1,7 +1,7 @@
 language: php
 
 services:
-    - docker
+  - docker
 
 sudo: false
 
