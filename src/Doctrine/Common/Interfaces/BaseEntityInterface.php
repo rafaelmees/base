@@ -14,6 +14,12 @@ interface BaseEntityInterface
 
     public function getRepository();
 
+    public function forcePersist();
+
+    public function prePersist();
+
+    public function preUpdate();
+
     /**
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
      * É usado principalmente em $this->setPropertiesEntity e nos Controllers.

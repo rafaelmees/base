@@ -4,6 +4,7 @@ namespace Bludata\Doctrine\ORM\Entities;
 
 use DateTime;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -15,7 +16,7 @@ use EntityManager;
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-abstract class BaseEntity implements BaseEntityInterface
+abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
     /**
      * @ORM\Id

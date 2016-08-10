@@ -1,13 +1,13 @@
 <?php
 
-namespace Bludata\Doctrine\ORM\Repositories;
+namespace Bludata\Doctrine\ODM\MongoDB\Repositories;
 
 use Symfony\Component\Validator\ValidatorBuilder;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
-use Bludata\Entities\BaseEntityInterface;
 
-abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
+abstract class BaseRepository extends DocumentRepository implements BaseRepositoryInterface
 {
     abstract public function preSave(BaseEntityInterface $entity);
 
@@ -159,6 +159,6 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
 
     public function em()
     {
-        return parent::getEntityManager();
+        return parent::getDocumentManager();
     }
 }
