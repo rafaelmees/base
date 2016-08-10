@@ -2,10 +2,10 @@
 
 namespace Bludata\Doctrine\ODM\MongoDB\Repositories;
 
-use Symfony\Component\Validator\ValidatorBuilder;
-use Doctrine\ODM\MongoDB\DocumentRepository;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
+use Doctrine\ODM\MongoDB\DocumentRepository;
+use Symfony\Component\Validator\ValidatorBuilder;
 
 abstract class BaseRepository extends DocumentRepository implements BaseRepositoryInterface
 {
