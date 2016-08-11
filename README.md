@@ -12,53 +12,69 @@
 # Arquivos
 ```
 src
-├── Application
-│   └── BaseApplication.php
-├── Authentication
-│   └── JWT
-│       ├── Exceptions
-│       │   ├── NotPermissionAccessException.php
-│       │   └── RestrictAccessException.php
-│       ├── Interfaces
-│       │   ├── AuthRepositoryInterface.php
-│       │   └── JWTInterface.php
-│       ├── Libs
-│       │   ├── JWT.php
-│       │   └── User.php
-│       ├── Middleware
-│       │   └── AuthMiddleware.php
-│       └── Providers
-│           └── JWTServiceProvider.php
-├── Entities
-│   └── BaseEntity.php
+├── Doctrine
+│   ├── Common
+│   │   └── Interfaces
+│   │       ├── BaseEntityInterface.php
+│   │       ├── BaseRepositoryInterface.php
+│   │       ├── EntityManagerInterface.php
+│   │       └── EntityTimestampInterface.php
+│   ├── ODM
+│   │   └── MongoDB
+│   │       ├── Entities
+│   │       │   └── BaseEntity.php
+│   │       ├── EntityManager.php
+│   │       └── Repositories
+│   │           └── BaseRepository.php
+│   └── ORM
+│       ├── Entities
+│       │   └── BaseEntity.php
+│       └── Repositories
+│           ├── BaseRepository.php
+│           └── QueryWorker.php
 ├── Helpers
 │   ├── CurlHelper.php
 │   ├── FormatHelper.php
 │   └── functions.php
-├── Http
-│   ├── Controllers
-│   │   ├── BaseController.php
-│   │   └── CRUDController.php
-│   └── Middleware
-│       └── CorsMiddleware.php
-├── Providers
-│   ├── CustomConnectionSqlanywhereServiceProvider.php
-│   └── RegisterSymfonyConstraintsServiceProvider.php
-├── Repositories
-│   ├── BaseRepository.php
-│   └── QueryWorker.php
-├── Services
-│   ├── BaseService.php
-│   └── CRUDService.php
-└── Tests
-    ├── BaseTest.php
+└── Lumen
+    ├── Application
+    │   └── BaseApplication.php
+    ├── Authentication
+    │   └── JWT
+    │       ├── Exceptions
+    │       │   ├── NotPermissionAccessException.php
+    │       │   └── RestrictAccessException.php
+    │       ├── Interfaces
+    │       │   ├── AuthRepositoryInterface.php
+    │       │   └── JWTInterface.php
+    │       ├── Libs
+    │       │   ├── JWT.php
+    │       │   └── User.php
+    │       ├── Middleware
+    │       │   └── AuthMiddleware.php
+    │       └── Providers
+    │           └── JWTServiceProvider.php
     ├── Http
-    │   └── Controllers
-    │       ├── BaseControllerTest.php
-    │       └── CRUDControllerTest.php
-    ├── Repositories
-    │   └── BaseRepositoryTest.php
-    └── Services
-        ├── BaseServiceTest.php
-        └── CRUDServiceTest.php
+    │   ├── Controllers
+    │   │   ├── BaseController.php
+    │   │   └── CRUDController.php
+    │   └── Middleware
+    │       └── CorsMiddleware.php
+    ├── Providers
+    │   ├── CustomConnectionSqlanywhereServiceProvider.php
+    │   └── RegisterSymfonyConstraintsServiceProvider.php
+    ├── Services
+    │   ├── BaseService.php
+    │   └── CRUDService.php
+    └── Tests
+        ├── BaseTest.php
+        ├── Http
+        │   └── Controllers
+        │       ├── BaseControllerTest.php
+        │       └── CRUDControllerTest.php
+        ├── Repositories
+        │   └── BaseRepositoryTest.php
+        └── Services
+            ├── BaseServiceTest.php
+            └── CRUDServiceTest.php
 ```
