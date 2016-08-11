@@ -33,4 +33,6 @@ interface BaseRepositoryInterface
     public function createEntity();
 
     public function createQueryWorker();
+
+    public function getMessageNotFound();
 }

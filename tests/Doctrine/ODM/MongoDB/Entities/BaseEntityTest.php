@@ -2,13 +2,13 @@
 
 namespace Bludata\Tests\Doctrine\ODM\MongoDB\Entities;
 
-use Bludata\Tests\TestCase;
+use Bludata\Tests\Doctrine\ODM\MongoDB\TestCase;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
 use Bludata\Tests\Doctrine\ODM\MongoDB\Entities\Stubs\EntityStub;
 use Bludata\Tests\Doctrine\ODM\MongoDB\Repositories\Stubs\EntityStubRepository;
 
-class BaseEntityTest extends Testcase
+class BaseEntityTest extends TestCase
 {
     public function testIsInstanciable()
     {
@@ -95,11 +95,6 @@ class BaseEntityTest extends Testcase
     public function testGetRepository($stub)
     {
         $this->assertTrue(method_exists($stub, 'getRepository'));
-
-        $this->app()->bind(EntityManagerInterface::class, function () {
-            return generageODMEntityManager();
-        });
-
         $this->assertInstanceOf(BaseRepositoryInterface::class, $stub->getRepository());
         $this->assertInstanceOf(EntityStubRepository::class, $stub->getRepository());
     }

@@ -11,6 +11,8 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
 {
     abstract public function preSave(BaseEntityInterface $entity);
 
+    abstract public function getMessageNotFound();
+
     public function validate(BaseEntityInterface $entity)
     {
         $validator = (new ValidatorBuilder())

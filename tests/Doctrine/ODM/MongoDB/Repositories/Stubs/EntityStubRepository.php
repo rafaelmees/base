@@ -12,4 +12,9 @@ class EntityStubRepository extends BaseRepository implements BaseRepositoryInter
     public function preSave(BaseEntityInterface $entity)
     {
     }
+
+    public function getMessageNotFound()
+    {
+        return 'Não encontrado';
+    }
 }
