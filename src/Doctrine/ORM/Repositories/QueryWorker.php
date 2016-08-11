@@ -66,7 +66,13 @@ class QueryWorker
      */
     public function getQuery()
     {
-        return $this->queryBuilder->getQuery()->useResultCache(false)->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
+        $query = $this->queryBuilder->getQuery();
+
+        if (method_exists($query, 'setHint')) {
+            $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
+        }
+
+        return $query;
     }
 
     /**
@@ -76,7 +82,13 @@ class QueryWorker
      */
     public function getResult()
     {
-        return $this->getQuery()->getResult();
+        $query = $this->getQuery();
+
+        if (method_exists($query, 'getResult')) {
+            return $query->getResult();
+        }
+
+        return $query->execute();
     }
 
     /**

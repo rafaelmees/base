@@ -4,6 +4,7 @@ namespace Bludata\Doctrine\ODM\MongoDB\Repositories;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
+use Bludata\Doctrine\ORM\Repositories\QueryWorker;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
 
@@ -30,6 +31,8 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
 
             abort(400, json_encode($errors));
         }
+
+        return true;
     }
 
     public function getClassMetadata()
@@ -39,7 +42,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
 
     public function getEntityName()
     {
-        return parent::getEntityName();
+        return parent::getDocumentName();
     }
 
     public function createEntity()
@@ -95,11 +98,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         }
 
         if (is_string($input)) {
-            $input = json_decode($input, true);
-        }
-
-        if (is_numeric($input)) {
-            return $this->find($input);
+            if ($decoded = json_decode($input, true)) {
+                $input = $decoded;
+            }
         }
 
         if (is_array($input)) {
@@ -114,7 +115,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
             return $object;
         }
 
-        throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
+        return $this->find($input);
     }
 
     /**

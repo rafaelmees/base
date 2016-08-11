@@ -64,7 +64,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     }
 
     /**
-     * @ORM\PrePersist
+     * @ODM\PrePersist
      */
     public function prePersist()
     {
@@ -74,7 +74,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     }
 
     /**
-     * @ORM\PreUpdate
+     * @ODM\PreUpdate
      */
     public function preUpdate()
     {

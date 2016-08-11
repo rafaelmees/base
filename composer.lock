@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8f350d67f498c7fb2b91d3e4cdef99c4",
-    "content-hash": "310b8b3247033382d174ba7c48a5566a",
+    "hash": "fcbe5b90975bb7d32e15ef8d0d4aed09",
+    "content-hash": "d3aaae1228bf4533f029992f11c83791",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -4062,6 +4062,82 @@
                 "fixtures"
             ],
             "time": "2016-04-29 12:21:54"
+        },
+        {
+            "name": "jaschweder/helpers",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaschweder/helpers.git",
+                "reference": "401df4a5c325563e7e032494d6c8ff621aed2764"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaschweder/helpers/zipball/401df4a5c325563e7e032494d6c8ff621aed2764",
+                "reference": "401df4a5c325563e7e032494d6c8ff621aed2764",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./src/Jaschweder/Helpers/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan A. Schweder",
+                    "email": "jonathanschweder@gmail.com"
+                }
+            ],
+            "description": "Basic help classes and functions for any application",
+            "time": "2016-05-28 19:50:42"
+        },
+        {
+            "name": "jaschweder/mock",
+            "version": "v1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaschweder/mock.git",
+                "reference": "57af861b69d18b521f1ea559d776374e9aea8237"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaschweder/mock/zipball/57af861b69d18b521f1ea559d776374e9aea8237",
+                "reference": "57af861b69d18b521f1ea559d776374e9aea8237",
+                "shasum": ""
+            },
+            "require": {
+                "jaschweder/helpers": "~1.0",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jaschweder\\": "src/Jaschweder/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan A. Schweder",
+                    "email": "jonathanschweder@gmail.com"
+                }
+            ],
+            "description": "Mock help classes and functions",
+            "time": "2016-06-15 12:49:11"
         },
         {
             "name": "phpdocumentor/reflection-common",

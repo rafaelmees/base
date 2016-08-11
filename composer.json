@@ -35,7 +35,8 @@
         "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "^1.6",
         "brianium/paratest": "^0.13.3",
-        "sebastian/peek-and-poke": "dev-master"
+        "sebastian/peek-and-poke": "dev-master",
+        "jaschweder/mock": "^1.7"
     },
     "autoload": {
         "psr-4": {
