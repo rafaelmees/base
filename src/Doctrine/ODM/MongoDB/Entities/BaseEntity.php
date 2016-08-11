@@ -1,50 +1,37 @@
 <?php
 
-namespace Bludata\Doctrine\ORM\Entities;
+namespace Bludata\Doctrine\ODM\MongoDB\Entities;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
-use EntityManager;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
-/**
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- */
 abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue
+     * @ODM\Id
      */
     protected $id;
 
     /**
      * @var \DateTime
      *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", name="createdAt")
+     * @ODM\Field(type="timestamp", name="createdAt")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", name="updatedAt")
+     * @ODM\Field(type="timestamp", name="updatedAt")
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true, name="deletedAt")
+     * @ODM\Field(type="timestamp", nullable=true, name="deletedAt")
      */
-    private $deletedAt;
+    protected $deletedAt;
 
     public function getCreatedAt()
     {
@@ -71,46 +58,46 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      */
     public function forcePersist()
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }
 
     /**
-     * @ORM\PrePersist
+     * @ODM\PrePersist
      */
     public function prePersist()
     {
         $this->getRepository()
-             ->preSave($this)
-             ->validate($this);
+            ->preSave($this)
+            ->validate($this);
     }
 
     /**
-     * @ORM\PreUpdate
+     * @ODM\PreUpdate
      */
     public function preUpdate()
     {
         $this->getRepository()
-             ->preSave($this)
-             ->validate($this);
+            ->preSave($this)
+            ->validate($this);
     }
 
     public function getRepository()
     {
-        return EntityManager::getRepository(get_class($this));
-    }
-
-    public function remove()
-    {
-        $this->getRepository()->remove($this);
-
-        return $this;
+        return app(EntityManagerInterface::class)->getRepository(get_class($this));
     }
 
     public function save($flush = false)
     {
         $this->getRepository()->save($this);
+
+        return $this;
+    }
+
+    public function remove()
+    {
+        $this->getRepository()->remove($this);
 
         return $this;
     }
@@ -203,7 +190,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         foreach ($this->getFillable() as $key) {
             if ($this->checkOnyExceptInArray($key, $options)) {
                 if (is_object($this->$key)) {
-                    if ($this->$key instanceof DateTime) {
+                    if ($this->$key instanceof \DateTime) {
                         $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
                         if ($this->$key) {

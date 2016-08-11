@@ -1,6 +1,10 @@
 <?php
 
-class FunctionsTest extends PHPUnit_Framework_TestCase
+namespace Bludata\Tests\Helpers;
+
+use Bludata\Tests\TestCase;
+
+class FunctionsTest extends TestCase
 {
     public function drProvider()
     {

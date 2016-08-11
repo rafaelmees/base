@@ -12,4 +12,4 @@ fi
 NUMJOBS="$(($(nproc)+1))"
 
 # run paratest
-./vendor/bin/paratest $COVERAGE --processes $NUMJOBS --functional --phpunit ./vendor/bin/phpunit --bootstrap ./vendor/autoload.php --configuration $TESTFILE --colors --path ./tests/
+./vendor/bin/paratest $COVERAGE --processes $NUMJOBS --functional --phpunit ./vendor/bin/phpunit --bootstrap ./tests/bootstrap.php --configuration $TESTFILE --colors --path ./tests/

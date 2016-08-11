@@ -1,15 +1,18 @@
 <?php
 
-namespace Bludata\Doctrine\ORM\Repositories;
+namespace Bludata\Doctrine\ODM\MongoDB\Repositories;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
-use Bludata\Entities\BaseEntityInterface;
-use Doctrine\ORM\EntityRepository;
+use Bludata\Doctrine\ORM\Repositories\QueryWorker;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
 
-abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
+abstract class BaseRepository extends DocumentRepository implements BaseRepositoryInterface
 {
     abstract public function preSave(BaseEntityInterface $entity);
+
+    abstract public function getMessageNotFound();
 
     public function validate(BaseEntityInterface $entity)
     {
@@ -28,6 +31,8 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
 
             abort(400, json_encode($errors));
         }
+
+        return true;
     }
 
     public function getClassMetadata()
@@ -37,7 +42,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
 
     public function getEntityName()
     {
-        return parent::getEntityName();
+        return parent::getDocumentName();
     }
 
     public function createEntity()
@@ -93,11 +98,9 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
         }
 
         if (is_string($input)) {
-            $input = json_decode($input, true);
-        }
-
-        if (is_numeric($input)) {
-            return $this->find($input);
+            if ($decoded = json_decode($input, true)) {
+                $input = $decoded;
+            }
         }
 
         if (is_array($input)) {
@@ -112,7 +115,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
             return $object;
         }
 
-        throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
+        return $this->find($input);
     }
 
     /**
@@ -136,7 +139,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     /**
      * @param Bludata\Entities\BaseEntityInterface $entity
      *
-     * @return Bludata\Doctrine\ORM\Repositories\QueryWorker
+     * @return Bludata\Repositories\QueryWorker
      */
     public function save(BaseEntityInterface $entity)
     {
@@ -148,7 +151,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     /**
      * @param Bludata\Entities\BaseEntityInterface $entity
      *
-     * @return Bludata\Doctrine\ORM\Repositories\QueryWorker
+     * @return Bludata\Repositories\QueryWorker
      */
     public function flush(BaseEntityInterface $entity = null)
     {
@@ -159,6 +162,6 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
 
     public function em()
     {
-        return parent::getEntityManager();
+        return parent::getDocumentManager();
     }
 }
