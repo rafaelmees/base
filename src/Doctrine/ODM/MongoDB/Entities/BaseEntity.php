@@ -7,6 +7,10 @@ use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
+/**
+ * @ODM\MappedSuperclass
+ * @ODM\HasLifecycleCallbacks
+ */
 abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
     /**
