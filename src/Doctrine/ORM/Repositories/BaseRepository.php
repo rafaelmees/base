@@ -2,8 +2,8 @@
 
 namespace Bludata\Doctrine\ORM\Repositories;
 
-use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
 
