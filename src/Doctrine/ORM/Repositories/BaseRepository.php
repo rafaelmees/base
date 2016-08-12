@@ -3,7 +3,7 @@
 namespace Bludata\Doctrine\ORM\Repositories;
 
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
-use Bludata\Entities\BaseEntityInterface;
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
 
@@ -122,7 +122,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
      *
      * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException Se $target não for encontrado
      *
-     * @return Bludata\Entities\BaseEntityInterface
+     * Bludata\Doctrine\Common\Interfaces
      */
     public function remove($target)
     {
@@ -134,7 +134,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     }
 
     /**
-     * @param Bludata\Entities\BaseEntityInterface $entity
+     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
      *
      * @return Bludata\Doctrine\ORM\Repositories\QueryWorker
      */
@@ -146,7 +146,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     }
 
     /**
-     * @param Bludata\Entities\BaseEntityInterface $entity
+     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
      *
      * @return Bludata\Doctrine\ORM\Repositories\QueryWorker
      */
