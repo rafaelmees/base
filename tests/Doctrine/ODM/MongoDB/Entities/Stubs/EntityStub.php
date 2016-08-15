@@ -87,7 +87,6 @@ class EntityStub extends BaseEntity
      */
     public function preUpdate()
     {
-        dd('teste');
         $this->setPreUpdateWasCall(true);
     }
 
