@@ -67,6 +67,13 @@ class CurlHelper
         return $this->info;
     }
 
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
     public function setPosFixUrl($posFixUrl)
     {
         $this->posFixUrl = $posFixUrl;
