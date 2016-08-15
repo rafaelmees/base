@@ -7,6 +7,7 @@ use Bludata\Doctrine\ODM\MongoDB\Entities\BaseEntity;
 
 /**
  * @ODM\Document(repositoryClass="Bludata\Tests\Doctrine\ODM\MongoDB\Repositories\Stubs\EntityStubRepository")
+ * @ODM\HasLifecycleCallbacks
  */
 class EntityStub extends BaseEntity
 {
@@ -21,6 +22,10 @@ class EntityStub extends BaseEntity
      */
     protected $attr2;
 
+    private $prePersistWasCall = false;
+
+    private $preUpdateWasCall = false;
+
     public function getOnlyStore()
     {
         return ['attr1', 'attr2'];
@@ -29,6 +34,61 @@ class EntityStub extends BaseEntity
     public function getFillable()
     {
         return array_merge(parent::getFillable(), ['attr1', 'attr2']);
+    }
+
+    /**
+     * @return
+     */
+    public function getPrePersistWasCall()
+    {
+        return $this->prePersistWasCall;
+    }
+
+    /**
+     * @param  $prePersistWasCall
+     *
+     * @return static
+     */
+    public function setPrePersistWasCall($prePersistWasCall)
+    {
+        $this->prePersistWasCall = $prePersistWasCall;
+        return $this;
+    }
+
+    /**
+     * @return
+     */
+    public function getPreUpdateWasCall()
+    {
+        return $this->preUpdateWasCall;
+    }
+
+    /**
+     * @param  $preUpdateWasCall
+     *
+     * @return static
+     */
+    public function setPreUpdateWasCall($preUpdateWasCall)
+    {
+        $this->preUpdateWasCall = $preUpdateWasCall;
+        return $this;
+    }
+
+    /**
+     * @ODM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->setPrePersistWasCall(true);
+    }
+
+    /**
+     * @ODM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        dd('teste');
+        $this->setPreUpdateWasCall(true);
     }
 
     /**

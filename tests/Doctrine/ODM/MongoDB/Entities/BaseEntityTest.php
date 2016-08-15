@@ -102,6 +102,32 @@ class BaseEntityTest extends TestCase
     /**
      * @depends testIsInstanciable
      */
+    public function testPrePersistCall($stub)
+    {
+        $stub->setAttr1('Lorem');
+        $stub->save();
+        $stub->flush();
+        $this->assertTrue($stub->getPrePersistWasCall());
+        return $stub;
+    }
+
+    /**
+     * @depends testPrePersistCall
+     */
+    public function testPreUpdateCall($stub)
+    {
+        $this->markTestIncomplete(
+          'Atualmente não está chamando métodos com tag "ODM\PreUpdate"'
+        );
+        $stub->setAttr1('Ipsum');
+        $stub->save();
+        $stub->flush();
+        $this->assertTrue($stub->getPreUpdateWasCall());
+    }
+
+    /**
+     * @depends testIsInstanciable
+     */
     public function testSave($stub)
     {
         $this->assertEquals($stub, $stub->save());

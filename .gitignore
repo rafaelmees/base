@@ -1,3 +1,6 @@
+*.log
+*.fuse_hidden*
+composer.lock
 vendor/
 tests/Doctrine/ODM/MongoDB/Entities/Hydrators/
 tests/Doctrine/ODM/MongoDB/Entities/Proxies/
