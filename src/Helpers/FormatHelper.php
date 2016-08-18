@@ -13,9 +13,7 @@ class FormatHelper
     {
         if (is_string($date) && $from == 'yyyy-mm-dd' && $to == 'obj') {
             return new \DateTime($date);
-        }
-        else if (is_string($date) && $from == 'dd/mm/yyyy' && $to == 'obj')
-        {
+        } elseif (is_string($date) && $from == 'dd/mm/yyyy' && $to == 'obj') {
             $explode = explode('/', $date);
 
             $date = $explode[2].'-'.$explode[1].'-'.$explode[0];
