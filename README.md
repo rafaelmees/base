@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/raivieira/base-api-php.svg?branch=master)](https://travis-ci.org/raivieira/base-api-php)
 [![Dependency Status](https://www.versioneye.com/user/projects/57b6e834090d4d00328f4eb3/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57b6e834090d4d00328f4eb3)
 [![codecov](https://codecov.io/gh/raivieira/base-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/raivieira/base-api-php)
-[![GitHub issues](https://img.shields.io/github/issues/raivieira/base-api-php.svg)](https://github.com/raivieira/base-api-php/issues)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/raivieira/base-api-php/master/LICENSE.md)
 
 ### Roadmap
