@@ -17,6 +17,7 @@ trait GetParamsTrait
             array_map(
                 function ($input) {
                     $input = sprintf('get%s', ucfirst($input));
+
                     return $this->$input();
                 },
                 $params
