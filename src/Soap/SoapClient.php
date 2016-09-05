@@ -56,8 +56,9 @@ class SoapClient
             throw new InvalidArgumentException('Host não informado');
         }
 
-        $client = new NativeSoapClient($host, $this->getOptions());
-        $this->setClient($client);
+        if (!$this->client) {
+            $this->client = new NativeSoapClient($host, $this->getOptions());
+        }
 
         return $this;
     }
@@ -70,7 +71,7 @@ class SoapClient
     public function call()
     {
         if (!$this->getHost()) {
-            throw new InvalidArgumentException('HOST do WSDL não foi informado');
+            throw new InvalidArgumentException('Host não informado');
         }
 
         if (!$this->getService()) {
@@ -78,22 +79,12 @@ class SoapClient
         }
 
         if (!$this->getRequest()) {
-            throw new InvalidArgumentException('Request não informado');
+            throw new InvalidArgumentException('Request não informada');
         }
 
-        if (!$this->getClient()) {
-            if (!$this->connect()) {
-                throw new InvalidArgumentException('Não foi possivel conectar ao WSDL');
-            }
-        }
-
-        try {
-            $client = $this->getClient();
-
-            return $client->__soapCall($this->getService(), $this->getRequest());
-        } catch (SoapFault $e) {
-            throw $e;
-        }
+        $this->connect();
+        $client = $this->getClient();
+        return $client->__soapCall($this->getService(), $this->getRequest());
     }
 
     /**

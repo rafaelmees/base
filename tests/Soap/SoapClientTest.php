@@ -11,7 +11,7 @@ class SoapClientTest extends TestCase
     public function clients()
     {
         $wsdls = [
-            'https://portalhomolog.detran.go.gov.br/sah/WSHabilitacaoSimulador?wsdl',
+            'https://portalhomolog.detran.go.gov.br/sah/WSHabilitacaoSimulador?wsdl'
         ];
         $clients = collect();
         foreach ($wsdls as $wsdl) {
@@ -34,6 +34,57 @@ class SoapClientTest extends TestCase
         return $clients;
     }
 
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage Host não informado
+     */
+    public function testCallWithoutHost()
+    {
+        $clients = $this->clients();
+        $clients->each(function ($client) {
+            $client->setHost('');
+            $client->call();
+        });
+    }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage Serviço não informado
+     */
+    public function testCallWithoutService()
+    {
+        $clients = $this->clients();
+        $clients->each(function ($client) {
+            $client->setService('');
+            $client->call();
+        });
+    }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage Request não informada
+     */
+    public function testCallWithoutRequest()
+    {
+        $clients = $this->clients();
+        $clients->each(function ($client) {
+            $client->setService('retornarAulasCandidato');
+            $client->setRequest([]);
+            $client->call();
+        });
+    }
+
+    public function testCall()
+    {
+        $clients = $this->clients();
+        $clients->each(function ($client) {
+            $client->setService('retornarAulasCandidato');
+            $client->setRequest(['aluno' => 'anyone']);
+            $response = $client->call();
+            $this->assertObjectHasAttribute('return', $response);
+        });
+    }
+
     public function testConnect()
     {
         $clients = $this->clients();
@@ -51,7 +102,7 @@ class SoapClientTest extends TestCase
         $clients = $this->clients();
         $clients->each(function ($client) {
             $client->setHost('');
-            $this->assertInstanceOf(SoapClient::class, $client->connect());
+            $client->connect();
         });
     }
 
