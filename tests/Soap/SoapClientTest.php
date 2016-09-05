@@ -28,7 +28,7 @@ class SoapClientTest extends TestCase
         );
 
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertInstanceOf(SoapClient::class, $client);
         });
         return $clients;
@@ -37,7 +37,7 @@ class SoapClientTest extends TestCase
     public function testConnect()
     {
         $clients = $this->clients();
-        $clients->each(function($client){
+        $clients->each(function ($client) {
             $this->assertInstanceOf(SoapClient::class, $client->connect());
         });
     }
@@ -49,7 +49,7 @@ class SoapClientTest extends TestCase
     public function testConnectWithoutPassingHost()
     {
         $clients = $this->clients();
-        $clients->each(function($client){
+        $clients->each(function ($client) {
             $client->setHost('');
             $this->assertInstanceOf(SoapClient::class, $client->connect());
         });
@@ -58,7 +58,7 @@ class SoapClientTest extends TestCase
     public function testSetHost()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'setHost'), 'método "setHost" não encontrado');
             $client->setHost('http://example.com');
             $this->assertObjectHasAttribute('host', $client);
@@ -72,7 +72,7 @@ class SoapClientTest extends TestCase
     public function testGetHost()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'getHost'), 'método "getHost" não encontrado');
             $host = $client->getHost();
             $this->assertNotEmpty($host);
@@ -82,7 +82,7 @@ class SoapClientTest extends TestCase
     public function testSetOptions()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'setOptions'), 'método "setOptions" não encontrado');
             $client->setOptions(['this' => 'is a test']);
             $this->assertObjectHasAttribute('options', $client);
@@ -96,7 +96,7 @@ class SoapClientTest extends TestCase
     public function testGetOptions()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'getOptions'), 'método "getOptions" não encontrado');
             $client->setOptions(['this' => 'is another test']);
             $options = $client->getOptions();
@@ -107,7 +107,7 @@ class SoapClientTest extends TestCase
     public function testSetRequest()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'setRequest'), 'método "setRequest" não encontrado');
             $client->setRequest(['this' => 'is a request test']);
             $this->assertObjectHasAttribute('request', $client);
@@ -121,7 +121,7 @@ class SoapClientTest extends TestCase
     public function testGetRequest()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'getRequest'), 'método "getRequest" não encontrado');
             $client->setRequest(['this' => 'is another request test']);
             $request = $client->getRequest();
@@ -132,7 +132,7 @@ class SoapClientTest extends TestCase
     public function testSetService()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'setService'), 'método "setService" não encontrado');
             $client->setService('someService');
             $this->assertObjectHasAttribute('service', $client);
@@ -146,7 +146,7 @@ class SoapClientTest extends TestCase
     public function testGetService()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'getService'), 'método "getService" não encontrado');
             $client->setService('someService');
             $service = $client->getService();
@@ -157,7 +157,7 @@ class SoapClientTest extends TestCase
     public function testSetClient()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'setClient'), 'método "setClient" não encontrado');
             $nativeCliente = new NativeSoapClient($client->getHost());
             $client->setClient($nativeCliente);
@@ -172,7 +172,7 @@ class SoapClientTest extends TestCase
     public function testGetClient()
     {
         $clients = $this->clients();
-        $clients->each(function($client) {
+        $clients->each(function ($client) {
             $this->assertTrue(method_exists($client, 'getClient'), 'método "getClient" não encontrado');
             $nativeCliente = new NativeSoapClient($client->getHost());
             $client->setClient($nativeCliente);
