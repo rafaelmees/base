@@ -4,7 +4,6 @@ namespace Bludata\Soap;
 
 use InvalidArgumentException;
 use SoapClient as NativeSoapClient;
-use SoapFault;
 
 class SoapClient
 {
@@ -84,6 +83,7 @@ class SoapClient
 
         $this->connect();
         $client = $this->getClient();
+
         return $client->__soapCall($this->getService(), $this->getRequest());
     }
 
