@@ -2,7 +2,7 @@
 
 namespace Bludata\Soap;
 
-use Exception;
+use InvalidArgumentException;
 use SoapClient as NativeSoapClient;
 use SoapFault;
 
@@ -53,7 +53,7 @@ class SoapClient
     public function connect()
     {
         if (!$host = $this->getHost()) {
-            throw new Exception('Host não informado');
+            throw new InvalidArgumentException('Host não informado');
         }
 
         $client = new NativeSoapClient($host, $this->getOptions());
@@ -70,20 +70,20 @@ class SoapClient
     public function call()
     {
         if (!$this->getHost()) {
-            throw new Exception('HOST do WSDL não foi informado');
+            throw new InvalidArgumentException('HOST do WSDL não foi informado');
         }
 
         if (!$this->getService()) {
-            throw new Exception('Serviço não informado');
+            throw new InvalidArgumentException('Serviço não informado');
         }
 
         if (!$this->getRequest()) {
-            throw new Exception('Request não informado');
+            throw new InvalidArgumentException('Request não informado');
         }
 
         if (!$this->getClient()) {
             if (!$this->connect()) {
-                throw new Exception('Não foi possivel conectar ao WSDL');
+                throw new InvalidArgumentException('Não foi possivel conectar ao WSDL');
             }
         }
 

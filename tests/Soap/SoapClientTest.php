@@ -42,6 +42,19 @@ class SoapClientTest extends TestCase
         });
     }
 
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage Host não informado
+     */
+    public function testConnectWithoutPassingHost()
+    {
+        $clients = $this->clients();
+        $clients->each(function($client){
+            $client->setHost('');
+            $this->assertInstanceOf(SoapClient::class, $client->connect());
+        });
+    }
+
     public function testSetHost()
     {
         $clients = $this->clients();
