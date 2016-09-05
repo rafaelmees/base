@@ -4,7 +4,7 @@ namespace Bludata\Common\Traits;
 
 trait FormatTrait
 {
-    function onlyNumbers($input)
+    public function onlyNumbers($input)
     {
         $input = preg_replace('/\D/i', '', $input);
 
