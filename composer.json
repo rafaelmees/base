@@ -35,7 +35,6 @@
         "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "^1.6",
         "brianium/paratest": "^0.13.3",
-        "sebastian/peek-and-poke": "dev-master",
         "jaschweder/mock": "^1.7"
     },
     "autoload": {
@@ -53,5 +52,10 @@
         "files": [
             "./tests/functions.php"
         ]
+    },
+    "suggest": {
+        "ext-mongo": "Necessário para utilizar as funções do pacote ODM",
+        "ext-mongodb": "Necessário para utilizar as funções do pacote ODM",
+        "ext-soap": "Necessário para utilizar as funções do pacote Soap"
     }
 }
