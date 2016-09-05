@@ -58,6 +58,7 @@ class SoapClient
 
         $client = new NativeSoapClient($host, $this->getOptions());
         $this->setClient($client);
+
         return $this;
     }
 
@@ -88,6 +89,7 @@ class SoapClient
 
         try {
             $client = $this->getClient();
+
             return $client->__soapCall($this->getService(), $this->getRequest());
         } catch (SoapFault $e) {
             throw $e;
@@ -114,6 +116,7 @@ class SoapClient
     public function setHost($host)
     {
         $this->host = $host;
+
         return $this;
     }
 
@@ -137,6 +140,7 @@ class SoapClient
     public function setOptions(array $options)
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -165,7 +169,7 @@ class SoapClient
 
         foreach ($params as $param => $value) {
             $request[$param] = $value;
-        };
+        }
 
         $this->request = $request;
 
@@ -192,6 +196,7 @@ class SoapClient
     public function setService($service)
     {
         $this->service = $service;
+
         return $this;
     }
 
@@ -215,6 +220,7 @@ class SoapClient
     public function setClient(NativeSoapClient $client)
     {
         $this->client = $client;
+
         return $this;
     }
 }
