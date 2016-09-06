@@ -69,22 +69,25 @@ class SoapClient
      */
     public function call()
     {
-        if (!$this->getHost()) {
+        $host = $this->getHost();
+        if (!$host || empty($host)) {
             throw new InvalidArgumentException('Host não informado');
         }
 
-        if (!$this->getService()) {
+        $service = $this->getService();
+        if (!$service || empty($service)) {
             throw new InvalidArgumentException('Serviço não informado');
         }
 
-        if (!$this->getRequest()) {
+        $request = $this->getRequest();
+        if (!$request || empty($request)) {
             throw new InvalidArgumentException('Request não informada');
         }
 
         $this->connect();
         $client = $this->getClient();
 
-        return $client->__soapCall($this->getService(), $this->getRequest());
+        return $client->__soapCall($service, $request);
     }
 
     /**
@@ -152,16 +155,8 @@ class SoapClient
      *
      * @return self
      */
-    public function setRequest($params)
+    public function setRequest($request)
     {
-        if (!$request = $this->getRequest()) {
-            $request = [];
-        }
-
-        foreach ($params as $param => $value) {
-            $request[$param] = $value;
-        }
-
         $this->request = $request;
 
         return $this;
