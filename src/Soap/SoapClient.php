@@ -74,7 +74,7 @@ class SoapClient
         }
 
         $service = $this->getService();
-        if (!$this->getService()) {
+        if (!$service || empty($service)) {
             throw new InvalidArgumentException('Serviço não informado');
         }
 
