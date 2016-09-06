@@ -22,11 +22,11 @@ class FormatHelper
             throw new InvalidArgumentException('Formato de saída inválido');
         }
 
-        if ($date instanceOf DateTime && $to === 'obj') {
+        if ($date instanceof DateTime && $to === 'obj') {
             return $date;
         }
 
-        if ($date instanceOf DateTime) {
+        if ($date instanceof DateTime) {
             return $date->format($to);
         }
 
