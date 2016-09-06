@@ -4,7 +4,6 @@ namespace Bludata\Soap;
 
 use InvalidArgumentException;
 use SoapClient as NativeSoapClient;
-use SoapFault;
 
 class SoapClient
 {
