@@ -2,25 +2,51 @@
 
 namespace Bludata\Common\Helpers;
 
+use DateTime;
+use InvalidArgumentException;
+
 class FormatHelper
 {
-    public static function onlyNumbers($value)
+    public static function onlyNumbers($input)
     {
         return preg_replace('/\D/i', '', $input);
     }
 
-    public static function parseDate($date, $from = 'yyyy-mm-dd', $to = 'obj')
+    public static function parseDate($date, $from = 'Y-m-d', $to = 'obj')
     {
-        if (is_string($date) && $from == 'yyyy-mm-dd' && $to == 'obj') {
-            return new \DateTime($date);
-        } elseif (is_string($date) && $from == 'dd/mm/yyyy' && ($to == 'obj' || $to == 'yyyy-mm-dd')) {
-            $explode = explode('/', $date);
-
-            $date = $explode[2].'-'.$explode[1].'-'.$explode[0];
-
-            return $to == 'obj' ? new \DateTime($date) : $date;
+        if (!is_string($from)) {
+            throw new InvalidArgumentException('Formato de entrada inválido');
         }
 
-        return $date;
+        if (!is_string($to)) {
+            throw new InvalidArgumentException('Formato de saída inválido');
+        }
+
+        if ($date instanceof DateTime && $to === 'obj') {
+            return $date;
+        }
+
+        if ($date instanceof DateTime) {
+            return $date->format($to);
+        }
+
+        $dateObject = DateTime::createFromFormat($from, $date);
+
+        if ($to === 'obj') {
+            return $dateObject;
+        }
+
+        if (is_string($to)) {
+            return $dateObject->format($to);
+        }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                'Não foi possível converter a data "%s" do formato "%s" para o formato "%s"',
+                $date,
+                $from,
+                $to
+            )
+        );
     }
 }
