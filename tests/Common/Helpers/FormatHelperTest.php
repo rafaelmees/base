@@ -28,21 +28,37 @@ class FormatHelperTest extends TestCase
         $this->assertEquals(FormatHelper::onlyNumbers($number), $result);
     }
 
-    public function parseDateProvider()
+    public function parseDateWithoutObjectsProvider()
     {
         return [
             ['2016-01-01','Y-m-d','d/m/Y', '01/01/2016'],
-            ['01/01/2016','d/m/Y','Y-m-d', '2016-01-01'],
+            ['01/01/2016','d/m/Y','Y-m-d', '2016-01-01']
+        ];
+    }
+
+    /**
+     * @dataProvider parseDateWithoutObjectsProvider
+     */
+    public function testParseDateWithoutObjects($date, $from, $to, $result)
+    {
+        $this->assertEquals(FormatHelper::parseDate($date, $from, $to), $result);
+    }
+
+    public function parseDateWithObjectsProvider()
+    {
+        return [
             ['2016-01-01','Y-m-d','obj', DateTime::createFromFormat('Y-m-d', '2016-01-01')],
             ['01/01/2016','d/m/Y','obj', DateTime::createFromFormat('d/m/Y', '01/01/2016')]
         ];
     }
 
     /**
-     * @dataProvider parseDateProvider
+     * @dataProvider parseDateWithObjectsProvider
      */
-    public function testParseDate($date, $from, $to, $result)
+    public function testParseDateWithObjects($date, $from, $to, $result)
     {
-        $this->assertEquals(FormatHelper::parseDate($date, $from, $to), $result);
+        $functionResult = FormatHelper::parseDate($date, $from, $to);
+        $functionResult = $functionResult->format($to);
+        $this->assertEquals($functionResult, $result->format($to));
     }
 }
