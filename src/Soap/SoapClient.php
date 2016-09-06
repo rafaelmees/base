@@ -69,7 +69,8 @@ class SoapClient
      */
     public function call()
     {
-        if (!$this->getHost()) {
+        $host = $this->getHost();
+        if (!$host || empty($host)) {
             throw new InvalidArgumentException('Host não informado');
         }
 
