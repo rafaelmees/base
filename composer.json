@@ -43,7 +43,7 @@
             "Bludata\\": "src/"
         },
         "files": [
-            "./src/Helpers/functions.php"
+            "./src/Common/Helpers/helpers.php"
         ]
     },
     "autoload-dev": {

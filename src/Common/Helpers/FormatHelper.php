@@ -1,12 +1,12 @@
 <?php
 
-namespace Bludata\Helpers;
+namespace Bludata\Common\Helpers;
 
 class FormatHelper
 {
     public static function onlyNumbers($value)
     {
-        return preg_replace('/[^0-9]/', '', $value);
+        return preg_replace('/\D/i', '', $input);
     }
 
     public static function parseDate($date, $from = 'yyyy-mm-dd', $to = 'obj')
