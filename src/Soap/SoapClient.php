@@ -85,6 +85,7 @@ class SoapClient
 
         $this->connect();
         $client = $this->getClient();
+
         return $client->__soapCall($service, $request);
     }
 
