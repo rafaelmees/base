@@ -1,85 +1,8 @@
 # Base API
 
-[![StyleCI](https://styleci.io/repos/56002039/shield)](https://styleci.io/repos/56002039)
 [![Build Status](https://travis-ci.org/raivieira/base-api-php.svg?branch=master)](https://travis-ci.org/raivieira/base-api-php)
+[![StyleCI](https://styleci.io/repos/56002039/shield)](https://styleci.io/repos/56002039)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/raivieira/base-api-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/raivieira/base-api-php/?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/57b6e834090d4d00328f4eb3/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57b6e834090d4d00328f4eb3)
 [![codecov](https://codecov.io/gh/raivieira/base-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/raivieira/base-api-php)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/raivieira/base-api-php/master/LICENSE.md)
-
-### Roadmap
-
-- Criar testes para Bludata\Doctrine\ORM
-- Mover o QueryWorker para Bludata\Doctrine\Common
-- Centralizar funcionalidados comuns entre ORM e ODM em Bludata\Doctrine\Common
-- Refatorar o código
-- etc
-
-### Arquivos
-```
-src
-├── Doctrine
-│   ├── Common
-│   │   └── Interfaces
-│   │       ├── BaseEntityInterface.php
-│   │       ├── BaseRepositoryInterface.php
-│   │       ├── EntityManagerInterface.php
-│   │       └── EntityTimestampInterface.php
-│   ├── ODM
-│   │   └── MongoDB
-│   │       ├── Entities
-│   │       │   └── BaseEntity.php
-│   │       ├── EntityManager.php
-│   │       └── Repositories
-│   │           └── BaseRepository.php
-│   └── ORM
-│       ├── Entities
-│       │   └── BaseEntity.php
-│       └── Repositories
-│           ├── BaseRepository.php
-│           └── QueryWorker.php
-├── Helpers
-│   ├── CurlHelper.php
-│   ├── FormatHelper.php
-│   └── functions.php
-└── Lumen
-    ├── Application
-    │   └── BaseApplication.php
-    ├── Authentication
-    │   └── JWT
-    │       ├── Exceptions
-    │       │   ├── NotPermissionAccessException.php
-    │       │   └── RestrictAccessException.php
-    │       ├── Interfaces
-    │       │   ├── AuthRepositoryInterface.php
-    │       │   └── JWTInterface.php
-    │       ├── Libs
-    │       │   ├── JWT.php
-    │       │   └── User.php
-    │       ├── Middleware
-    │       │   └── AuthMiddleware.php
-    │       └── Providers
-    │           └── JWTServiceProvider.php
-    ├── Http
-    │   ├── Controllers
-    │   │   ├── BaseController.php
-    │   │   └── CRUDController.php
-    │   └── Middleware
-    │       └── CorsMiddleware.php
-    ├── Providers
-    │   ├── CustomConnectionSqlanywhereServiceProvider.php
-    │   └── RegisterSymfonyConstraintsServiceProvider.php
-    ├── Services
-    │   ├── BaseService.php
-    │   └── CRUDService.php
-    └── Tests
-        ├── BaseTest.php
-        ├── Http
-        │   └── Controllers
-        │       ├── BaseControllerTest.php
-        │       └── CRUDControllerTest.php
-        ├── Repositories
-        │   └── BaseRepositoryTest.php
-        └── Services
-            ├── BaseServiceTest.php
-            └── CRUDServiceTest.php
-```
