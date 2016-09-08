@@ -23,6 +23,7 @@ trait AttributesTrait
                     if (method_exists($this, $getMethod)) {
                         return $this->$getMethod();
                     }
+
                     return $this->$attr;
                 },
                 $attributes
@@ -120,6 +121,7 @@ trait AttributesTrait
 
                     $newParam[] = $p;
                 }
+
                 return $newParam;
             }
 
