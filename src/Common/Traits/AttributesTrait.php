@@ -49,24 +49,11 @@ trait AttributesTrait
             return $this->$getMethod();
         }
 
-        trigger_error(
+        throw new InvalidArgumentException(
             sprintf(
                 'The class "%s" don\'t have a method "%s"',
                 get_class($this),
                 $getMethod
-            ),
-            E_USER_WARNING
-        );
-
-        if (array_key_exists($attr, $attributes)) {
-            return $attributes[$attr];
-        }
-
-        throw new InvalidArgumentException(
-            sprintf(
-                'The class "%s" don\'t have an attribute "%s"',
-                get_class($this),
-                $attr
             )
         );
     }
@@ -79,26 +66,11 @@ trait AttributesTrait
             return $this->$setMethod($value);
         }
 
-        trigger_error(
+        throw new InvalidArgumentException(
             sprintf(
                 'The class "%s" don\'t have a method "%s"',
                 get_class($this),
                 $setMethod
-            ),
-            E_USER_WARNING
-        );
-
-        $attributes = $this->getAttributes();
-
-        if (in_array($attr, $attributes)) {
-            $this->$attr = $value;
-        }
-
-        throw new InvalidArgumentException(
-            sprintf(
-                'The class "%s" don\'t have an attribute "%s"',
-                get_class($this),
-                $attr
             )
         );
     }

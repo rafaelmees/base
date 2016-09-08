@@ -6,13 +6,20 @@ use PHPUnit_Framework_TestCase;
 use SebastianBergmann\PeekAndPoke\Proxy;
 use Faker\Factory;
 
-class TestCase extends PHPUnit_Framework_TestCase {
+class TestCase extends PHPUnit_Framework_TestCase
+{
 
     protected $faker;
 
     public function proxy($object)
     {
         return new Proxy($object);
+    }
+
+    public function mock($name)
+    {
+        global $factory;
+        return $factory->mock($name);
     }
 
     public function faker()
