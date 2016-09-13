@@ -207,12 +207,12 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                         $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
                         if ($this->$key) {
-                            $dateFormat = 'Y-m-d H:i:s';
+                            $dateFormat = 'Y-m-d';
 
                             if ($metaDataKey) {
                                 switch ($metaDataKey['type']) {
-                                    case 'date':
-                                        $dateFormat = 'Y-m-d';
+                                    case 'datetime':
+                                        $dateFormat = 'Y-m-d H:i:s';
                                         break;
 
                                     case 'time':
