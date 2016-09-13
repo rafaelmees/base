@@ -35,8 +35,7 @@
         "sebastian/peek-and-poke": "dev-master",
         "fzaninotto/faker": "^1.6",
         "brianium/paratest": "^0.13.3",
-        "jaschweder/mock": "^1.7",
-        "doctrine/mongodb-odm": "^1.1"
+        "jaschweder/mock": "^1.7"
     },
     "autoload": {
         "psr-4": {
@@ -55,6 +54,7 @@
         ]
     },
     "suggest": {
+        "doctrine/mongodb-odm": "^1.1",
         "ext-mongo": "Necessário para utilizar as funções do pacote ODM",
         "ext-mongodb": "Necessário para utilizar as funções do pacote ODM",
         "ext-soap": "Necessário para utilizar as funções do pacote Soap"
