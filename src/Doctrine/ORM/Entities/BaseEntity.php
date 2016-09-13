@@ -171,7 +171,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
             $method = 'set'.ucfirst($key);
 
             if (method_exists($this, $method) && $set) {
-                $this->$method($value);
+                $this->$method(is_string($value) && strlen($value) <= 0 ? null : $value);
             }
         }
 
