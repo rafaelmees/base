@@ -157,8 +157,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
     public function setPropertiesEntity(array $data)
     {
-        foreach ($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $set = true;
 
             if (
@@ -171,8 +170,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
             $method = 'set'.ucfirst($key);
 
-            if (method_exists($this, $method) && $set)
-            {
+            if (method_exists($this, $method) && $set) {
                 $this->$method(is_string($value) && strlen($value) <= 0 ? null : $value);
             }
         }
