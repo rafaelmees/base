@@ -26,6 +26,7 @@ class CurlHelper
         curl_setopt($this->init, CURLOPT_URL, trim($this->baseUrl.$this->posFixUrl));
         curl_setopt($this->init, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->init, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($this->init, CURLOPT_SSL_VERIFYPEER, false);
 
         foreach ($this->options as $key => $value) {
             curl_setopt($this->init, $key, $value);
