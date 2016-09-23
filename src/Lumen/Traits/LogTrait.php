@@ -55,7 +55,7 @@ trait LogTrait
 
     public function log($level, $message, array $context = [])
     {
-        $logger = app(\Psr\Log\LoggerInterface::class);
+        $logger = app('log');
 
         $log = $this->toLogMessage($message);
 
