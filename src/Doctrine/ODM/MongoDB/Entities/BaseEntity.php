@@ -6,6 +6,8 @@ use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Doctrine\ODM\MongoDB\PersistentCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ODM\MappedSuperclass
