@@ -57,8 +57,7 @@
         "alcaeus/mongo-php-adapter": "Necessário para utilizar as funções do pacote ODM",
         "doctrine/mongodb": "Necessário para utilizar as funções do pacote ODM",
         "doctrine/mongodb-odm": "Necessário para utilizar as funções do pacote ODM",
-        "ext-mongo": "Necessário para utilizar as funções do pacote ODM",
-        "ext-mongodb": "Necessário para utilizar as funções do pacote ODM",
+        "ext-mongodb-alpha": "Necessário para utilizar as funções do pacote ODM",
         "ext-soap": "Necessário para utilizar as funções do pacote Soap"
     }
 }
