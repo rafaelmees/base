@@ -2,6 +2,8 @@
 
 namespace Bludata\Lumen\Traits;
 
+use Psr\Log\LoggerInterface;
+
 trait LogTrait
 {
     public function emergency($message, array $context = [])
@@ -55,7 +57,7 @@ trait LogTrait
 
     public function log($level, $message, array $context = [])
     {
-        $logger = app('log');
+        $logger = app(LoggerInterface::class);
 
         $log = $this->toLogMessage($message);
 
