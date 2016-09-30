@@ -27,14 +27,15 @@ before_install:
   - docker pull mongo
   - docker run -d -p 27017:27017 mongo
   - docker ps -a
-  - printf "\n" | pecl install mongo
   - pecl install mongodb
   - phpenv config-add php.ini
 
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
-  - travis_retry composer require doctrine/mongodb-odm:1.0.7
+  - travis_retry composer require alcaeus/mongo-php-adapter:dev-master
+  - travis_retry composer require doctrine/mongodb:dev-master
+  - travis_retry composer require doctrine/mongodb-odm:dev-master
 
 script:
   - if [ "$TRAVIS_PHP_VERSION" != "5.6" ]; then  travis_retry bash -x ./run-tests.sh; fi
