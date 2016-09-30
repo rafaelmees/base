@@ -26,7 +26,7 @@ before_install:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source --dev
+  - travis_retry composer install --no-interaction --prefer-dist
   - travis_retry composer require alcaeus/mongo-php-adapter
   - travis_retry composer require doctrine/mongodb:dev-master
   - travis_retry composer require doctrine/mongodb-odm:dev-master
