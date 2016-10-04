@@ -21,7 +21,7 @@ class CorsMiddleware
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
             header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, token, _');
-            header('Content-Type: application/json');
+            header('Content-Type: application/json; charset=utf-8');
         }
 
         if ($request->getRealMethod() == 'OPTIONS') {
