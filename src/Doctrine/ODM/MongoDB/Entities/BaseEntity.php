@@ -217,7 +217,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                                 }
                             }
                             $array[$key] = $this->$key->format($dateFormat);
-                        }
+                    } elseif ($this->$key instanceof \MongoTimestamp) {
+                        $array[$key] = $this->$key;
                     } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
                         $ids = [];
                         foreach ($this->$key->getValues() as $item) {
