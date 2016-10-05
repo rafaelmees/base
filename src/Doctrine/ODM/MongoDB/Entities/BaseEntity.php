@@ -196,7 +196,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         foreach ($this->getFillable() as $key) {
             if ($this->checkOnyExceptInArray($key, $options)) {
                 if (is_object($this->$key)) {
-                    if ($this->$key instanceof \DateTime) {
+                    if ($this->$key instanceof \DateTime || $this->$key instanceof \MongoTimestamp) {
                         $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
                         if ($this->$key) {
@@ -213,13 +213,19 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                                         break;
 
                                     default:
+                                        $dateFormat = 'Y-m-d H:i:s';
                                         break;
                                 }
                             }
+                            
+                            if ($this->$key instanceof \MongoTimestamp) {
+                                $timestamp = new \DateTime;
+                                $timestamp->setTimestamp($this->$key->sec);
+                                $this->$key = $timestamp;
+                            }
+
                             $array[$key] = $this->$key->format($dateFormat);
                         }
-                    } elseif ($this->$key instanceof \MongoTimestamp) {
-                        $array[$key] = $this->$key;
                     } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
                         $ids = [];
                         foreach ($this->$key->getValues() as $item) {
