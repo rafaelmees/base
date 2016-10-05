@@ -217,9 +217,9 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                                         break;
                                 }
                             }
-                            
+
                             if ($this->$key instanceof \MongoTimestamp) {
-                                $timestamp = new \DateTime;
+                                $timestamp = new \DateTime();
                                 $timestamp->setTimestamp($this->$key->sec);
                                 $this->$key = $timestamp;
                             }
