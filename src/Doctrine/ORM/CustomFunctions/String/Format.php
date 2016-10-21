@@ -2,8 +2,8 @@
 
 namespace Bludata\Doctrine\ORM\CustomFunctions\String;
 
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Lexer;
 
 class Format extends FunctionNode
 {
@@ -14,25 +14,31 @@ class Format extends FunctionNode
     protected $dateExpression;
 
     /**
-     * holds the '%format' parameter of the DATE_FORMAT DQL statement
+     * holds the '%format' parameter of the DATE_FORMAT DQL statement.
+     *
      * @var string
      */
     protected $formatChar;
+
     /**
-     * getSql - allows ORM  to inject a DATE_FORMAT() statement into an SQL string being constructed
+     * getSql - allows ORM  to inject a DATE_FORMAT() statement into an SQL string being constructed.
+     *
      * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker
+     *
      * @return void
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return 'FORMAT(' .
-                $sqlWalker->walkArithmeticExpression($this->dateExpression) .
+        return 'FORMAT('.
+                $sqlWalker->walkArithmeticExpression($this->dateExpression).
                 ','.
-                $sqlWalker->walkStringPrimary($this->formatChar) .
+                $sqlWalker->walkStringPrimary($this->formatChar).
                 ')';
     }
+
     /**
-     * parse - allows DQL to breakdown the DQL string into a processable structure
+     * parse - allows DQL to breakdown the DQL string into a processable structure.
+     *
      * @param \Doctrine\ORM\Query\Parser $parser
      */
     public function parse(\Doctrine\ORM\Query\Parser $parser)
