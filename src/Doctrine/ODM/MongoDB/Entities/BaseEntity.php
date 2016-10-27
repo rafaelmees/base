@@ -74,9 +74,15 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      */
     public function prePersist()
     {
-        $this->getRepository()
-            ->preSave($this)
-            ->validate($this);
+        $repository = $this->getRepository();
+
+        if (method_exists($repository, 'preSave')) {
+            $repository->preSave($this);
+        }
+
+        if (method_exists($repository, 'preSave')) {
+            $repository->validate($this);
+        }
     }
 
     /**
@@ -84,9 +90,15 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      */
     public function preUpdate()
     {
-        $this->getRepository()
-            ->preSave($this)
-            ->validate($this);
+        $repository = $this->getRepository();
+
+        if (method_exists($repository, 'preSave')) {
+            $repository->preSave($this);
+        }
+
+        if (method_exists($repository, 'preSave')) {
+            $repository->validate($this);
+        }
     }
 
     public function getRepository()
