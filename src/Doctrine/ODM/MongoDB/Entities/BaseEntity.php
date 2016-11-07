@@ -214,22 +214,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                         if ($this->$key) {
                             $dateFormat = 'Y-m-d H:i:s';
 
-                            if ($metaDataKey) {
-                                switch ($metaDataKey['type']) {
-                                    case 'date':
-                                        $dateFormat = 'Y-m-d';
-                                        break;
-
-                                    case 'time':
-                                        $dateFormat = 'H:i:s';
-                                        break;
-
-                                    default:
-                                        $dateFormat = 'Y-m-d H:i:s';
-                                        break;
-                                }
-                            }
-
                             if ($this->$key instanceof \MongoTimestamp) {
                                 $timestamp = new \DateTime();
                                 $timestamp->setTimestamp($this->$key->sec);
