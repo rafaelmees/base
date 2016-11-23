@@ -200,17 +200,23 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         $classMetadata = $this->getRepository()->getClassMetadata();
         $array = [];
 
-        foreach ($this->getFillable() as $key) {
-            if ($this->checkOnyExceptInArray($key, $options)) {
-                if (is_object($this->$key)) {
-                    if ($this->$key instanceof DateTime) {
-                        $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+        foreach ($this->getFillable() as $key)
+        {
+            $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
-                        if ($this->$key) {
+            if ($this->checkOnyExceptInArray($key, $options))
+            {
+                if (is_object($this->$key))
+                {
+                    if ($this->$key instanceof DateTime)
+                    {
+                        if ($this->$key)
+                        {
                             $dateFormat = 'Y-m-d';
 
                             if ($metaDataKey) {
-                                switch ($metaDataKey['type']) {
+                                switch ($metaDataKey['type'])
+                                {
                                     case 'datetime':
                                         $dateFormat = 'Y-m-d H:i:s';
                                         break;
@@ -225,17 +231,31 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                             }
                             $array[$key] = $this->$key->format($dateFormat);
                         }
-                    } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
+                    }
+                    elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection)
+                    {
                         $ids = [];
-                        foreach ($this->$key->getValues() as $item) {
+                        foreach ($this->$key->getValues() as $item)
+                        {
                             $ids[] = $item->getId();
                         }
                         $array[$key] = $ids;
-                    } else {
+                    }
+                    else
+                    {
                         $array[$key] = $this->$key->getId();
                     }
-                } else {
-                    $array[$key] = $this->$key;
+                }
+                else
+                {
+                    if ($metaDataKey['type'] == 'decimal')
+                    {
+                        $array[$key] = (float) $this->$key;
+                    }
+                    else
+                    {
+                        $array[$key] = $this->$key;
+                    }
                 }
             }
         }
