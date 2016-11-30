@@ -798,7 +798,7 @@ class QueryWorker
                 $expression = $this->queryBuilder->expr()->notLike($field, $value);
                 break;
             case 'isinstanceof':
-                $expression = $this->queryBuilder->expr()->isInstanceOf($field, $value);
+                $expression = $alias.' INSTANCE OF '.$value;
                 break;
             case 'between':
                 $expression = $this->queryBuilder->expr()->between($field, $this->queryBuilder->expr()->literal($value[0]), $this->queryBuilder->expr()->literal($value[1]));
