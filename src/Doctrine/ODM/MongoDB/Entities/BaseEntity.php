@@ -207,36 +207,33 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
         foreach ($this->getFillable() as $key) {
             if ($this->checkOnyExceptInArray($key, $options)) {
-                if (is_object($this->$key)) {
-                    if ($this->$key instanceof \DateTime || $this->$key instanceof \MongoTimestamp) {
-                        $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+                if (is_object($this->$key) && $this->$key instanceof \DateTime || $this->$key instanceof \MongoTimestamp) {
+                    $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
-                        if ($this->$key) {
-                            $dateFormat = 'Y-m-d H:i:s';
+                    if ($this->$key) {
+                        $dateFormat = 'Y-m-d H:i:s';
 
-                            if ($this->$key instanceof \MongoTimestamp) {
-                                $timestamp = new \DateTime();
-                                $timestamp->setTimestamp($this->$key->sec);
-                                $this->$key = $timestamp;
-                            }
-
-                            $array[$key] = $this->$key->format($dateFormat);
+                        if ($this->$key instanceof \MongoTimestamp) {
+                            $timestamp = new \DateTime();
+                            $timestamp->setTimestamp($this->$key->sec);
+                            $this->$key = $timestamp;
                         }
-                    } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
-                        $ids = [];
-                        foreach ($this->$key->getValues() as $item) {
-                            $ids[] = $item->getId();
-                        }
-                        $array[$key] = $ids;
-                    } else {
-                        $array[$key] = $this->$key->getId();
+
+                        $array[$key] = $this->$key->format($dateFormat);
                     }
+                } elseif (is_object($this->$key) && $this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
+                    $ids = [];
+                    foreach ($this->$key->getValues() as $item) {
+                        $ids[] = $item->getId();
+                    }
+                    $array[$key] = $ids;
+                } elseif ( method_exists($this->$key, 'getId')) {
+                    $array[$key] = $this->$key->getId();
                 } else {
                     $array[$key] = $this->$key;
                 }
             }
         }
-
         return $array;
     }
 }
