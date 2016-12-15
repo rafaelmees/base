@@ -4,6 +4,7 @@ namespace Bludata\Doctrine\ORM\Entities;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
+use Bludata\Doctrine\Common\Traits\SetPropertiesEntityTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
+    use SetPropertiesEntityTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -163,29 +166,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function getOnlyUpdate()
     {
         return $this->getOnlyStore();
-    }
-
-    public function setPropertiesEntity(array $data)
-    {
-        foreach ($data as $key => $value) {
-            $set = true;
-
-            if (
-                ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore()))
-                ||
-                (isset($data['id']) && is_numeric($data['id']) && !in_array($key, $this->getOnlyUpdate()))
-            ) {
-                $set = false;
-            }
-
-            $method = 'set'.ucfirst($key);
-
-            if (method_exists($this, $method) && $set) {
-                $this->$method(is_string($value) && strlen($value) <= 0 ? null : $value);
-            }
-        }
-
-        return $this;
     }
 
     final protected function checkOnyExceptInArray($key, array $options = null)
