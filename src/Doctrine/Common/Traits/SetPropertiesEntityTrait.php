@@ -59,7 +59,8 @@ trait SetPropertiesEntityTrait
                 });
 
                 if ($column) {
-                    $column = $column[0];
+                    $column = array_values($column);
+                    $column = array_shift($column);
                 }
 
                 /**
@@ -73,6 +74,9 @@ trait SetPropertiesEntityTrait
                  * Verifica se a propriedade está usando a anotação Bludata\Doctrine\Common\Annotations\ToObject.
                  */
                 if ($toObject) {
+                    $toObject = array_values($toObject);
+                    $toObject = array_shift($toObject);
+
                     /*
                      * Caso seja um campo de data, utilizamos o método FormatHelper::parseDate para converter o valor enviado pelo usuário para um objeto DateTime.
                      */
@@ -96,7 +100,8 @@ trait SetPropertiesEntityTrait
                          * Se for encontrado alguma das anotações, iremos realizar o tratamento adequado para a anotação encontrada.
                          */
                         if ($ormMapping) {
-                            $ormMapping = $ormMapping[0];
+                            $ormMapping = array_values($ormMapping);
+                            $ormMapping = array_shift($ormMapping);
 
                             $targetEntityName = $reflectionClass->getNamespaceName().'\\'.$ormMapping->targetEntity;
                             $targetEntity = new $targetEntityName();
@@ -116,9 +121,9 @@ trait SetPropertiesEntityTrait
                                  * então o usuário terá que implementar o método addX?().
                                  * Do contrário será lançada uma BadMethodCallException.
                                  */
-                                $methodAdd = 'add'.$ormMapping->targetEntity;
-                                if (!method_exists($this, $methodAdd)) {
-                                    throw new \BadMethodCallException('Para utilizar Bludata\Doctrine\Common\Annotations\ToObject em '.get_called_class().'::$'.$key.' você precisar declarar o método '.get_called_class().'::'.$methodAdd.'()');
+                                $methodAdd = $toObject->customMethodAdd ? $toObject->customMethodAdd : 'add'.$ormMapping->targetEntity;
+                                if (!method_exists($this, $methodAdd) && !$toObject->customMethodAdd) {
+                                    throw new \BadMethodCallException('Para utilizar '.get_class($toObject).' em '.get_called_class().'::$'.$key.' você precisar declarar o método '.get_called_class().'::'.$methodAdd.'(), ou, informar o parâmetro '.get_class($toObject).'::customMethodAdd');
                                 }
 
                                 if (
