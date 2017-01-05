@@ -8,5 +8,5 @@ namespace Bludata\Doctrine\Common\Annotations;
  */
 class ToObject
 {
-	public $customMethodAdd;
+    public $customMethodAdd;
 }
