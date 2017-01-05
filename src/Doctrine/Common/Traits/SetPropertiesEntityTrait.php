@@ -78,7 +78,7 @@ trait SetPropertiesEntityTrait
                      */
                     if ($column instanceof Column && ($column->type == 'date' || $column->type == 'datetime')) {
                         $this->$methodSet(
-                            FormatHelper::parseDate($valueKey)
+                            FormatHelper::parseDate($valueKey, ($column->type == 'date' ? 'Y-m-d' : 'Y-m-d H:i:s'))
                         );
                     } else {
                         /**
