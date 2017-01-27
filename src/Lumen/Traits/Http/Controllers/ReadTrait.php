@@ -9,7 +9,7 @@ trait ReadTrait
     protected $optionsToArrayIndex;
     protected $optionsToArrayShow;
 
-	public function index(Request $request)
+    public function index(Request $request)
     {
         return response()->json(
             $this->mainService

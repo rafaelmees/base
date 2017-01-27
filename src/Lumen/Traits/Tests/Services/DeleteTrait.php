@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait DeleteTrait
 {
-	/**
+    /**
      * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function testRemove()

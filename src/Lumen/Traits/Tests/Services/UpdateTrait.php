@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait UpdateTrait
 {
-	public function testUpdate()
+    public function testUpdate()
     {
         $flushedMockArray = $this->getRepositoryTest()->getFlushedMockArray();
         $mockArray = $this->getRepositoryTest()->getMockArray();

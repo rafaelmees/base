@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
 trait ReadTrait
 {
-	public function testIndex()
+    public function testIndex()
     {
         $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 

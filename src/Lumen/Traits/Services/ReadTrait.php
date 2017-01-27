@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Services;
 
 trait ReadTrait
 {
-	public function findAll(array $filters = null)
+    public function findAll(array $filters = null)
     {
         return $this->mainRepository->findAll()->withFilters($filters);
     }

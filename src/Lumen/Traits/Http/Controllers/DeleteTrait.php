@@ -5,8 +5,8 @@ namespace Bludata\Lumen\Traits\Http\Controllers;
 trait DeleteTrait
 {
     protected $optionsToArrayDestroy;
-    
-	public function destroy($id)
+
+    public function destroy($id)
     {
         $entity = $this->mainService
                        ->remove($id)

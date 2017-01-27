@@ -8,17 +8,17 @@ trait CreateTrait
 {
     protected $optionsToArrayStore;
 
-	public function store(Request $request)
+    public function store(Request $request)
     {
         $entity = $this->mainService
                        ->store(
-                       		$this->filterRequest(
-	                       		$request->json()->all(),
-	                            $this->mainService
-	                                 ->getMainRepository()
-	                                 ->createEntity()
-	                                 ->getOnlyStore()
-	                        )
+                               $this->filterRequest(
+                                   $request->json()->all(),
+                                $this->mainService
+                                     ->getMainRepository()
+                                     ->createEntity()
+                                     ->getOnlyStore()
+                            )
                        )
                        ->flush();
 

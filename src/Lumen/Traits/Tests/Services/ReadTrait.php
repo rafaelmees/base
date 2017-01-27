@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait ReadTrait
 {
-	public function testFindAll()
+    public function testFindAll()
     {
         $entity = $this->getService()
                        ->store($this->getRepositoryTest()->getMockArray())
@@ -16,7 +16,7 @@ trait ReadTrait
         $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $findAll[0]);
     }
 
-	public function testFind()
+    public function testFind()
     {
         $entity = $this->getService()
                        ->store($this->getRepositoryTest()->getMockArray())

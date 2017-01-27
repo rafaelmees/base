@@ -8,7 +8,7 @@ trait UpdateTrait
 {
     protected $optionsToArrayUpdate;
 
-	public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $entity = $this->mainService
                        ->update(

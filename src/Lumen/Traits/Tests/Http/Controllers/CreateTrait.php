@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
 trait CreateTrait
 {
-	public function testStore()
+    public function testStore()
     {
         $response = $this->curlHelper
                          ->post(

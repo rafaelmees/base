@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Services;
 
 trait UpdateTrait
 {
-	public function update($id, array $data)
+    public function update($id, array $data)
     {
         $entity = $this->mainRepository->find($id);
 

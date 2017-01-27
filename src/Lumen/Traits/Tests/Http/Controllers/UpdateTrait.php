@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
 trait UpdateTrait
 {
-	public function testUpdate()
+    public function testUpdate()
     {
         $flushedMockArray = $this->getServiceTest()->getRepositoryTest()->getFlushedMockArray();
         $mockArray = $this->getServiceTest()->getRepositoryTest()->getMockArray();

@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait CreateTrait
 {
-	public function testStore()
+    public function testStore()
     {
         $entity = $this->getService()
                        ->store($this->getRepositoryTest()->getMockArray())

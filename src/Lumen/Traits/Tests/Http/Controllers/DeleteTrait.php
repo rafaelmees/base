@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
 trait DeleteTrait
 {
-	public function testDestroy()
+    public function testDestroy()
     {
         $entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 

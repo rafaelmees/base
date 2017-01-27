@@ -4,7 +4,7 @@ namespace Bludata\Lumen\Traits\Services;
 
 trait CreateTrait
 {
-	public function store(array $data)
+    public function store(array $data)
     {
         $entity = $this->mainRepository->createEntity();
 
