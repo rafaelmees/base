@@ -85,7 +85,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * Inseri ou atualiza um registro.
+     * Inserir ou atualizar um registro.
      *
      * @param null | string | int | array
      *
@@ -119,7 +119,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * Marca um registro como deletado.
+     * Marcar um registro como deletado.
      *
      * @param object | int $target
      *

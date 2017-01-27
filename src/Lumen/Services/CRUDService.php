@@ -2,52 +2,12 @@
 
 namespace Bludata\Lumen\Services;
 
-use Bludata\Doctrine\ORM\Entities\BaseEntity;
-
 abstract class CRUDService extends BaseService
 {
-    abstract public function prePersistEntity(BaseEntity $entity);
+    use \Bludata\Lumen\Traits\Services\CreateTrait;
+    use \Bludata\Lumen\Traits\Services\ReadTrait;
+    use \Bludata\Lumen\Traits\Services\UpdateTrait;
+    use \Bludata\Lumen\Traits\Services\DeleteTrait;
 
-    public function findAll(array $filters = null)
-    {
-        return $this->mainRepository->findAll()->withFilters($filters);
-    }
-
-    public function find($id)
-    {
-        return $this->mainRepository->find($id);
-    }
-
-    public function store(array $data)
-    {
-        $entity = $this->mainRepository->createEntity();
-
-        $entity->setPropertiesEntity($data);
-
-        $this->prePersistEntity($entity);
-
-        $entity->save();
-
-        return $entity;
-    }
-
-    public function update($id, array $data)
-    {
-        $entity = $this->mainRepository->find($id);
-
-        $entity->setPropertiesEntity($data);
-
-        $this->prePersistEntity($entity);
-
-        $entity->save();
-
-        return $entity;
-    }
-
-    public function remove($id)
-    {
-        return $this->mainRepository
-                    ->find($id)
-                    ->remove();
-    }
+    abstract public function prePersistEntity(\Bludata\Doctrine\ORM\Entities\BaseEntity $entity);
 }
