@@ -10,7 +10,7 @@ use Symfony\Component\Validator\ValidatorBuilder;
 abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
 {
     /**
-     * Método executado nos eventos ORM\PrePersist e ORM\PreUpdate
+     * Método executado nos eventos ORM\PrePersist e ORM\PreUpdate.
      */
     public function preSave(BaseEntityInterface $entity)
     {
@@ -18,7 +18,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     }
 
     /**
-     * Método executado nos eventos ORM\PostPersist e ORM\PostUpdate
+     * Método executado nos eventos ORM\PostPersist e ORM\PostUpdate.
      */
     public function postSave(BaseEntityInterface $entity)
     {
