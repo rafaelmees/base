@@ -10,7 +10,21 @@ use Symfony\Component\Validator\ValidatorBuilder;
 
 abstract class BaseRepository extends DocumentRepository implements BaseRepositoryInterface
 {
-    abstract public function preSave(BaseEntityInterface $entity);
+    /**
+     * Método executado nos eventos ORM\PrePersist e ORM\PreUpdate
+     */
+    public function preSave(BaseEntityInterface $entity)
+    {
+        return $this;
+    }
+
+    /**
+     * Método executado nos eventos ORM\PostPersist e ORM\PostUpdate
+     */
+    public function postSave(BaseEntityInterface $entity)
+    {
+        return $this;
+    }
 
     abstract public function getMessageNotFound();
 

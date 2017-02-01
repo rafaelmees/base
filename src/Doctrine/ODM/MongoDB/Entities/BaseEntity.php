@@ -86,6 +86,22 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     }
 
     /**
+     * @ODM\PostPersist
+     */
+    public function postPersist()
+    {
+        $repository = $this->getRepository();
+
+        if (method_exists($repository, 'postSave')) {
+            $repository->postSave($this);
+        }
+
+        if (method_exists($repository, 'postSave')) {
+            $repository->validate($this);
+        }
+    }
+
+    /**
      * @ODM\PreUpdate
      */
     public function preUpdate()
@@ -97,6 +113,22 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         }
 
         if (method_exists($repository, 'preSave')) {
+            $repository->validate($this);
+        }
+    }
+
+    /**
+     * @ODM\PostUpdate
+     */
+    public function postUpdate()
+    {
+        $repository = $this->getRepository();
+
+        if (method_exists($repository, 'postSave')) {
+            $repository->postSave($this);
+        }
+
+        if (method_exists($repository, 'postSave')) {
             $repository->validate($this);
         }
     }
