@@ -100,6 +100,15 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     }
 
     /**
+     * @ORM\PostPersist
+     */
+    public function postPersist()
+    {
+        $this->getRepository()
+             ->postSave($this);
+    }
+
+    /**
      * @ORM\PreUpdate
      */
     public function preUpdate()
@@ -107,6 +116,15 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         $this->getRepository()
              ->preSave($this)
              ->validate($this);
+    }
+
+    /**
+     * @ORM\PostUpdate
+     */
+    public function postUpdate()
+    {
+        $this->getRepository()
+             ->postSave($this);
     }
 
     public function getRepository()

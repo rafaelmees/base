@@ -18,7 +18,11 @@ interface BaseEntityInterface
 
     public function prePersist();
 
+    public function postPersist();
+
     public function preUpdate();
+
+    public function postUpdate();
 
     /**
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
