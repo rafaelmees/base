@@ -26,6 +26,14 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         return $this;
     }
 
+    /**
+     * Método executado no evento ORM\PreFlush.
+     */
+    public function preFlush(BaseEntityInterface $entity)
+    {
+        return $this;
+    }
+
     abstract public function getMessageNotFound();
 
     public function validate(BaseEntityInterface $entity)

@@ -24,6 +24,8 @@ interface BaseRepositoryInterface
 
     public function postSave(BaseEntityInterface $entity);
 
+    public function preFlush(BaseEntityInterface $entity);
+
     public function save(BaseEntityInterface $entity);
 
     public function flush(BaseEntityInterface $entity = null);

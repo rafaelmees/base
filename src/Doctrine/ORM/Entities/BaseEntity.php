@@ -127,6 +127,15 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
              ->postSave($this);
     }
 
+    /**
+     * @ORM\PreFlush
+     */
+    public function preFlush()
+    {
+        $this->getRepository()
+             ->preFlush($this);
+    }
+
     public function getRepository()
     {
         return EntityManager::getRepository(get_class($this));

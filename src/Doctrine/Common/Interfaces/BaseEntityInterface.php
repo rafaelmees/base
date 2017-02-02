@@ -24,6 +24,8 @@ interface BaseEntityInterface
 
     public function postUpdate();
 
+    public function preFlush();
+
     /**
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store
      * É usado principalmente em $this->setPropertiesEntity e nos Controllers.

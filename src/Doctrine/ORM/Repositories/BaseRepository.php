@@ -25,6 +25,14 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
         return $this;
     }
 
+    /**
+     * Método executado no evento ORM\PreFlush.
+     */
+    public function preFlush(BaseEntityInterface $entity)
+    {
+        return $this;
+    }
+
     public function validate(BaseEntityInterface $entity)
     {
         $validator = (new ValidatorBuilder())
