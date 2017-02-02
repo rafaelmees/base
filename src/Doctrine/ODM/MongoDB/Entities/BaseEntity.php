@@ -134,7 +134,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     }
 
     /**
-     * @ORM\PreFlush
+     * @ODM\PreFlush
      */
     public function preFlush()
     {
