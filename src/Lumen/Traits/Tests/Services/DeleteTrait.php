@@ -9,9 +9,8 @@ trait DeleteTrait
      */
     public function testRemove()
     {
-        $entity = $this->getService()
-                       ->store($this->getRepositoryTest()->getMockArray())
-                       ->flush();
+        $entity = $this->getRepositoryTest()
+                       ->getFlushedMockObject();
 
         $this->getService()
              ->remove($entity->getId())

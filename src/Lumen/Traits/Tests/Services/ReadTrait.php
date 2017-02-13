@@ -6,9 +6,8 @@ trait ReadTrait
 {
     public function testFindAll()
     {
-        $entity = $this->getService()
-                       ->store($this->getRepositoryTest()->getMockArray())
-                       ->flush();
+        $entity = $this->getRepositoryTest()
+                       ->getFlushedMockObject();
 
         $findAll = $this->getService()->findAll()->getResult();
 
@@ -18,9 +17,8 @@ trait ReadTrait
 
     public function testFind()
     {
-        $entity = $this->getService()
-                       ->store($this->getRepositoryTest()->getMockArray())
-                       ->flush();
+        $entity = $this->getRepositoryTest()
+                       ->getFlushedMockObject();
 
         $find = $this->getService()->find($entity->getId());
 
