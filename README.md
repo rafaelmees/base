@@ -7,9 +7,21 @@
 [![codecov](https://codecov.io/gh/raivieira/base-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/raivieira/base-api-php)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/raivieira/base-api-php/master/LICENSE.md)
 
+## Setup
+
+### Docker
+```sh
+$ curl -sSL https://get.docker.com/ | sh
+```
+
+### Geran chave SSH
+```sh
+$ ssh-keygen -t rsa -b 4096 -C "nome.sobrenome@bludata.com.br"
+```
+
 ## Como instalar
 
-Alterar ``composer.json`` adicionado o repositÃ³rio do bitbucket, segue exemplo:
+Alterar ``composer.json`` adicionado o repositório do bitbucket, segue exemplo:
 
 ```json
 {
