@@ -14,14 +14,14 @@
 $ curl -sSL https://get.docker.com/ | sh
 ```
 
-### Geran chave SSH
+### Gerando chave SSH
 ```sh
 $ ssh-keygen -t rsa -b 4096 -C "nome.sobrenome@bludata.com.br"
 ```
 
 ## Como instalar
 
-Alterar ``composer.json`` adicionado o repositório do bitbucket, segue exemplo:
+Alterar ``composer.json`` adicionado o repositï¿½rio do bitbucket, segue exemplo:
 
 ```json
 {
