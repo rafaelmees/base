@@ -1,5 +1,5 @@
 {
-    "name": "bludata/base-api-php",
+    "name": "bludata/base",
     "type": "library",
     "description": "Pacote com funcionalidades básicas para criar uma API PHP",
     "keywords": ["bludata", "api", "rest"],
