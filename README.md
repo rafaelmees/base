@@ -27,12 +27,12 @@ Alterar ``composer.json`` adicionado o reposit�rio do bitbucket, segue exemplo
 {
     "require": {
         // ...
-        "bludata/base-api-php": "v2.2.4"
+        "bludata/base": "v2.2.4"
     },
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@bitbucket.org:bludata/base-api-php.git"
+            "url": "git@bitbucket.org:bludata/base.git"
         }
     ]
 }
