@@ -21,7 +21,7 @@ class TestCase extends BaseTestCase
             $config->setHydratorNamespace('Tests\\Hydrators');
             $config->setDefaultDB('test-base-api-php');
             $config->setMetadataDriverImpl(AnnotationDriver::create( __DIR__ .'/Entities/Stubs'));
-            $connection = new Connection;
+            $connection = new Connection(env('DB_MONGODB_HOST', 'localhost'));
             AnnotationDriver::registerAnnotationClasses();
             return EntityManager::create($connection, $config);
         });
