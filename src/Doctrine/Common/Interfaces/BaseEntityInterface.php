@@ -10,6 +10,8 @@ interface BaseEntityInterface
 
     public function remove();
 
+    public function restoreRemoved();
+
     public function flush($all = true);
 
     public function getRepository();

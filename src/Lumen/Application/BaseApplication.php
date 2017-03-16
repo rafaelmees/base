@@ -79,6 +79,24 @@ abstract class BaseApplication extends Application
                     'descriptionGroup' => $descriptionGroup,
                 ]);
             }
+
+            if (!in_array('destroyed', $except)) {
+                $this->get($prefix.'/destroyed', [
+                    'as'               => $prefix.'.destroyed',
+                    'uses'             => $controller.'@destroyed',
+                    'description'      => 'Buscar excluídos',
+                    'descriptionGroup' => $descriptionGroup,
+                ]);
+            }
+
+            if (!in_array('restoreDestroyed', $except)) {
+                $this->post($prefix.'/destroyed/{id:[0-9]+}', [
+                    'as'               => $prefix.'.restoreDestroyed',
+                    'uses'             => $controller.'@restoreDestroyed',
+                    'description'      => 'Restaurar excluído',
+                    'descriptionGroup' => $descriptionGroup,
+                ]);
+            }
         }
 
         if ($routes instanceof Closure) {

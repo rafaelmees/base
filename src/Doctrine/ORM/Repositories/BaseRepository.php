@@ -4,6 +4,7 @@ namespace Bludata\Doctrine\ORM\Repositories;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
+use Bludata\Doctrine\ORM\Helpers\FilterHelper;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
 
@@ -153,6 +154,31 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
         $this->em()->remove($entity);
 
         return $entity;
+    }
+
+    public function findAllRemoved()
+    {
+        FilterHelper::disableSoftDeleteableFilter();
+
+        $removed = $this->createQueryWorker()
+                        ->andWhere('deletedAt', 'isnotnull');
+
+        return $removed;
+    }
+
+    public function findRemoved($id, $abort = true)
+    {
+        $removed = $this->findAllRemoved()
+                        ->andWhere('id', '=', $id)
+                        ->getOneResult();
+
+        if (!$removed && $abort) {
+            abort(404, $this->getMessageNotFound());
+        }
+
+        FilterHelper::enableSoftDeleteableFilter();
+
+        return $removed;
     }
 
     /**

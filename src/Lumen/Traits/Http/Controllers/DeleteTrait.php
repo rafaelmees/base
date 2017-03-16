@@ -14,4 +14,23 @@ trait DeleteTrait
 
         return response()->json($entity->toArray($this->optionsToArrayDestroy));
     }
+
+    public function destroyed()
+    {
+        return response()->json(
+            $this->mainService
+                 ->findAllDestroyed()
+                 ->toArray()
+        );
+    }
+
+    public function restoreDestroyed($id)
+    {
+        return response()->json(
+            $this->mainService
+                 ->restoreDestroyed($id)
+                 ->flush()
+                 ->toArray()
+        );
+    }
 }

@@ -20,6 +20,10 @@ interface BaseRepositoryInterface
 
     public function remove($target);
 
+    public function findAllRemoved();
+
+    public function findRemoved($id, $abort = true);
+
     public function preSave(BaseEntityInterface $entity);
 
     public function postSave(BaseEntityInterface $entity);

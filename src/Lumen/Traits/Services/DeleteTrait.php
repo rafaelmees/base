@@ -10,4 +10,17 @@ trait DeleteTrait
                     ->find($id)
                     ->remove();
     }
+
+    public function findAllDestroyed()
+    {
+        return $this->mainRepository
+                    ->findAllRemoved();
+    }
+
+    public function restoreDestroyed($id)
+    {
+        return $this->mainRepository
+                    ->findRemoved($id)
+                    ->restoreRemoved();
+    }
 }

@@ -67,6 +67,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
     public function getDiscr()
@@ -144,6 +146,14 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function remove()
     {
         $this->getRepository()->remove($this);
+
+        return $this;
+    }
+
+    public function restoreRemoved()
+    {
+        $this->setDeletedAt(null)
+             ->save();
 
         return $this;
     }
