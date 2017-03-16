@@ -164,6 +164,11 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this;
     }
 
+    public function restoreRemoved()
+    {
+        abort(501, 'Not Implemented');
+    }
+
     public function flush($all = true)
     {
         $this->getRepository()->flush($all ? null : $this);

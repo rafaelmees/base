@@ -158,6 +158,16 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         return $entity;
     }
 
+    public function findAllRemoved()
+    {
+        abort(501, 'Not Implemented');
+    }
+
+    public function findRemoved($id, $abort = true)
+    {
+        abort(501, 'Not Implemented');
+    }
+
     /**
      * @param Bludata\Entities\BaseEntityInterface $entity
      *
