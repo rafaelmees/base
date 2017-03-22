@@ -2,7 +2,9 @@
 
 namespace Bludata\Lumen\Services;
 
-abstract class BaseService
+use Bludata\Lumen\Common\Interfaces\BaseServiceInterface;
+
+abstract class BaseService implements BaseServiceInterface
 {
     /**
      * @var Bludata\Lumen\Repositories\BaseRepository
