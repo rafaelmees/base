@@ -34,7 +34,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="createdAt")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
@@ -42,12 +42,12 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", name="updatedAt")
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true, name="deletedAt")
      */
-    private $deletedAt;
+    protected $deletedAt;
 
     public function getCreatedAt()
     {
