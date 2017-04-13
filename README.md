@@ -19,6 +19,11 @@ $ curl -sSL https://get.docker.com/ | sh
 $ ssh-keygen -t rsa -b 4096 -C "nome.sobrenome@bludata.com.br"
 ```
 
+### Fix: sign_and_send_pubkey: signing failed: agent refused operation
+```sh
+$ ssh-add
+```
+
 ## Como instalar
 
 Alterar ``composer.json`` adicionado o reposit�rio do bitbucket, segue exemplo:
