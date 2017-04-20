@@ -51,7 +51,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
                 $errors[] = $violation->getMessage();
             }
 
-            abort(400, json_encode($errors));
+            abort(400, json_encode($errors, JSON_UNESCAPED_UNICODE));
         }
 
         return true;
