@@ -17,16 +17,12 @@ abstract class BaseController extends Controller
         return $this->mainService;
     }
 
-    protected function translateFilters($filters)
+    protected function translateFilters(Request $request)
     {
-        if ($filters instanceof Request) {
-            if ($filters->has('filters')) {
-                $filters = json_decode(base64_decode($filters->input('filters')), true);
-            } else {
-                $filters = [];
-            }
+        $filters = [];
+        if ($request->has('filters')) {
+            $filters = json_decode(base64_decode($request->input('filters')), true);
         }
-
         return $filters;
     }
 
