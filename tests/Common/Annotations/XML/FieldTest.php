@@ -9,7 +9,11 @@ class FieldTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->registerFieldStub();
+    }
 
+    public function registerFieldStub()
+    {
         if (class_exists('Bludata\Tests\Common\Annotations\XML\FieldStub')) {
             return;
         }
@@ -54,8 +58,18 @@ FieldStubCLASS;
         $annotations = $reader->getPropertyAnnotations($reflectClass);
         $this->assertGreaterThan(0, count($annotations));
         $this->assertContainsOnlyInstancesOf('Bludata\Common\Annotations\XML\Field', $annotations);
-        $annotation = array_pop($annotations);
-        $this->assertTrue(method_exists($annotation, 'getName'));
-        $this->assertEquals('foo', $annotation->getName());
+        return array_values($annotations);
+    }
+
+    /**
+     * @depends testProperty1HasAnAnnotation
+     */
+    public function testProperty1CanBeConvertedToString($annotations)
+    {
+        foreach($annotations as $annotation) {
+            $this->assertNotEmpty((string) $annotation);
+            $this->assertNotEmpty($annotation->toString());
+            $this->assertEquals('<foo>property1</foo>', $annotation->toString('property1'));
+        }
     }
 }
