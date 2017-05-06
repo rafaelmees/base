@@ -34,14 +34,8 @@ class XMLConverter extends Converter
             $fieldAnnotation = array_values($fieldAnnotation)[0];
             $value = null;
             $reflectProperty = new \ReflectionProperty($element, $field);
-            if ($reflectProperty->isPublic()) {
-                $value = $reflectProperty->getValue();
-            }
-
-            if ($reflectProperty->isProtected() || $reflectProperty->isPrivate()) {
-                if (is_object($element) && in_array('Bludata\Common\Traits\AttributesTrait', class_uses($element))) {
-                    $value = $element->$field;
-                }
+            if (is_object($element)) {
+                $value = $element->$field;
             }
 
             if (is_array($value)) {
