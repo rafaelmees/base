@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -88,7 +89,9 @@ trait SetPropertiesEntityTrait
                                    ||
                                    $annotation instanceof OneToMany
                                    ||
-                                   $annotation instanceof ManyToMany;
+                                   $annotation instanceof ManyToMany
+                                   ||
+                                   $annotation instanceof OneToOne;
                         });
 
                         /*
@@ -171,6 +174,8 @@ trait SetPropertiesEntityTrait
                                         }
                                     }
                                 }
+                            } else if ($ormMapping instanceof OneToOne) {
+                                $this->$methodSet($repositoryTargetEntity->findOrCreate($valueKey));
                             }
                         }
                     }
