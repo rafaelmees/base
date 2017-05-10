@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -32,15 +33,10 @@ trait SetPropertiesEntityTrait
             $methodGet = 'get'.ucfirst($key);
 
             if (method_exists($this, $methodSet) && $set) {
-                /*
-                 * Seta a propriedade com o valor enviado pelo usuário.
-                 */
-                $this->$methodSet(is_string($value) && strlen($value) <= 0 ? null : $value);
-
                 /**
                  * Armazena o valor enviado pelo usuário.
                  */
-                $valueKey = $this->$methodGet();
+                $valueKey = is_string($value) && strlen($value) <= 0 ? null : $value;
 
                 /**
                  * Classes utilizadas para buscar os metadados da classe e suas propriedades.
@@ -93,7 +89,9 @@ trait SetPropertiesEntityTrait
                                    ||
                                    $annotation instanceof OneToMany
                                    ||
-                                   $annotation instanceof ManyToMany;
+                                   $annotation instanceof ManyToMany
+                                   ||
+                                   $annotation instanceof OneToOne;
                         });
 
                         /*
@@ -111,7 +109,7 @@ trait SetPropertiesEntityTrait
                              * Se a propriedade estiver utilizando a anotação Doctrine\ORM\Mapping\ManyToOne e o usuário
                              * informou um número, então buscamos o devido objeto pelo seu id.
                              */
-                            if ($ormMapping instanceof ManyToOne && is_numeric($valueKey)) {
+                            if ($ormMapping instanceof ManyToOne) {
                                 $this->$methodSet(
                                     $repositoryTargetEntity->find($valueKey)
                                 );
@@ -134,17 +132,58 @@ trait SetPropertiesEntityTrait
                                     )
                                     && is_array($valueKey)
                                 ) {
-                                    $this->$methodSet(new ArrayCollection());
+                                    if ($ormMapping instanceof OneToMany ) {
+                                        /*
+                                         * Percorremos a lista original de elementos
+                                         */
+                                        foreach ($this->$methodGet() as $element) {
+                                            /**
+                                             * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
+                                             */
+                                            $data = array_filter($valueKey, function ($value, $key) use ($element) {
+                                                return isset($value['id']) && $value['id'] == $element->getId();
+                                            }, ARRAY_FILTER_USE_BOTH);
 
-                                    foreach ($valueKey as $value) {
-                                        $this->$methodAdd(
-                                            $ormMapping instanceof OneToMany ? $repositoryTargetEntity->findOrCreate($value) : $repositoryTargetEntity->find($value)
-                                        );
+                                            if ($data) {
+                                                /**
+                                                 * Caso o elemento seja encontrado, então atualizamos na lista original e removemos do array enviado pelo usuário.
+                                                 */
+                                                $keyData = array_keys($data)[0];
+
+                                                $element->setPropertiesEntity($data[$keyData]);
+                                                unset($valueKey[$keyData]);
+                                            } else {
+                                                /**
+                                                 * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
+                                                 */
+                                                $this->$methodGet()->removeElement($element);
+                                            }
+                                        }
+
+                                        /*
+                                         * Aqui adicionamos na lista original os novos elementos que ainda não foram persistidos.
+                                         */
+                                        foreach ($valueKey as $value) {
+                                            $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
+                                        }
+                                    } else {
+                                        $this->$methodSet(new ArrayCollection());
+
+                                        foreach ($valueKey as $value) {
+                                            $this->$methodAdd($repositoryTargetEntity->find($value));
+                                        }
                                     }
                                 }
+                            } else if ($ormMapping instanceof OneToOne) {
+                                $this->$methodSet($repositoryTargetEntity->findOrCreate($valueKey));
                             }
                         }
                     }
+                } else {
+                    /*
+                     * Seta a propriedade com o valor enviado pelo usuário.
+                     */
+                    $this->$methodSet($valueKey);
                 }
             }
         }
