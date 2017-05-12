@@ -12,7 +12,7 @@ interface BaseEntityInterface
 
     public function restoreRemoved();
 
-    public function flush($all = true);
+    public function flush();
 
     public function getRepository();
 

@@ -112,6 +112,8 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
      * @param null | string | int | array
      *
      * @throws InvalidArgumentException Se $input não for null | string | int | array é lançada a exceção
+     *
+     * @return Bludata\Doctrine\Common\Interfaces\BaseEntityInterface
      */
     public function findOrCreate($input)
     {
@@ -147,7 +149,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
      *
      * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException Se $target não for encontrado
      *
-     * @return Bludata\Entities\BaseEntityInterface
+     * @return Bludata\Doctrine\Common\Interfaces\BaseEntityInterface
      */
     public function remove($target)
     {
@@ -169,9 +171,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * @param Bludata\Entities\BaseEntityInterface $entity
+     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
      *
-     * @return Bludata\Repositories\QueryWorker
+     * @return self
      */
     public function save(BaseEntityInterface $entity)
     {
@@ -181,9 +183,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * @param Bludata\Entities\BaseEntityInterface $entity
+     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
      *
-     * @return Bludata\Repositories\QueryWorker
+     * @return self
      */
     public function flush(BaseEntityInterface $entity = null)
     {

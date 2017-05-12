@@ -150,13 +150,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return app(EntityManagerInterface::class)->getRepository(get_class($this));
     }
 
-    public function save($flush = false)
-    {
-        $this->getRepository()->save($this);
-
-        return $this;
-    }
-
     public function remove()
     {
         $this->getRepository()->remove($this);
@@ -169,9 +162,16 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         abort(501, 'Not Implemented');
     }
 
-    public function flush($all = true)
+    public function save($flush = false)
     {
-        $this->getRepository()->flush($all ? null : $this);
+        $this->getRepository()->save($this);
+
+        return $this;
+    }
+
+    public function flush()
+    {
+        $this->getRepository()->flush($this);
 
         return $this;
     }

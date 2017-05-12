@@ -165,9 +165,9 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this;
     }
 
-    public function flush($all = true)
+    public function flush()
     {
-        $this->getRepository()->flush($all ? null : $this);
+        $this->getRepository()->flush($this);
 
         return $this;
     }
