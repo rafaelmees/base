@@ -44,6 +44,9 @@ trait AttributesTrait
     public function get($attr)
     {
         $attributes = $this->getAttributes();
+        if (in_array($attr, array_keys($attributes))) {
+            return $this->$attr;
+        }
 
         $getMethod = $this->getMethod($attr);
         if (method_exists($this, $getMethod)) {
@@ -61,8 +64,12 @@ trait AttributesTrait
 
     public function set($attr, $value)
     {
-        $setMethod = $this->setMethod($attr);
+        $attributes = $this->getAttributes();
+        if (in_array($attr, array_keys($attributes))) {
+            return $this->$attr = $value;
+        }
 
+        $setMethod = $this->setMethod($attr);
         if (method_exists($this, $setMethod)) {
             return $this->$setMethod($value);
         }

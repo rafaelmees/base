@@ -42,7 +42,8 @@
             "Bludata\\": "src/"
         },
         "files": [
-            "./src/Common/Helpers/helpers.php"
+            "./src/Common/Helpers/helpers.php",
+            "./src/Lumen/helpers.php"
         ]
     },
     "autoload-dev": {
@@ -51,6 +52,9 @@
         },
         "files": [
             "./tests/functions.php"
+        ],
+        "classmap": [
+            "./tests/Stubs/"
         ]
     },
     "suggest": {

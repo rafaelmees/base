@@ -8,23 +8,6 @@ namespace Bludata\Common\Annotations\XML;
  *   @Attribute("name", type="string")
  * })
  */
-class Entity
+class Entity extends XMLAnnotation
 {
-    /**
-     * @Required
-     */
-    protected $name;
-
-    public function __construct(array $values)
-    {
-        $this->name = $values['name'];
-    }
-
-    /**
-     * @return Get the value of name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }

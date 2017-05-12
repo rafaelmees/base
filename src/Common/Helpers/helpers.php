@@ -54,60 +54,50 @@ if (!function_exists('dr')) {
     }
 }
 
-/*
- * Get Enviorment variable
+/**
+ * Retrieve all annotations of a giving object
  */
-if (!function_exists('env')) {
-    function env($key, $defaultValue = '')
+if (!function_exists('get_class_annotations')) {
+    function get_class_annotations($element, $annotation=null)
     {
-        $env = getenv($key);
-        if (!$env) {
-            return $defaultValue;
+        $class = $element;
+        if (is_object($element)) {
+            $class = get_class($element);
         }
 
-        return $env;
+        $reflectClass = new \ReflectionClass($class);
+        $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+        return $reader->getClassAnnotations($reflectClass, $annotation);
     }
 }
 
-/*
- * Register a entierly directory of annotations
+/**
+ * Retrieve annotations of a especific property of a giving object
  */
-if (!function_exists('register_annotation_dir')) {
-    function register_annotation_dir($dir) {
-        if (!is_dir($dir)) {
-            return false;
+if (!function_exists('get_property_annotations')) {
+    function get_property_annotations($element, $property=null, $annotation=null)
+    {
+        $class = $element;
+        if (is_object($element) && !($element instanceof \ReflectionClass)) {
+            $class = get_class($element);
         }
 
-        $handle = opendir($dir);
-        while($path = readdir($handle)) {
-            $toRegisterPath = implode(DIRECTORY_SEPARATOR, [$dir, $path]);
-            register_annotation_file($toRegisterPath);
+        if (is_string($property)) {
+            $property = new \ReflectionProperty($class, $property);
         }
 
-        return true;
-    }
-}
-
-/*
- * Register a single file annotation
- */
-if (!function_exists('register_annotation_file')) {
-    function register_annotation_file($file) {
-        if (!is_file($file)) {
-            return false;
+        $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+        if ($property instanceof \ReflectionProperty) {
+            return $reader->getPropertyAnnotations($property, $annotation);
         }
 
-        return \Doctrine\Common\Annotations\AnnotationRegistry::registerFile($file);
-    }
-}
+        $reflectClass = new \ReflectionClass($class);
+        $reflectProperties = $reflectClass->getProperties();
+        $annotations = [];
+        foreach($reflectProperties as $property) {
+            $annotations[$property->getName()] = get_property_annotations($reflectClass, $property, $annotation);
+        }
 
-if (!function_exists('bind_repository_interface')) {
-    function bind_repository_interface($repositoryInterface, $repository, $entity) {
-        app()->bind($repositoryInterface, function($app) use ($repository, $entity) {
-            return new $repository(
-                $app['em'],
-                $app['em']->getClassMetaData($entity)
-            );
-        });
+        return $annotations;
     }
 }
