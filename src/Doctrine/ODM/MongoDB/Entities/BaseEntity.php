@@ -162,16 +162,16 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         abort(501, 'Not Implemented');
     }
 
-    public function save($flush = false)
+    public function save()
     {
         $this->getRepository()->save($this);
 
         return $this;
     }
 
-    public function flush()
+    public function flush($all = true)
     {
-        $this->getRepository()->flush($this);
+        $this->getRepository()->flush($all ? null : $this);
 
         return $this;
     }

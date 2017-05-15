@@ -6,13 +6,13 @@ interface BaseEntityInterface
 {
     public function getId();
 
-    public function save($flush = false);
+    public function save();
 
     public function remove();
 
     public function restoreRemoved();
 
-    public function flush();
+    public function flush($all = true);
 
     public function getRepository();
 
