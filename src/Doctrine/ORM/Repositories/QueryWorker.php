@@ -32,7 +32,31 @@ class QueryWorker
     /**
      * @var array
      */
+    protected $tables = [];
+    /**
+     * @var array
+     */
     protected $queryFields = [];
+    /**
+     * @var array
+     */
+    protected $expressions = [];
+    /**
+     * @var array
+     */
+    protected $groupFields = [];
+    /**
+     * @var array
+     */
+    protected $field = [];
+    /**
+     * @var integer
+     */
+    protected $position = 0;
+    /**
+     * @var array
+     */
+    protected $fieldValue = [];
 
     public function __construct($repository)
     {
@@ -130,6 +154,23 @@ class QueryWorker
     }
 
     /**
+     * @return Doctrine\ORM\QueryBuilder
+     */
+    public function getBuilder()
+    {
+        return $this->queryBuilder;
+    }
+
+    /**
+     * @return Doctrine\ORM\QueryWorker
+     */
+    public function setBuilder($builder)
+    {
+        $this->queryBuilder = $builder;
+        return $this;
+    }
+
+    /**
      * Retorna a quantidade de elementos em $this->getResult().
      *
      * @return int
@@ -211,39 +252,6 @@ class QueryWorker
     }
 
     /**
-     * Add  joins.
-     *
-     * @param string $field
-     *
-     * @return $array
-     */
-    private function whereFieldJoin($field, $value = null, $operation = null)
-    {
-        $arr = explode('.', $field);
-        $tempField = end($arr);
-        $alias = prev($arr);
-            // verifica se está solicitando um many to many
-            $meta = $this->getClassMetaData();
-        if (!empty($meta->associationMappings[$alias]['joinTable'])) {
-            $table = $this->getFullFieldName($meta->associationMappings[$alias]['fieldName'], self::DEFAULT_TABLE_ALIAS);
-            $alias = $this->tableAlias();
-            if (!$operation) {
-                $operation = '=';
-            }
-            $condicao = $this->makeExpression($tempField, $operation, $value, $alias);
-            $this->queryBuilder->leftJoin($table, $alias, 'WITH', $condicao);
-
-            return ['alias' => $alias, 'field' => $tempField];
-        }
-            //monta os joins
-            $this->associationQueryFields($field);
-            //monta os dados do where
-            $field = $tempField;
-
-        return ['alias' => $alias, 'field' => $field];
-    }
-
-    /**
      * Add a "and where" filter.
      *
      * @param string $field
@@ -255,9 +263,15 @@ class QueryWorker
     public function andWhere($field, $operation, $value = null, $alias = self::DEFAULT_TABLE_ALIAS)
     {
         if (strpos($field, '.') > 0) {
-            $newValues = $this->whereFieldJoin($field, $value, $operation);
-            $alias = $newValues['alias'];
-            $field = $newValues['field'];
+            //monta os joins
+            $this->fieldValue = [
+                'value' => $value,
+                'operation' => $operation,
+            ];
+            $newAliasField = $this->associationQueryFields($field);
+            $alias = $newAliasField['alias'];
+            $field = $newAliasField['field'];
+
         }
         $this->queryBuilder->andWhere($this->makeExpression($field, $operation, $value, $alias));
 
@@ -276,31 +290,12 @@ class QueryWorker
     public function orWhere($field, $operation, $value = null, $alias = self::DEFAULT_TABLE_ALIAS)
     {
         if (strpos($field, '.') > 0) {
-            $newValues = $this->whereFieldJoin($field, $value, $operation);
-            $alias = $newValues['alias'];
-            $field = $newValues['field'];
+            //monta os joins
+            $newAliasField = $this->associationQueryFields($field);
+            $alias = $newAliasField['alias'];
+            $field = $newAliasField['field'];
         }
         $this->queryBuilder->orWhere($this->makeExpression($field, $operation, $value, $alias));
-
-        return $this;
-    }
-
-    /**
-     * Add a join filter.
-     *
-     * @param array  $meta
-     * @param string $alias
-     *
-     * @return $this
-     */
-    public function manyToManyJoin($meta, $alias, $defaultAlias = self::DEFAULT_TABLE_ALIAS)
-    {
-        $table = $this->getFullFieldName($meta->associationMappings[$alias]['fieldName'], $defaultAlias);
-
-        if (!in_array($table, $this->entitys)) {
-            $this->queryBuilder->join($table, $alias);
-            $this->entitys[] = $table;
-        }
 
         return $this;
     }
@@ -318,11 +313,11 @@ class QueryWorker
         foreach ($conditions as $attr) {
             $field = $attr['field'];
             if (strpos($field, '.') > 0) {
-                $newValues = $this->whereFieldJoin($field, $attr['value'], $attr['operation']);
-                $alias = $newValues['alias'];
-                $field = $newValues['field'];
+                //monta os joins
+                $newAliasField = $this->associationQueryFields($field);
+                $alias = $newAliasField['alias'];
+                $field = $newAliasField['field'];
             }
-
             $expressions[] = $this->makeExpression($field, $attr['operation'], $attr['value'], $alias);
         }
 
@@ -337,16 +332,21 @@ class QueryWorker
     public function addGroupBy($field)
     {
         $alias = self::DEFAULT_TABLE_ALIAS;
-        $newAliasField = $this->fieldJoin($this->getClassMetaData(), $field, $alias);
-        $alias = $newAliasField['alias'];
-        $field = $newAliasField['field'];
+        if (strpos($field, '.') > 0) {
+            //monta os joins
+            $newAliasField = $this->associationQueryFields($field);
+        }
         if (count($this->queryFields) > 0) {
-            if (!in_array($this->getFullFieldName($field, $alias), $this->queryFields)) {
-                $this->queryFields[] = $this->getFullFieldName($field, $alias);
-            }
             foreach ($this->queryFields as $item) {
-                if (strpos($item, '(') === false) {
+                $parts = [];
+                if (strpos($item, ' AS ')) {
+                    $item = str_replace(')', '', str_replace('(', '', $item));
+                    $parts = explode('AS', $item);
+                    $item = trim($parts[0]);
+                }
+                if (!in_array($item, $this->groupFields)) {
                     $this->queryBuilder->addGroupBy($item);
+                    $this->groupFields[] = $item;
                 }
             }
         }
@@ -389,9 +389,10 @@ class QueryWorker
     {
         $alias = self::DEFAULT_TABLE_ALIAS;
         if (strpos($field, '.') > 0) {
-            $newValues = $this->whereFieldJoin($field);
-            $alias = $newValues['alias'];
-            $field = $newValues['field'];
+            //monta os joins
+            $newAliasField = $this->associationQueryFields($field);
+            $alias = $newAliasField['alias'];
+            $field = $newAliasField['field'];
         }
         $this->queryBuilder->addOrderBy($this->getFullFieldName($field, $alias), $order);
 
@@ -423,50 +424,19 @@ class QueryWorker
     {
         foreach ($fields as $key => $value) {
             if (is_int($key)) {
-                $valor = $value;
-                if (is_array($value)) {
-                    if (!empty($value['expression'])) {
-                        //é uma expressão
-                        $expression = ['expression' => $value['expression'], 'alias' => $value['alias']];
-                        $valor = $value['field'];
-                        $this->associationQueryFields($valor, $expression);
-                    }
-                } else {
-                    $this->associationQueryFields($valor);
-                }
+                $this->associationQueryFields($value);
             } elseif (is_array($value)) {
                 $alias = $this->tableAlias();
                 $this->queryBuilder->join($this->getFullFieldName($key, self::DEFAULT_TABLE_ALIAS), $alias);
                 foreach ($value as $valueField) {
                     $this->queryFields[] = $this->getFullFieldName($valueField, $alias);
                 }
+            } else {
+                $this->queryFields[] = $value;
             }
         }
         $this->queryBuilder->select(implode(',', $this->queryFields));
-
         return $this;
-    }
-
-    /**
-     * get the repository.
-     *
-     * @param associationField.fkField
-     */
-    private function getPathRepository($newEntity)
-    {
-        return app()->getRepositoryInterface($newEntity);
-    }
-
-    /**
-     * get the class metadata.
-     *
-     * @param associationField.fkField
-     */
-    private function getMetaRepository($entity)
-    {
-        $repository = $this->getPathRepository($entity);
-
-        return $repository ? $repository->getClassMetaData() : [];
     }
 
     /**
@@ -474,236 +444,327 @@ class QueryWorker
      *
      * @param associationField.fkField
      * @param $field
+     *
      */
-    public function associationQueryFields($value, $expression = 0)
+    public function associationQueryFields($campo)
     {
-        $pos = strpos($value, '.');
+        $this->field = $campo;
+        $pos = strpos($campo, '.');
         if ($pos > 0) {
-            $fk = substr($value, 0, $pos);
-            $field = substr($value, ($pos + 1));
-            $alias = $fk;
-            if (substr_count($value, '.') > 1) {
-                // tem mais de um join para chegar ao campo
-                $count = 0;
-                $arr = explode('.', $value);
-                $field = end($arr);
-                $fkTemp = $fk;
-                $arrLength = count($arr);
-                foreach ($arr as $key => $entity) {
-                    if ($count == 0) {
-                        $campo = $this->fkAssociation($this->getClassMetaData(), $entity, $arr[$count + 1], $entity, self::DEFAULT_TABLE_ALIAS);
-                        if ($campo && !in_array($campo, $this->queryFields)) {
-                            if ($expression == 0) {
-                                $this->queryFields[] = $campo;
-                            }
+            $arr = explode('.', $campo);
+            $lastField = end($arr);
+
+            if (count($arr) == 2 && $arr[0] == self::DEFAULT_TABLE_ALIAS) {
+                //não é um campo composto
+                return [
+                    'field' => $lastField,
+                    'alias' => $arr[0],
+                ];
+            }
+
+            $tempMeta = '';
+            foreach ($arr as $key => $value) {
+
+                $this->position = $key;
+
+                if ($this->position < count($arr) - 1) {
+
+                    $dados = $this->getMetaAndAliases();
+
+                    $alias = $dados['alias'];
+                    $parentAlias = $dados['parentAlias'];
+
+                    if ($tempMeta) {
+                        $meta = $tempMeta;
+                        $tempMeta = '';
+                    } else {
+                        $meta = $dados['parentMeta'];
+                    }
+
+                    if ($meta->isAssociationWithSingleJoinColumn($value)) {
+                        //manyToOne
+                        $association = $meta->getAssociationMapping($value);
+                        $this->setLeftJoin(
+                            $meta->getAssociationTargetClass($value),
+                            $association['joinColumns'][0]['referencedColumnName'],
+                            $association['fieldName'],
+                            $alias,
+                            $parentAlias
+                        );
+
+                    } elseif ($meta->isCollectionValuedAssociation($value)) {
+                        $association = $meta->getAssociationMapping($value);
+                        if (empty($association['mappedBy']) && empty($association['joinTable'])) {
+                            //não tem como fazer o join
+                            $this->critical(sprintf('"%s" não é uma associação válida', $campo));
+                            continue;
                         }
-                    } elseif (($count + 1) < $arrLength) {
-                        if ($this->getPathRepository(ucfirst($fkTemp))) {
-                            $meta = $this->getMetaRepository(ucfirst($fkTemp));
-                            $campo = $this->fkAssociation($meta, $entity, $arr[$count + 1], $entity, $fkTemp);
+                        if (!empty($association['joinTable'])) {
+                            //manyToMany
+                            $this->setManyToManyJoin(
+                                $this->getFullFieldName($association['fieldName'], $parentAlias),
+                                $alias,
+                                $this->setManyToManyValuedCondition($association, $alias, $arr)
+                            );
                         } else {
-                            //busca a entidade correta
-                            if ($count > 1) {
-                                $metaAnterior = null;
-                                $fkAnterior = ucfirst($arr[$count - 2]);
-                                //verifica se a entidade anterior era um oneToMany
-                                if (count($this->getPathRepository($fkAnterior)) == 0) {
-                                    //verifica se havia uma entidade antes
-                                    if (!empty($arr[$count - 3])) {
-                                        $fkAnterior = ucfirst($arr[$count - 3]);
-                                    } else {
-                                        // pega a entidade default
-                                        $fkAnterior = self::DEFAULT_TABLE_ALIAS;
-                                        $metaAnterior = $meta;
-                                    }
-                                }
-                                $metaAlias = $this->getFkMetaAlias($fkAnterior, $fkTemp, $metaAnterior);
-                            } else {
-                                $metaAlias = $this->getFkMetaAlias(self::DEFAULT_TABLE_ALIAS, $fkTemp, $this->getClassMetaData());
-                            }
-                            $fkTemp = $metaAlias['alias'];
-                            $meta = $this->getMetaRepository(ucfirst($fkTemp));
-                            $campo = $this->fkAssociation($meta, $entity, $arr[$count + 1], $entity, $fkTemp);
+                            //oneToMany
+                            $this->setLeftJoin(
+                                $meta->getAssociationTargetClass($value),
+                                $this->getTargetField($dados['meta'], $meta, $value),
+                                $meta->getIdentifierColumnNames()[0],
+                                $alias,
+                                $parentAlias
+                            );
                         }
-                        if ($campo && ($expression == 0 || ($expression != 0 && $count == ($arrLength - 1)))) {
-                            $this->addQueryField($campo, $expression);
+                    } else {
+                        //subClass
+                        if (count($meta->subClasses) > 0) {
+                            $temp = $this->getSubClassFields($meta, $value);
+                            if (!empty($temp['meta'])) {
+                                $this->setLeftJoin($temp['table'], $temp['targetField'], $temp['parentField'], $alias, $parentAlias);
+                                $tempMeta = $temp['meta'];
+                            }
                         }
                     }
-                    $fkTemp = $entity;
-                    ++$count;
                 }
-            } else {
-                if (empty($this->getClassMetaData()->associationMappings[$fk]) && count($this->getClassMetaData()->subClasses) > 0) {
-                    //ignorado não é possível criar o join, provavelmente está no pai chamando o filho.
-                    return $this;
-                }
-                // realiza o join para retornar o valor do campo
-                $campo = $this->fkAssociation($this->getClassMetaData(), $fk, $field, $alias, self::DEFAULT_TABLE_ALIAS);
-                $this->addQueryField($campo, $expression);
             }
         } else {
-            $valor = $this->getFullFieldName($value);
-            if (!empty($this->getClassMetaData()->associationMappings[$value])) {
-                // é uma FK, retorna o ID
-                $valor = 'IDENTITY('.$valor.') '.$value;
-            }
-            $this->addQueryField($valor, $expression);
+            //não possui joins
+            $this->position = 0;
+            $meta = $this->getClassMetadata();
+            $lastField = $campo;
+            $alias = self::DEFAULT_TABLE_ALIAS;
         }
+        //adiciona o campo ao select
+        $this->setQueryField($meta, $lastField, $alias);
+
+        return [
+            'field' => $lastField,
+            'alias' => $alias,
+        ];
     }
 
     /**
-     * Add a field or expression in the select array.
-     *
-     * @param string field
-     * @param mix expression
-     */
-    private function addQueryField($campo, $expression = 0)
-    {
-        if ($campo && !in_array($campo, $this->queryFields)) {
-            if ($expression == 0) {
-                $this->queryFields[] = $campo;
-            } else {
-                //verifica se pode adicionar a expressão
-                if (strpos($campo, ')') === false) {
-                    $this->getSelectExpression($expression['expression'], $campo, $expression['alias']);
-                } else {
-                    $parts = explode(')', $campo);
-                    //remove o alias
-                    array_pop($parts);
-                    $this->getSelectExpression($expression['expression'], implode(')', $parts), $expression['alias']);
-                }
-            }
-        }
-    }
-
-    /**
-     * Add a join statement.
-     *
-     * @todo  ignorar registros com deletedAt == true
-     * @todo  validar a associação a partir do aluno: processos.ordensServico.servicoOrdemServico.itensServicoOrdemServico.itemServico
-     *
-     * @param $meta - getClassMetaData
-     * @param $fk
-     * @param $field
-     * @param $alias
-     * @param $defaultAlias
-     */
-    public function fkAssociation($meta, $fk, $field, $alias, $defaultAlias)
-    {
-        if ($association = $meta->associationMappings[$fk]) {
-            if (!in_array($association['targetEntity'], $this->entitys)) {
-                if (!empty($association['joinColumns'])) {
-                    $condition = $this->getFullFieldName($association['fieldName'], $defaultAlias).' = '.$this->getFullFieldName($association['joinColumns'][0]['referencedColumnName'], $alias);
-                    $this->queryBuilder->leftJoin($association['targetEntity'], $alias, 'WITH', $condition);
-                    $this->queryBuilder->andWhere($condition);
-                    $this->entitys[] = $association['targetEntity'];
-                } else {
-                    //está buscando de um arrayCollection
-                    $repository = explode('\\', $association['targetEntity']);
-                    if (!$association['mappedBy']) {
-                        if (!empty($association['joinTable'])) {
-                            $this->manyToManyJoin($meta, $fk, $defaultAlias);
-
-                            return $this->getFullFieldName($field, $fk);
-                        }
-
-                        return;
-                    }
-                    $meta = $this->getMetaRepository(end($repository));
-
-                    return $this->fkArrayAssociation($meta, $association['mappedBy'], $field, lcfirst(end($repository)), $defaultAlias, $association['targetEntity']);
-                }
-            }
-
-            //verifica se o campo existe
-            if ($this->getPathRepository(ucfirst($fk))) {
-                $meta = $this->getMetaRepository(ucfirst($fk));
-            } else {
-                //busca a entidade correta
-                $metaAlias = $this->getFkMetaAlias($defaultAlias, $fk, $meta);
-                $meta = $metaAlias['meta'];
-                $alias = $metaAlias['alias'];
-            }
-            if (empty($meta->associationMappings[$field]) && empty($meta->fieldMappings[$field])) {
-                return;
-            } elseif (!empty($meta->associationMappings[$field]) && empty($meta->associationMappings[$field]['joinColumns'])) {
-                return;
-            }
-            //retorna o campo
-            return '('.$this->getFullFieldName($field, $alias).') AS '.$this->getFullFieldName($field, $alias, '_');
-        }
-    }
-
-    /**
-     * Add joins and return the new field and alias.
-     *
-     * @param $meta - getClassMetaData
-     * @param $field
-     * @param $alias
-     *
+     * Get the classMetadata and alias from the current position in the field
      * @return array
      */
-    public function fieldJoin($meta, $field, $alias)
+    private function getMetaAndAliases()
     {
-        if (strpos($field, '.') > 0) {
-            $arr = explode('.', $field);
-            $fieldTemp = end($arr);
-            $alias = prev($arr);
-            if (!empty($meta->associationMappings[$alias]['joinTable'])) {
-                $this->manyToManyJoin($meta, $alias);
-            } else {
-                //monta os joins
-                $this->associationQueryFields($field);
+        $arr = explode('.', $this->field);
+        $meta = $this->getClassMetadata();
+        $metaAnterior = [];
+        $parent = '';
+        $alias = '';
+
+        for ($i = 0; $i <= $this->position; $i++) {
+
+            $metaAnterior = $meta;
+
+            if ($meta->hasAssociation($arr[$i])) {
+                $class = $meta->getAssociationTargetClass($arr[$i]);
+            } elseif (count($meta->subClasses) > 0) {
+                $temp = $this->getSubClassFields($meta, $arr[$i]);
+                if (!empty($temp['meta'])) {
+                    $class = $temp['table'];
+                }
             }
-            $field = $fieldTemp;
+
+            $meta = (new ClassMetadata($class))->getClassMetadata();
+
+            if ($i < $this->position) {
+                $parent .= $parent != '' ? '_' : '';
+                $parent .= $arr[$i];
+            }
+            if ($i == $this->position) {
+                $alias .= $parent;
+                $alias .= $parent != '' ? '_' : '';
+                $alias .= $arr[$i];
+            }
         }
 
-        return ['alias' => $alias, 'field' => $field];
-    }
+        if ($parent == '' && $alias != '') {
+            $parent = self::DEFAULT_TABLE_ALIAS;
+        }
+        if ($alias == '') {
+            $alias = self::DEFAULT_TABLE_ALIAS;
+        }
 
+        return [
+            'meta' => $meta,
+            'parentMeta' => $metaAnterior,
+            'alias' => $alias,
+            'parentAlias' => $parent,
+        ];
+    }
     /**
-     * @TODO GROUP_CONCAT()
-     * Add a join statement from array collection
+     * Create a join
      *
-     * @param $meta - getClassMetaData
-     * @param $fk
-     * @param $field
-     * @param $alias
-     * @param $defaultAlias
-     * @param $targetEntity
-     */
-    public function fkArrayAssociation($meta, $fk, $field, $alias, $defaultAlias, $targetEntity)
-    {
-        if ($association = $meta->associationMappings[$fk]) {
-            if (!in_array($targetEntity, $this->entitys)) {
-                $condition = $this->getFullFieldName($association['fieldName'], $alias).' = '.
-                $this->getFullFieldName($association['joinColumns'][0]['referencedColumnName'], $defaultAlias);
-                $this->queryBuilder->join($targetEntity, $alias, 'WITH', $condition);
-                $this->queryBuilder->andWhere($condition);
-                $this->entitys[] = $targetEntity;
-            }
-
-            return '('.$this->getFullFieldName($field, $alias).') AS '.$this->getFullFieldName($field, $alias, '_');
-        }
-    }
-
-    /**
+     * @param string $table
+     * @param string $field
+     * @param string $parentField
      * @param string $alias
-     * @param string $fk
-     * @param array  $meta
+     * @param string $parentAlias
+     */
+    private function setJoin($table, $field, $parentField, $alias, $parentAlias)
+    {
+        if (!in_array($alias, $this->tables)) {
+            $condition = $this->getFullFieldName($field, $alias) . ' = ' . $this->getFullFieldName($parentField, $parentAlias);
+            $this->queryBuilder->join($table, $alias, 'WITH', $condition);
+            $this->tables[] = $alias;
+        }
+    }
+
+    /**
+     * Create a left join with optional where
+     *
+     * @param string $table
+     * @param string $field
+     * @param string $parentField
+     * @param string $alias
+     * @param string $parentAlias
+     * @param boolean $withWhere
+     */
+    private function setLeftJoin($table, $field, $parentField, $alias, $parentAlias, $withWhere = false)
+    {
+        if (!in_array($alias, $this->tables)) {
+            $condition = $this->getFullFieldName($field, $alias) . ' = ' . $this->getFullFieldName($parentField, $parentAlias);
+            $this->queryBuilder->leftJoin($table, $alias, 'WITH', $condition);
+            if ($withWhere) {
+                $this->queryBuilder->andWhere($condition);
+            }
+            $this->tables[] = $alias;
+        }
+    }
+    /**
+     * Create a condition with the value
+     *
+     * @param array $association
+     * @param string $alias
+     * @param array $arr
+     */
+    private function setManyToManyValuedCondition($association, $alias, $arr)
+    {
+        if (empty($this->fieldValue['value']) || $this->position < count($arr) - 2) {
+            return null;
+        }
+        $targetField = $this->position == count($arr) - 1 ? $association['joinTable']['joinColumns'][0]['referencedColumnName'] : end($arr);
+        return $this->makeExpression($targetField, $this->fieldValue['operation'], $this->fieldValue['value'], $alias);
+    }
+    /**
+     * Create a manyToMany join
+     *
+     * @param string $table
+     * @param string $alias
+     * @param mix $condition
+     */
+    private function setManyToManyJoin($table, $alias, $condition = null)
+    {
+        if (!in_array($alias, $this->tables)) {
+            if ($condition) {
+                $this->queryBuilder->join($table, $alias, 'WITH', $condition);
+            } else {
+                $this->queryBuilder->join($table, $alias);
+            }
+            $this->tables[] = $alias;
+        }
+    }
+    /**
+     * Add the field in the select field list
+     *
+     * @param $meta
+     * @param $value
+     * @param $alias
+     */
+    private function setQueryField($meta, $value, $alias)
+    {
+        $campo = $this->getFullFieldName($value, $alias);
+
+        if ($meta->isSingleValuedAssociation($value)) {
+            $targetField = $meta->getAssociationMapping($value)['joinColumns'][0]['referencedColumnName'];
+            $alias = $alias == self::DEFAULT_TABLE_ALIAS ? substr($campo, strpos($campo, '.') + 1) : $alias . '_' . $targetField;
+            $campo = "IDENTITY(" . $campo . ") " . $alias;
+        } elseif ($this->position > 0) {
+            $campo = '(' . $campo . ') AS ' . $alias . '_' . $value;
+        }
+        // acrescenta o campo ao select
+        $this->queryFields[] = $campo;
+    }
+
+    /**
+     * Get the fields to create a join with a subClass
+     *
+     * @param $meta
+     * @param $value
      *
      * @return array
      */
-    public function getFkMetaAlias($alias, $fk, $meta = null)
+    private function getSubClassFields($meta, $value)
     {
-        if (self::DEFAULT_TABLE_ALIAS != $alias) {
-            $meta = $this->getMetaRepository(ucfirst($alias));
+        foreach ($meta->subClasses as $subClass) {
+            $delimiter = strpos($subClass, '/') > 0 ? '/' : '\\';
+            $temp = explode($delimiter, $subClass);
+            $tempMeta = (new ClassMetadata($subClass))->getClassMetadata();
+            if (end($temp) == $value) {
+                return [
+                    'table' => $subClass,
+                    'parentField' => $meta->getIdentifierColumnNames()[0],
+                    'targetField' => $tempMeta->getIdentifierColumnNames()[0],
+                    'meta' => $tempMeta,
+                ];
+            }
         }
-        $repository = explode('\\', $meta->associationMappings[$fk]['targetEntity']);
-        $meta = $this->getMetaRepository(end($repository));
-        $alias = lcfirst(end($repository));
+        return;
+    }
 
-        return ['meta' => $meta, 'alias' => $alias];
+    /**
+     * Get the target field
+     *
+     * @param $meta
+     * @param $parentMeta
+     * @param $value
+     *
+     * @return string
+     */
+    private function getTargetField($meta, $parentMeta, $value)
+    {
+        if (count($parentMeta->parentClasses) > 0) {
+            foreach ($parentMeta->parentClasses as $classe) {
+                $associationsByTargetClass = $meta->getAssociationsByTargetClass($classe);
+                if (count($associationsByTargetClass) > 0) {
+                    $parentTable = lcfirst(substr($classe, strrpos($classe, strpos($classe, '\\') !== false ? '\\' : '/') + 1));
+                    $field = $this->searchAssociationField($associationsByTargetClass, $parentTable, $value);
+                    if ($field) {
+                        return $field;
+                    }
+                }
+            }
+        }
+        $associationsByTargetClass = $meta->getAssociationsByTargetClass($parentMeta->getName());
+        $field = $this->searchAssociationField($associationsByTargetClass, lcfirst($parentMeta->getTableName()), $value);
+        if ($field) {
+            return $field;
+        }
+        return $meta->getIdentifierColumnNames()[0];
+
+    }
+
+    /**
+     * Search the field in the associations list
+     *
+     * @param $associationsByTargetClass
+     * @param $parentTable
+     * @param $value
+     *
+     * @return string
+     */
+    private function searchAssociationField($associationsByTargetClass, $parentTable, $value)
+    {
+        foreach ($associationsByTargetClass as $table => $association) {
+            if ($table == $parentTable && $association['inversedBy'] == $value) {
+                return $association['fieldName'];
+            }
+        }
+        return;
     }
 
     /**
@@ -792,19 +853,19 @@ class QueryWorker
                 // $expression = $this->queryBuilder->expr()->contains($field, $value);
                 break;
             case 'like':
-                $expression = $this->queryBuilder->expr()->like('LOWER('.$field.')', strtolower($value));
+                $expression = $this->queryBuilder->expr()->like('LOWER(' . $field . ')', strtolower($value));
                 break;
             case 'notlike':
                 $expression = $this->queryBuilder->expr()->notLike($field, $value);
                 break;
             case 'isinstanceof':
-                $expression = $alias.' INSTANCE OF '.$value;
+                $expression = $alias . ' INSTANCE OF ' . $value;
                 break;
             case 'between':
                 $expression = $this->queryBuilder->expr()->between($field, $this->queryBuilder->expr()->literal($value[0]), $this->queryBuilder->expr()->literal($value[1]));
                 break;
             case 'dateparteq':
-                $expression = $this->queryBuilder->expr()->eq("DATEPART('".$value['format']."', ".$field.')', $value['value']);
+                $expression = $this->queryBuilder->expr()->eq("DATEPART('" . $value['format'] . "', " . $field . ')', $value['value']);
         }
 
         return $expression;
@@ -815,6 +876,6 @@ class QueryWorker
      */
     protected function tableAlias()
     {
-        return self::DEFAULT_TABLE_ALIAS.count($this->queryBuilder->getAllAliases());
+        return self::DEFAULT_TABLE_ALIAS . count($this->queryBuilder->getAllAliases());
     }
 }
