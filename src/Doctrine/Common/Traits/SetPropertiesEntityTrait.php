@@ -170,7 +170,7 @@ trait SetPropertiesEntityTrait
                                         $this->$methodSet(new ArrayCollection());
 
                                         foreach ($valueKey as $value) {
-                                            $this->$methodAdd($repositoryTargetEntity->find($value));
+                                            $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
                                         }
                                     }
                                 }
