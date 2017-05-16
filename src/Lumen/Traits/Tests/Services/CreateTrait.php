@@ -6,15 +6,16 @@ trait CreateTrait
 {
     public function testStore()
     {
-        $entity = $this->getRepositoryTest()
-                       ->getFlushedMockObject();
+        $entity = $this->getService()
+                       ->store($this->getRepositoryTest()->getMockArray())
+                       ->flush();
 
-        $repository = $this->getService()
-                           ->getMainRepository();
+        $repository = $this->getService()->getMainRepository();
 
-        $find = $repository->find($entity->getId());
+        $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
+        $this->assertNotNull($entity->getId());
+        $this->assertInstanceOf('DateTime', $entity->getCreatedAt());
 
-        $this->assertInstanceOf($repository->getEntityName(), $entity);
-        $this->assertEquals($entity->getId(), $find->getId());
+        return $entity;
     }
 }

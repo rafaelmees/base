@@ -4,9 +4,12 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait UpdateTrait
 {
-    public function testUpdate()
+    /**
+     * @depends testStore
+     */
+    public function testUpdate($entity)
     {
-        $flushedMockArray = $this->getRepositoryTest()->getFlushedMockArray();
+        $flushedMockArray = $entity->toArray();
         $mockArray = $this->getRepositoryTest()->getMockArray();
 
         foreach ($this->getService()->getMainRepository()->createEntity()->getOnlyUpdate() as $key) {
@@ -26,7 +29,7 @@ trait UpdateTrait
         $find = $repository->find($entity->getId());
 
         $this->assertInstanceOf($repository->getEntityName(), $entity);
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+        $this->assertInstanceOf('DateTime', $entity->getUpdatedAt());
         $this->assertEquals($entity->getId(), $find->getId());
     }
 }

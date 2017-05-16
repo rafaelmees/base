@@ -7,27 +7,25 @@ use Bludata\Doctrine\ORM\Helpers\FilterHelper;
 trait DeleteTrait
 {
     /**
-     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @depends testStore
      */
-    public function testRemove()
+    public function testRemove($entity)
     {
-        $entity = $this->getRepositoryTest()
-                       ->getFlushedMockObject();
-
-        $this->getService()
+        $entityRemoved = $this->getService()
              ->remove($entity->getId())
              ->flush();
 
-        $find = $this->getService()->getMainRepository()->find($entity->getId());
+        $this->assertInstanceOf('DateTime', $entityRemoved->getDeletedAt());
+        $this->assertNull($this->getService()->getMainRepository()->find($entity->getId(), false));
+
+        return $entityRemoved;
     }
 
-    public function testDestroyed()
+    /**
+     * @depends testRemove
+     */
+    public function testFindAllDestroyed($entity)
     {
-        $entity = $this->getRepositoryTest()
-                       ->getFlushedMockObject()
-                       ->remove()
-                       ->flush();
-
         $findAllDestroyed = $this->getService()->findAllDestroyed()->getResult();
 
         $this->assertGreaterThan(0, count($findAllDestroyed));
@@ -38,25 +36,28 @@ trait DeleteTrait
             $this->assertNotNull($entity->getDeletedAt());
         }
 
+        $filter = array_values(array_filter($findAllDestroyed, function ($obj) use ($entity) {
+            return $obj->getId() == $entity->getId();
+        }));
+
+        $this->assertEquals($filter[0]->getId(), $entity->getId());
+
         FilterHelper::enableSoftDeleteableFilter();
+
+        return $findAllDestroyed;
     }
 
     /**
-     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @depends testRemove
      */
-    public function testRestoreDestroyed()
+    public function testRestoreDestroyed($entity)
     {
-        $entity = $this->getRepositoryTest()
-                       ->getFlushedMockObject()
-                       ->remove()
-                       ->flush();
+        $entityRestored = $this->getService()
+                               ->restoreDestroyed($entity->getId())
+                               ->flush();
 
-        $this->getService()->getMainRepository()->clear($entity);
+        $this->assertNull($entityRestored->getDeletedAt());
 
-        $retored = $this->getService()
-                        ->restoreDestroyed($entity->getId())
-                        ->flush();
-
-        $find = $this->getService()->getMainRepository()->findRemoved($entity->getId());
+        return $entityRestored;
     }
 }
