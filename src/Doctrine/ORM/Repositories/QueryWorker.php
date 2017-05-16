@@ -20,6 +20,11 @@ class QueryWorker
     protected $queryBuilder;
 
     /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em;
+
+    /**
      * @var Doctrine\ORM\Mapping\ClassMetadata
      */
     protected $classMetadata;
@@ -60,6 +65,7 @@ class QueryWorker
 
     public function __construct($repository)
     {
+        $this->em = $repository->em();
         $this->repository = $repository;
         $this->queryBuilder = $this->repository->createQueryBuilder(self::DEFAULT_TABLE_ALIAS);
         $this->classMetadata = $this->repository->getClassMetadata();
@@ -569,7 +575,7 @@ class QueryWorker
                 }
             }
 
-            $meta = (new ClassMetadata($class))->getClassMetadata();
+            $meta = $this->em->getClassMetadata($class);
 
             if ($i < $this->position) {
                 $parent .= $parent != '' ? '_' : '';
@@ -703,7 +709,7 @@ class QueryWorker
         foreach ($meta->subClasses as $subClass) {
             $delimiter = strpos($subClass, '/') > 0 ? '/' : '\\';
             $temp = explode($delimiter, $subClass);
-            $tempMeta = (new ClassMetadata($subClass))->getClassMetadata();
+            $tempMeta = $this->em->getClassMetadata($subClass);
             if (end($temp) == $value) {
                 return [
                     'table' => $subClass,
