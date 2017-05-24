@@ -76,9 +76,14 @@ trait SetPropertiesEntityTrait
                     /*
                      * Caso seja um campo de data, utilizamos o método FormatHelper::parseDate para converter o valor enviado pelo usuário para um objeto DateTime.
                      */
-                    if ($column instanceof Column && ($column->type == 'date' || $column->type == 'datetime')) {
+                    if ($column instanceof Column && ($column->type == 'date' || $column->type == 'datetime' || $column->type == 'time')) {
+
+                        if ($column->type == 'time' && strlen($valueKey) == 5) {
+                            $valueKey .= ':00';
+                        }
+
                         $this->$methodSet(
-                            FormatHelper::parseDate($valueKey, ($column->type == 'date' ? 'Y-m-d' : 'Y-m-d H:i:s'))
+                            FormatHelper::parseDate($valueKey, ($column->type == 'date' ? 'Y-m-d' : ($column->type == 'datetime' ? 'Y-m-d H:i:s' : 'H:i:s')))
                         );
                     } else {
                         /**
