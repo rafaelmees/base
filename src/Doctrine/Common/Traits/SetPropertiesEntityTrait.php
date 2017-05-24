@@ -78,7 +78,7 @@ trait SetPropertiesEntityTrait
                      */
                     if ($column instanceof Column && ($column->type == 'date' || $column->type == 'datetime' || $column->type == 'time')) {
 
-                        if ($column->type == 'time' && strlen($valueKey) == 5) {
+                        if ($column->type == 'time' && (is_string($valueKey) && strlen($valueKey) == 5)) {
                             $valueKey .= ':00';
                         }
 
@@ -196,3 +196,4 @@ trait SetPropertiesEntityTrait
         return $this;
     }
 }
+
