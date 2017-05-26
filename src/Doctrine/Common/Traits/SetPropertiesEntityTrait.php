@@ -116,7 +116,7 @@ trait SetPropertiesEntityTrait
                              */
                             if ($ormMapping instanceof ManyToOne) {
                                 $this->$methodSet(
-                                    $repositoryTargetEntity->find($valueKey)
+                                    $valueKey ? $repositoryTargetEntity->find($valueKey) : null
                                 );
                             } elseif (($ormMapping instanceof OneToMany || $ormMapping instanceof ManyToMany) && is_array($valueKey)) {
                                 /**
