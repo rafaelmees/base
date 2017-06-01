@@ -237,6 +237,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                     if ($skip) {
                         continue;
                     }
+
                     $qb = $this->em()->createQueryBuilder();
                     $qb->select('COUNT(t)')
                         ->from($metadata->getName(), 't')
