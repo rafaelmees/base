@@ -150,9 +150,9 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return app(EntityManagerInterface::class)->getRepository(get_class($this));
     }
 
-    public function remove()
+    public function remove($abort = true)
     {
-        $this->getRepository()->remove($this);
+        $this->getRepository()->remove($this, $abort);
 
         return $this;
     }
@@ -222,7 +222,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                 $set = false;
             }
 
-            $method = 'set'.ucfirst($key);
+            $method = 'set' . ucfirst($key);
 
             if (method_exists($this, $method) && $set) {
                 $this->$method($value);

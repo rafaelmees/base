@@ -37,8 +37,8 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     public function validate(BaseEntityInterface $entity)
     {
         $validator = (new ValidatorBuilder())
-                    ->enableAnnotationMapping()
-                    ->getValidator();
+            ->enableAnnotationMapping()
+            ->getValidator();
 
         $violations = $validator->validate($entity);
 
@@ -149,10 +149,12 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
      *
      * @return Bludata\Doctrine\Common\Interfaces\BaseEntityInterface
      */
-    public function remove($target)
+    public function remove($target, $abort = true)
     {
         $entity = $this->find($target);
-
+        if ($abort) {
+            $this->isUsedByEntitys($entity);
+        }
         $this->em()->remove($entity);
 
         return $entity;
@@ -163,7 +165,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
         FilterHelper::disableSoftDeleteableFilter();
 
         $removed = $this->createQueryWorker()
-                        ->andWhere('deletedAt', 'isnotnull');
+            ->andWhere('deletedAt', 'isnotnull');
 
         return $removed;
     }
@@ -171,8 +173,8 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     public function findRemoved($id, $abort = true)
     {
         $removed = $this->findAllRemoved()
-                        ->andWhere('id', '=', $id)
-                        ->getOneResult();
+            ->andWhere('id', '=', $id)
+            ->getOneResult();
 
         if (!$removed && $abort) {
             abort(404, $this->getMessageNotFound());
@@ -210,5 +212,61 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     public function em()
     {
         return parent::getEntityManager();
+    }
+
+    public function isUsedByEntitys(BaseEntityInterface $entity)
+    {
+        $entities = [];
+        $meta = $this->getClassMetadata();
+        $associations = $meta->getAssociationNames();
+        foreach ($this->em()->getMetadataFactory()->getAllMetadata() as $metadata) {
+            foreach ($metadata->getAssociationNames() as $field) {
+                if ($metadata->isAssociationWithSingleJoinColumn($field) &&
+                    $metadata->getAssociationTargetClass($field) == $this->getEntityName()
+                ) {
+                    //ignore cascade
+                    $skip = false;
+                    foreach ($associations as $association) {
+                        if (count($meta->getAssociationMapping($association)['cascade']) &&
+                            $meta->getAssociationTargetClass($association) == $metadata->getName()
+                        ) {
+                            $skip = true;
+                            break;
+                        }
+                    }
+                    if ($skip) {
+                        continue;
+                    }
+                    $qb = $this->em()->createQueryBuilder();
+                    $qb->select('COUNT(t)')
+                        ->from($metadata->getName(), 't')
+                        ->andWhere('t.' . $metadata->getAssociationMapping($field)['fieldName'] . ' = ?1')
+                        ->setParameter(1, $entity->getId());
+
+                    //ignore deleted
+                    if ($metadata->hasField('deletedAt')) {
+                        $qb->andWhere('t.deletedAt IS NULL');
+                    } elseif (count($metadata->parentClasses)) {
+                        $count = 1;
+                        foreach ($metadata->parentClasses as $parent) {
+                            $parentMetaData = $this->em()->getClassMetadata($parent);
+                            if ($parentMetaData->hasField('deletedAt')) {
+                                $id = $parentMetaData->getIdentifierFieldNames()[0];
+                                $qb->join($parent, 't' . $count, 'WITH', 't' . $count . '.' . $id . ' = t.' . $id)
+                                    ->andWhere('t' . $count . '.deletedAt IS NULL');
+                                $count++;
+                            }
+                        }
+                    }
+                    if ($qb->getQuery()->getSingleScalarResult() > 0) {
+                        //@TODO pegar o label da classe nas annotations
+                        $entities[] = $metadata->getTableName();
+                    }
+                }
+            }
+        }
+        if (count($entities)) {
+            abort(404, 'Esse registro está sendo utilizado por: ' . implode(', ', $entities) . '.');
+        }
     }
 }

@@ -8,7 +8,7 @@ interface BaseEntityInterface
 
     public function save();
 
-    public function remove();
+    public function remove($abort = true);
 
     public function restoreRemoved();
 

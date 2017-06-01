@@ -39,8 +39,8 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     public function validate(BaseEntityInterface $entity)
     {
         $validator = (new ValidatorBuilder())
-                    ->enableAnnotationMapping()
-                    ->getValidator();
+            ->enableAnnotationMapping()
+            ->getValidator();
 
         $violations = $validator->validate($entity);
 
@@ -151,10 +151,12 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
      *
      * @return Bludata\Doctrine\Common\Interfaces\BaseEntityInterface
      */
-    public function remove($target)
+    public function remove($target, $abort = true)
     {
         $entity = $this->find($target);
-
+        if ($abort) {
+            $this->isUsedByEntitys($entity);
+        }
         $this->em()->remove($entity);
 
         return $entity;
@@ -197,5 +199,10 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     public function em()
     {
         return parent::getDocumentManager();
+    }
+
+    public function isUsedByEntitys(BaseEntityInterface $entity)
+    {
+
     }
 }
