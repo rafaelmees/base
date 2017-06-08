@@ -23,6 +23,20 @@ abstract class BaseApplication extends Application
         return $this;
     }
 
+    public function registerPublicRoutes($descriptionGroup, $prefix, $controller, array $except = [], Closure $routes = null)
+    {
+        $this->resource($descriptionGroup, $prefix, $controller, array_merge($except, ['store', 'update', 'destroy', 'restoreDestroyed']), $routes);
+
+        return $this;
+    }
+
+    public function registerPrivateRoutes($descriptionGroup, $prefix, $controller, array $except = [], Closure $routes = null)
+    {
+        $this->resource($descriptionGroup, $prefix, $controller, array_merge($except, ['index', 'show', 'destroyed']), $routes);
+
+        return $this;
+    }
+
     /**
      * @return Bludata\Lumen\Application\BaseApplication
      */
