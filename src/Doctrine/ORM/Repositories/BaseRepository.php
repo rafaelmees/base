@@ -137,7 +137,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
             return $object;
         }
 
-        throw new InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
+        throw new \InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
     }
 
     /**
