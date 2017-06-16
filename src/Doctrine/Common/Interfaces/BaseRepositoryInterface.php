@@ -18,7 +18,7 @@ interface BaseRepositoryInterface
 
     public function findOrCreate($input);
 
-    public function remove($target);
+    public function remove($target, $abort = true);
 
     public function findAllRemoved();
 

@@ -7,6 +7,7 @@ use Bludata\Doctrine\Common\Annotations\ToObject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -110,13 +111,41 @@ trait SetPropertiesEntityTrait
                             $targetEntity = new $targetEntityName();
                             $repositoryTargetEntity = $targetEntity->getRepository();
 
+
+                            /**
+                             * Caso seja encontrada a anotação Doctrine\ORM\Mapping\DiscriminatorMap em $targetEntity, setamos $repositoryTargetEntity com o repositório da entidade informada referente a $valueKey[$targetEntity->getDiscrName()].
+                             */
+                            $reflectionClassTargetEntity = new ReflectionClass($targetEntityName);
+                            $targetEntityAnnotations = $annotationReader->getClassAnnotations($reflectionClassTargetEntity);
+
+                            $discriminatorMap = array_filter($targetEntityAnnotations, function ($annotation){
+                                return $annotation instanceof DiscriminatorMap;
+                            });
+
+                            if ($discriminatorMap) {
+                                $discriminatorMap = array_shift($discriminatorMap);
+
+                                $targetEntityName = array_filter($discriminatorMap->value, function ($valueMap, $keyMap) use ($targetEntity, $valueKey) {
+                                    return $keyMap == $valueKey[$targetEntity->getDiscrName()];
+                                }, ARRAY_FILTER_USE_BOTH);
+
+                                if (!$targetEntityName) {
+                                    throw new \InvalidArgumentException('Nenhuma entidade foi encontrada para \''.$targetEntity->getDiscrName().'\' = \''.$valueKey[$targetEntity->getDiscrName()].'\'');
+
+                                }
+
+                                $targetEntityName = $reflectionClass->getNamespaceName().'\\'.array_shift($targetEntityName);
+                                $targetEntity = new $targetEntityName();
+                                $repositoryTargetEntity = $targetEntity->getRepository();
+                            }
+
                             /*
                              * Se a propriedade estiver utilizando a anotação Doctrine\ORM\Mapping\ManyToOne e o usuário
                              * informou um número, então buscamos o devido objeto pelo seu id.
                              */
                             if ($ormMapping instanceof ManyToOne) {
                                 $this->$methodSet(
-                                    $valueKey ? $repositoryTargetEntity->find($valueKey) : null
+                                    $valueKey ? $repositoryTargetEntity->findOrCreate($valueKey) : null
                                 );
                             } elseif (($ormMapping instanceof OneToMany || $ormMapping instanceof ManyToMany) && is_array($valueKey)) {
                                 /**

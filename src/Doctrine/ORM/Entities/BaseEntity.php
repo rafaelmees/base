@@ -97,8 +97,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function prePersist()
     {
         $this->getRepository()
-             ->preSave($this)
-             ->validate($this);
+            ->preSave($this)
+            ->validate($this);
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function postPersist()
     {
         $this->getRepository()
-             ->postSave($this);
+            ->postSave($this);
     }
 
     /**
@@ -116,8 +116,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function preUpdate()
     {
         $this->getRepository()
-             ->preSave($this)
-             ->validate($this);
+            ->preSave($this)
+            ->validate($this);
     }
 
     /**
@@ -126,7 +126,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function postUpdate()
     {
         $this->getRepository()
-             ->postSave($this);
+            ->postSave($this);
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function preFlush()
     {
         $this->getRepository()
-             ->preFlush($this);
+            ->preFlush($this);
     }
 
     public function getRepository()
@@ -143,9 +143,9 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return EntityManager::getRepository(get_class($this));
     }
 
-    public function remove()
+    public function remove($abort = true)
     {
-        $this->getRepository()->remove($this);
+        $this->getRepository()->remove($this, $abort);
 
         return $this;
     }
@@ -153,7 +153,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function restoreRemoved()
     {
         $this->setDeletedAt(null)
-             ->save();
+            ->save();
 
         return $this;
     }
