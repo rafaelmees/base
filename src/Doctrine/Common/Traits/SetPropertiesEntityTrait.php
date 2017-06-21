@@ -166,46 +166,43 @@ trait SetPropertiesEntityTrait
                                     )
                                     && is_array($valueKey)
                                 ) {
-                                    if ($ormMapping instanceof OneToMany ) {
+                                    /*
+                                     * Percorremos a lista original de elementos
+                                     */
+                                    foreach ($this->$methodGet() as $element) {
                                         /*
-                                         * Percorremos a lista original de elementos
+                                         * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
                                          */
-                                        foreach ($this->$methodGet() as $element) {
-                                            /**
-                                             * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
+                                        $data = array_filter($valueKey, function ($value, $key) use ($element) {
+                                            return (is_array($value) && isset($value['id']) && $value['id'] == $element->getId())
+                                                   ||
+                                                   (is_numeric($value) && $value == $element->getId());
+                                        }, ARRAY_FILTER_USE_BOTH);
+
+                                        if ($data) {
+                                            /*
+                                             * Caso o elemento seja encontrado, então atualizamos na lista original e removemos do array enviado pelo usuário.
                                              */
-                                            $data = array_filter($valueKey, function ($value, $key) use ($element) {
-                                                return isset($value['id']) && $value['id'] == $element->getId();
-                                            }, ARRAY_FILTER_USE_BOTH);
+                                            $keyData = array_keys($data)[0];
 
-                                            if ($data) {
-                                                /**
-                                                 * Caso o elemento seja encontrado, então atualizamos na lista original e removemos do array enviado pelo usuário.
-                                                 */
-                                                $keyData = array_keys($data)[0];
-
+                                            if (is_array($data[$keyData])) {
                                                 $element->setPropertiesEntity($data[$keyData]);
-                                                unset($valueKey[$keyData]);
-                                            } else {
-                                                /**
-                                                 * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
-                                                 */
-                                                $this->$methodGet()->removeElement($element);
                                             }
-                                        }
 
-                                        /*
-                                         * Aqui adicionamos na lista original os novos elementos que ainda não foram persistidos.
-                                         */
-                                        foreach ($valueKey as $value) {
-                                            $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
+                                            unset($valueKey[$keyData]);
+                                        } else {
+                                            /*
+                                             * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
+                                             */
+                                            $this->$methodGet()->removeElement($element);
                                         }
-                                    } else {
-                                        $this->$methodSet(new ArrayCollection());
+                                    }
 
-                                        foreach ($valueKey as $value) {
-                                            $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
-                                        }
+                                    /*
+                                     * Aqui adicionamos na lista original os novos elementos que ainda não foram persistidos.
+                                     */
+                                    foreach ($valueKey as $value) {
+                                        $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
                                     }
                                 }
                             } else if ($ormMapping instanceof OneToOne) {
