@@ -84,7 +84,7 @@ trait SetPropertiesEntityTrait
                         }
 
                         $this->$methodSet(
-                            FormatHelper::parseDate($valueKey, ($column->type == 'date' ? 'Y-m-d' : ($column->type == 'datetime' ? 'Y-m-d H:i:s' : 'H:i:s')))
+                            $valueKey ? FormatHelper::parseDate($valueKey, ($column->type == 'date' ? 'Y-m-d' : ($column->type == 'datetime' ? 'Y-m-d H:i:s' : 'H:i:s'))) : null
                         );
                     } else {
                         /**
@@ -122,7 +122,7 @@ trait SetPropertiesEntityTrait
                                 return $annotation instanceof DiscriminatorMap;
                             });
 
-                            if ($discriminatorMap) {
+                            if ($discriminatorMap && isset($valueKey[$targetEntity->getDiscrName()])) {
                                 $discriminatorMap = array_shift($discriminatorMap);
 
                                 $targetEntityName = array_filter($discriminatorMap->value, function ($valueMap, $keyMap) use ($targetEntity, $valueKey) {
