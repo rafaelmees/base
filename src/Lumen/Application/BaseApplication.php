@@ -42,6 +42,7 @@ abstract class BaseApplication extends Application
      */
     public function resource($descriptionGroup, $prefix, $controller, array $except = [], Closure $routes = null)
     {
+        $asPrefix = str_replace('/', '.', $prefix);
         $exceptAll = false;
 
         if (isset($except[0])) {
@@ -51,7 +52,7 @@ abstract class BaseApplication extends Application
         if (!$exceptAll) {
             if (!in_array('index', $except)) {
                 $this->get($prefix, [
-                    'as'               => $prefix.'.index',
+                    'as'               => $asPrefix.'.index',
                     'uses'             => $controller.'@index',
                     'description'      => 'Buscar todos',
                     'descriptionGroup' => $descriptionGroup,
@@ -60,7 +61,7 @@ abstract class BaseApplication extends Application
 
             if (!in_array('show', $except)) {
                 $this->get($prefix.'/{id:[0-9]+}', [
-                    'as'               => $prefix.'.show',
+                    'as'               => $asPrefix.'.show',
                     'uses'             => $controller.'@show',
                     'description'      => 'Buscar um',
                     'descriptionGroup' => $descriptionGroup,
@@ -69,7 +70,7 @@ abstract class BaseApplication extends Application
 
             if (!in_array('store', $except)) {
                 $this->post($prefix, [
-                    'as'               => $prefix.'.store',
+                    'as'               => $asPrefix.'.store',
                     'uses'             => $controller.'@store',
                     'description'      => 'Cadastrar',
                     'descriptionGroup' => $descriptionGroup,
@@ -78,7 +79,7 @@ abstract class BaseApplication extends Application
 
             if (!in_array('update', $except)) {
                 $this->put($prefix.'/{id:[0-9]+}', [
-                    'as'               => $prefix.'.update',
+                    'as'               => $asPrefix.'.update',
                     'uses'             => $controller.'@update',
                     'description'      => 'Editar',
                     'descriptionGroup' => $descriptionGroup,
@@ -87,7 +88,7 @@ abstract class BaseApplication extends Application
 
             if (!in_array('destroy', $except)) {
                 $this->delete($prefix.'/{id:[0-9]+}', [
-                    'as'               => $prefix.'.destroy',
+                    'as'               => $asPrefix.'.destroy',
                     'uses'             => $controller.'@destroy',
                     'description'      => 'Excluir',
                     'descriptionGroup' => $descriptionGroup,
@@ -96,18 +97,18 @@ abstract class BaseApplication extends Application
 
             if (!in_array('destroyed', $except)) {
                 $this->get($prefix.'/destroyed', [
-                    'as'               => $prefix.'.destroyed',
+                    'as'               => $asPrefix.'.destroyed',
                     'uses'             => $controller.'@destroyed',
-                    'description'      => 'Buscar excluÃ­dos',
+                    'description'      => 'Buscar excluídos',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
             }
 
             if (!in_array('restoreDestroyed', $except)) {
                 $this->post($prefix.'/destroyed/{id:[0-9]+}', [
-                    'as'               => $prefix.'.restoreDestroyed',
+                    'as'               => $asPrefix.'.restoreDestroyed',
                     'uses'             => $controller.'@restoreDestroyed',
-                    'description'      => 'Restaurar excluÃ­do',
+                    'description'      => 'Restaurar excluído',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
             }
