@@ -90,7 +90,7 @@ trait AttributesTrait
                 return $attr->toArray();
             }
 
-            if ($attr instanceof ArrayAccess) {
+            if ($attr instanceof ArrayAccess || is_array($attr)) {
                 $newParam = [];
                 foreach ($attr as $p) {
                     if (method_exists($p, 'toArray')) {
