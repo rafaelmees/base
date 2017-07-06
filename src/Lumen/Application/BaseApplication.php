@@ -99,7 +99,7 @@ abstract class BaseApplication extends Application
                 $this->get($prefix.'/destroyed', [
                     'as'               => $asPrefix.'.destroyed',
                     'uses'             => $controller.'@destroyed',
-                    'description'      => 'Buscar excluídos',
+                    'description'      => 'Buscar excluÃ­dos',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
             }
@@ -108,7 +108,7 @@ abstract class BaseApplication extends Application
                 $this->post($prefix.'/destroyed/{id:[0-9]+}', [
                     'as'               => $asPrefix.'.restoreDestroyed',
                     'uses'             => $controller.'@restoreDestroyed',
-                    'description'      => 'Restaurar excluído',
+                    'description'      => 'Restaurar excluÃ­do',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
             }
