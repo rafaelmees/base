@@ -1,6 +1,167 @@
 <?php
 
 /**
+ * Checks the existence of the class in Core or Base
+ * @return name of class
+ */
+if (!function_exists('bdClassExists')) {
+    function bdClassExists($folder, $className, $module = null, $version = 'v1', $abort = true)
+    {
+        $entityClass = app()->getBaseNamespace().app()->getMainModule($module).'\\'.$version.'\\'.$folder.'\\'.$className;
+
+        if (class_exists($entityClass)) {
+            return $entityClass;
+        }
+
+        if ($abort) {
+            abort(500, 'Undefined \''.$className.'\'');
+        }
+
+        return null;
+    }
+}
+
+/**
+ * Checks the existence of the class interface in Core or Base
+ * @return name of class interface
+ */
+if (!function_exists('bdInterfaceExists')) {
+    function bdInterfaceExists($folder, $className, $module = null, $version = 'v1', $abort = true)
+    {
+        $entityClass = app()->getBaseNamespace().app()->getMainModule($module).'\\'.$version.'\\'.$folder.'\\'.$className;
+
+        if (interface_exists($entityClass)) {
+            return $entityClass;
+        }
+
+        if ($abort) {
+            abort(500, 'Undefined \''.$className.'\'');
+        }
+
+        return null;
+    }
+}
+
+/**
+ * @return the name of the repository interface
+ */
+if (!function_exists('bdRepositoryInterfaceClass')) {
+    function bdRepositoryInterfaceClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdInterfaceClass($className.'Repository', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return the name of the class
+ */
+if (!function_exists('bdRepositoryClass')) {
+    function bdRepositoryClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdClassExists('Repositories', $className.'Repository', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return an instance of the class repository
+ */
+if (!function_exists('bdRepository')) {
+    function bdRepository($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return app(bdRepositoryInterfaceClass($className, $module, $version, $abort));
+    }
+}
+
+/**
+ * @return the name of the service interface
+ */
+if (!function_exists('bdServiceInterfaceClass')) {
+    function bdServiceInterfaceClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdInterfaceClass($className.'Service', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return the name of the service
+ */
+if (!function_exists('bdServiceClass')) {
+    function bdServiceClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdClassExists('Services', $className.'Service', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return an instance of the service
+ */
+if (!function_exists('bdService')) {
+    function bdService($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return app(bdServiceInterfaceClass($className, $module, $version, $abort));
+    }
+}
+
+/**
+ * @return the name of the entity
+ */
+if (!function_exists('bdEntityClass')) {
+    function bdEntityClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdClassExists('Entities', $className, $module, $version, $abort);
+    }
+}
+
+/**
+ * @return an instance of the entity
+ */
+if (!function_exists('bdEntity')) {
+    function bdEntity($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return app(bdEntityClass($className, $module, $version, $abort));
+    }
+}
+
+/**
+ * @return the name of the contract
+ */
+if (!function_exists('bdContractClass')) {
+    function bdContractClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdInterfaceExists('Contracts', $className.'Interface', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return an instance of the contract
+ */
+if (!function_exists('bdContract')) {
+    function bdContract($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return app(bdContractClass($className, $module, $version, $abort));
+    }
+}
+/**
+ * Verifica a existencia da interface
+ */
+if (!function_exists('bdInterfaceClass')) {
+    function bdInterfaceClass($className, $module = null, $version = 'v1', $abort = true)
+    {
+        return bdInterfaceExists('Interfaces', $className.'Interface', $module, $version, $abort);
+    }
+}
+
+/**
+ * @return an instance of the EntityManager
+ */
+if (!function_exists('em')) {
+    function em()
+    {
+        return app('Doctrine\ORM\EntityManagerInterface');
+    }
+}
+
+/**
  * Dump and die.
  */
 if (!function_exists('dd')) {

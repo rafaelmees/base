@@ -10,6 +10,8 @@ abstract class BaseApplication extends Application
     protected $currentUser;
 
     abstract public function getRepositoryInterface($entity);
+    abstract public function getBaseNamespace();
+    abstract public function getMainModule($module = null);
 
     public function getCurrentUser()
     {
