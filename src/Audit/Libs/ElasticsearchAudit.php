@@ -1,6 +1,7 @@
 <?php
 
-namespace Audit\Libs;
+namespace Bludata\Audit\Libs;
+
 use Audit\Contracts\AuditInterface;
 use Elasticsearch\ClientBuilder;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Audit\Contracts;
+namespace Bludata\Audit\Contracts;
 
 interface AuditInterface
 {
