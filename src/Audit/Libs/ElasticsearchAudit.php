@@ -2,28 +2,35 @@
 
 namespace Bludata\Audit\Libs;
 
-use Audit\Contracts\AuditInterface;
+use Bludata\Audit\Contracts\AuditInterface;
 use Elasticsearch\ClientBuilder;
 
 class ElasticsearchAudit implements AuditInterface
 {
     protected $elasticsearch;
+    protected $mappingConfig;
 
-    public function __construct()
+    public function __construct(Array $mapping)
     {
         $this->refreshClient();
-        $this->prefix = env('AUDIT_PREFIX');
+        $this->mappingConfig = $mapping;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMappingConfig($index)
+    {
+        return $this->mappingConfig['index'][$index];
     }
 
     public function refreshClient()
     {
         $hosts = [
             [
-                'host' => env('AUDIT_HOST'),
-                'port' => env('AUDIT_PORT'),
-                'scheme' => env('AUDIT_SCHEME'),
-                'user' => env('AUDIT_USER'),
-                'pass' => env('AUDIT_PASS'),
+                'host' => env('AUDIT_HOST', 'localhost'),
+                'port' => env('AUDIT_PORT', '9200'),
+                'scheme' => env('AUDIT_SCHEME', 'http')
             ],
         ];
         $elasticsearch = ClientBuilder::create();
@@ -34,12 +41,11 @@ class ElasticsearchAudit implements AuditInterface
     /**
      * Gerar em uma migration com os templates criados
      */
-    public function createLogIndex($index)
+    public function createLogIndex($index = null)
     {
-        // be sure that the index doesn't already exist
         if (!$this->elasticsearch->indices()->exists(['index' => $index])) {
-            // create index
-            $params = $this->generateLogTemplate($index);
+
+            $params = $this->getMappingConfig($index);
             return $this->elasticsearch->indices()->create($params);
         }
     }
@@ -47,18 +53,18 @@ class ElasticsearchAudit implements AuditInterface
     /**
      * @inheritdoc
      */
-    public function put($key, $value, $template = 'log')
+    public function put($index, $value, $template = 'log')
     {
         if (!count($value)) {
             throw new \InvalidArgumentException('Body can\'t be empty');
         }
 
         $params = [
-            'index' => $this->prefix . $key,
+            'index' => env('AUDIT_INDEX', $index ? $index : ''),
             'body' => $value,
-            'id' => $value['idEntity'],
             'type' => $template,
         ];
+
         $response = $this->elasticsearch->index($params);
         return $response;
     }
