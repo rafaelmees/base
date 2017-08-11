@@ -2,6 +2,7 @@
 
 namespace Bludata\Doctrine\ODM\MongoDB\Entities;
 
+use Bludata\Doctrine\ODM\MongoDB\Traits\SetPropertiesEntityTrait;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityManagerInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
@@ -15,6 +16,8 @@ use Doctrine\ODM\MongoDB\PersistentCollection;
  */
 abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterface
 {
+    use SetPropertiesEntityTrait;
+
     /**
      * @ODM\Id
      */
@@ -207,29 +210,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function getOnlyUpdate()
     {
         return $this->getOnlyStore();
-    }
-
-    public function setPropertiesEntity(array $data)
-    {
-        foreach ($data as $key => $value) {
-            $set = true;
-
-            if (
-                ((!isset($data['id']) || !is_numeric($data['id'])) && !in_array($key, $this->getOnlyStore()))
-                ||
-                (isset($data['id']) && is_numeric($data['id']) && !in_array($key, $this->getOnlyUpdate()))
-            ) {
-                $set = false;
-            }
-
-            $method = 'set' . ucfirst($key);
-
-            if (method_exists($this, $method) && $set) {
-                $this->$method($value);
-            }
-        }
-
-        return $this;
     }
 
     final protected function checkOnyExceptInArray($key, array $options = null)

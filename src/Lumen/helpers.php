@@ -53,8 +53,8 @@ if (!function_exists('bind_repository_interface')) {
     function bind_repository_interface($repositoryInterface, $repository, $entity) {
         app()->bind($repositoryInterface, function($app) use ($repository, $entity) {
             return new $repository(
-                $app['em'],
-                $app['em']->getClassMetaData($entity)
+                $app->make(Bludata\Doctrine\Common\Interfaces\EntityManagerInterface::class),
+                $app->make(Bludata\Doctrine\Common\Interfaces\EntityManagerInterface::class)->getClassMetaData($entity)
             );
         });
     }
