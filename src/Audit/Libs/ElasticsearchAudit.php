@@ -8,20 +8,10 @@ use Elasticsearch\ClientBuilder;
 class ElasticsearchAudit implements AuditInterface
 {
     protected $elasticsearch;
-    protected $mappingConfig;
 
-    public function __construct(Array $mapping)
+    public function __construct()
     {
         $this->refreshClient();
-        $this->mappingConfig = $mapping;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMappingConfig($index)
-    {
-        return $this->mappingConfig['index'][$index];
     }
 
     public function refreshClient()
@@ -41,12 +31,10 @@ class ElasticsearchAudit implements AuditInterface
     /**
      * Gerar em uma migration com os templates criados
      */
-    public function createLogIndex($index = null)
+    public function createIndex($index = null)
     {
-        if (!$this->elasticsearch->indices()->exists(['index' => $index])) {
-
-            $params = $this->getMappingConfig($index);
-            return $this->elasticsearch->indices()->create($params);
+        if (!$this->elasticsearch->indices()->exists(['index' => $index['index']])) {
+            return $this->elasticsearch->indices()->create($index);
         }
     }
 
