@@ -1,6 +1,6 @@
 <?php
 
-namespace Bludata\Doctrine\Common\Traits;
+namespace Bludata\Doctrine\ORM\Traits;
 
 use Bludata\Common\Helpers\FormatHelper;
 use Bludata\Doctrine\Common\Annotations\ToObject;
@@ -158,52 +158,55 @@ trait SetPropertiesEntityTrait
                                     throw new \BadMethodCallException('Para utilizar '.get_class($toObject).' em '.get_called_class().'::$'.$key.' você precisar declarar o método '.get_called_class().'::'.$methodAdd.'(), ou, informar o parâmetro '.get_class($toObject).'::customMethodAdd');
                                 }
 
-                                if (
-                                    (
-                                        $ormMapping instanceof OneToMany
-                                        ||
-                                        $ormMapping instanceof ManyToMany
-                                    )
-                                    && is_array($valueKey)
-                                ) {
+                                /*
+                                 * Percorremos a lista original de elementos
+                                 */
+                                foreach ($this->$methodGet() as $element) {
                                     /*
-                                     * Percorremos a lista original de elementos
+                                     * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
                                      */
-                                    foreach ($this->$methodGet() as $element) {
+                                    $data = array_filter($valueKey, function ($value, $key) use ($element) {
+                                        return (is_array($value) && isset($value['id']) && $value['id'] == $element->getId())
+                                               ||
+                                               (is_numeric($value) && $value == $element->getId());
+                                    }, ARRAY_FILTER_USE_BOTH);
+
+                                    if ($data) {
                                         /*
-                                         * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
+                                         * Caso o elemento seja encontrado, então atualizamos na lista original e removemos do array enviado pelo usuário.
                                          */
-                                        $data = array_filter($valueKey, function ($value, $key) use ($element) {
-                                            return (is_array($value) && isset($value['id']) && $value['id'] == $element->getId())
-                                                   ||
-                                                   (is_numeric($value) && $value == $element->getId());
-                                        }, ARRAY_FILTER_USE_BOTH);
+                                        $keyData = array_keys($data)[0];
 
-                                        if ($data) {
-                                            /*
-                                             * Caso o elemento seja encontrado, então atualizamos na lista original e removemos do array enviado pelo usuário.
-                                             */
-                                            $keyData = array_keys($data)[0];
+                                        if (is_array($data[$keyData])) {
+                                            $element->setPropertiesEntity($data[$keyData]);
+                                        }
 
-                                            if (is_array($data[$keyData])) {
-                                                $element->setPropertiesEntity($data[$keyData]);
-                                            }
+                                        unset($valueKey[$keyData]);
+                                    } else {
+                                        /*
+                                         * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
+                                         */
 
-                                            unset($valueKey[$keyData]);
+                                        /**
+                                         * Removemos apenas o vinculo do registro
+                                         */
+                                        if ($ormMapping instanceof OneToMany && !$ormMapping->orphanRemoval) {
+                                            $methodSetMappedBy = 'set'.ucfirst($ormMapping->mappedBy);
+                                            $element->$methodSetMappedBy(null);
                                         } else {
-                                            /*
-                                             * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
+                                            /**
+                                             * Removemos apenas o registro (deletado)
                                              */
                                             $this->$methodGet()->removeElement($element);
                                         }
                                     }
+                                }
 
-                                    /*
-                                     * Aqui adicionamos na lista original os novos elementos que ainda não foram persistidos.
-                                     */
-                                    foreach ($valueKey as $value) {
-                                        $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
-                                    }
+                                /*
+                                 * Aqui adicionamos na lista original os novos elementos que ainda não foram persistidos.
+                                 */
+                                foreach ($valueKey as $value) {
+                                    $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
                                 }
                             } else if ($ormMapping instanceof OneToOne) {
                                 $this->$methodSet($repositoryTargetEntity->findOrCreate($valueKey));

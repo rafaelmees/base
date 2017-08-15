@@ -4,7 +4,7 @@ namespace Bludata\Doctrine\ORM\Entities;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
-use Bludata\Doctrine\Common\Traits\SetPropertiesEntityTrait;
+use Bludata\Doctrine\ORM\Traits\SetPropertiesEntityTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
