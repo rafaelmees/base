@@ -25,6 +25,7 @@ class ElasticsearchAudit implements AuditInterface
         ];
         $elasticsearch = ClientBuilder::create();
         $elasticsearch->setHosts($hosts);
+        $elasticsearch->allowBadJSONSerialization();
         $this->elasticsearch = $elasticsearch->build();
     }
 
