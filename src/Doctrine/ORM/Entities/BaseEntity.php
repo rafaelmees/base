@@ -24,7 +24,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
