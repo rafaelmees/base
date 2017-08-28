@@ -20,44 +20,4 @@ trait DeleteTrait
 
         return $entityRemoved;
     }
-
-    /**
-     * @depends testRemove
-     */
-    public function testFindAllDestroyed($entity)
-    {
-        $findAllDestroyed = $this->getService()->findAllDestroyed()->getResult();
-
-        $this->assertGreaterThan(0, count($findAllDestroyed));
-        $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $findAllDestroyed[0]);
-
-        foreach ($findAllDestroyed as $entity)
-        {
-            $this->assertNotNull($entity->getDeletedAt());
-        }
-
-        $filter = array_values(array_filter($findAllDestroyed, function ($obj) use ($entity) {
-            return $obj->getId() == $entity->getId();
-        }));
-
-        $this->assertEquals($filter[0]->getId(), $entity->getId());
-
-        FilterHelper::enableSoftDeleteableFilter();
-
-        return $findAllDestroyed;
-    }
-
-    /**
-     * @depends testRemove
-     */
-    public function testRestoreDestroyed($entity)
-    {
-        $entityRestored = $this->getService()
-                               ->restoreDestroyed($entity->getId())
-                               ->flush();
-
-        $this->assertNull($entityRestored->getDeletedAt());
-
-        return $entityRestored;
-    }
 }
