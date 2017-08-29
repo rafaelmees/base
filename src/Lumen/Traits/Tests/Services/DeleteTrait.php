@@ -6,11 +6,10 @@ use Bludata\Doctrine\ORM\Helpers\FilterHelper;
 
 trait DeleteTrait
 {
-    /**
-     * @depends testStore
-     */
-    public function testRemove($entity)
+    public function testRemove()
     {
+        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+
         $entityRemoved = $this->getService()
              ->remove($entity->getId())
              ->flush();

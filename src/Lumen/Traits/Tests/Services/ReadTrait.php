@@ -4,11 +4,10 @@ namespace Bludata\Lumen\Traits\Tests\Services;
 
 trait ReadTrait
 {
-    /**
-     * @depends testStore
-     */
-    public function testFindAll($entity)
+    public function testFindAll()
     {
+        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+
         $findAll = $this->getService()->findAll()->getResult();
 
         $this->assertGreaterThan(0, count($findAll));
@@ -23,11 +22,10 @@ trait ReadTrait
         return $findAll;
     }
 
-    /**
-     * @depends testStore
-     */
-    public function testFind($entity)
+    public function testFind()
     {
+        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+
         $find = $this->getService()->find($entity->getId());
 
         $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $find);
