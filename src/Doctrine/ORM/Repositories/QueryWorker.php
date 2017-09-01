@@ -808,12 +808,16 @@ class QueryWorker
      */
     protected function makeExpression($field, $operation, $value = null, $alias = self::DEFAULT_TABLE_ALIAS)
     {
+        $valueOrigin = $value;
+
         if (!is_array($value)) {
             $value = $this->queryBuilder->expr()->literal($value);
         }
+
         if ($field) {
             $field = $this->getFullFieldName($field, $alias);
         }
+
         $expression = null;
         switch (strtolower($operation)) {
             case '>':
@@ -852,11 +856,9 @@ class QueryWorker
             case 'notin':
                 $expression = $this->queryBuilder->expr()->notIn($field, $value);
                 break;
-            case 'contains':
-                /*
-                 * @todo implementar o metodo contains
-                 */
-                // $expression = $this->queryBuilder->expr()->contains($field, $value);
+            case 'memberof':
+                $expression =  ':memberOfId MEMBER OF ' . $field;
+                $this->queryBuilder->setParameter('memberOfId', $valueOrigin);
                 break;
             case 'like':
                 $expression = $this->queryBuilder->expr()->like('LOWER(' . $field . ')', strtolower($value));
