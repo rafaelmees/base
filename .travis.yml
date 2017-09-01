@@ -11,6 +11,8 @@ matrix:
   include:
     - php: 5.6
     - php: 7.0
+    - php: 7.1
+    - php: 7.2
     - php: nightly
   allow_failures:
     - php: nightly
@@ -21,7 +23,7 @@ before_install:
   - docker run -d -p 27017:27017 mongo
   - docker ps -a
   - pecl install mongodb-alpha
-  - phpenv config-add php.ini
+  - phpenv config-add ./travis/php.ini
 
 before_script:
   - travis_retry composer self-update
@@ -31,12 +33,8 @@ before_script:
   - travis_retry composer require doctrine/mongodb-odm:dev-master
 
 script:
-  - if [ "$TRAVIS_PHP_VERSION" != "5.6" ]; then  travis_retry bash -x ./run-tests.sh; fi
-  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then  COVERAGE="--coverage-clover=coverage.xml" travis_retry bash -x ./run-tests.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "5.6" ]; then  travis_retry bash -x ./travis/run-tests.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then  COVERAGE="--coverage-clover=coverage.xml" travis_retry bash -x ./travis/run-tests.sh; fi
 
 after_success:
-  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $TRAVIS_BRANCH; fi
-
-notifications:
-  slack:
-    secure: qCn/yGsKLpk8oeqhOe8IESdaqUVzPFYC5dgGY32H+zIOr0wTy1kiIdylNaH0CwpPX60sfRw7ojUmG5i2upTnlgW5I/yrTCzXqMH5fRAk/KW3C2HYtZ+fnc8FA63r4MEdoT5PoY0Vs6IHvIf7OajMVa/aCkS5pWsCzkxzXw5k6PBvqdNs6SozF5dH4QRPVivp5Nyv7UzsOtRITVIfjrplgcPfqMHHIm/no46Y9/ijJL+IpaU/dWJmOHbks77lS1+xdTBWK0bl4/fhV72xjQ4SpDQb+iLBKh1Vl8ScPuiKiuetdlCpwkgfQzL6GpVa63m+zsoZJfE5gOs+30clID9ZspO2HgwLBlre6rMxT/kL8npYayyEc4wT+fUNgpNIlFeFJlnzrF5dutWRAHwGdc/Ku2nYmbg/C6TYY7we8dbRxuallC4DqAPMCDYoNQSYba00SSlXbeXpMnX/OF7Ntt4mD4ivB37olDBFBzhoxBJFJAKBJwrBJ4OnRo4Rd9vSO5QFKFWPN/iu1wuKICpAwUSqNhvofqf5i021kZUMH2XlajB0apBbm+8D6KG6+TPkwAImmVfzg7q8sbxFU/Q91oU72ejjh2xKt6X1KqSLkJY0qszXxoKOLXchb8LbfdglWEmRVUgtymIpphZHsrsBCn93GHN6LLJtKNKbFKmsy3Mq5cY=
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $TRAVIS_BRANCH; fi
