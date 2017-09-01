@@ -5,19 +5,19 @@ namespace Bludata\Audit\Contracts;
 interface AuditInterface
 {
     /**
-     * Create a new Audit register
+     * Create a new Audit register.
      */
     public function put($key, $value);
 
     /**
-     * Get one or more Audit registers
+     * Get one or more Audit registers.
      *
      * @param mixed $params
      */
-    public function get($key, $id=null, $type=null);
+    public function get($key, $id = null, $type = null);
 
     /**
-     * Delete a Audit register
+     * Delete a Audit register.
      *
      * @param string $key
      */

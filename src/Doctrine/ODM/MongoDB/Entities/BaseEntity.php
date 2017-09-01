@@ -222,7 +222,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                 $set = false;
             }
 
-            $method = 'set' . ucfirst($key);
+            $method = 'set'.ucfirst($key);
 
             if (method_exists($this, $method) && $set) {
                 $this->$method($value);

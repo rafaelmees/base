@@ -10,9 +10,9 @@ use Symfony\Component\Validator\Constraint;
 class UniqueEntity extends Constraint
 {
     public $message;
-    public $fields             = [];
+    public $fields = [];
     public $withDefaultFilters = false;
-    public $disabledFilters    = [];
+    public $disabledFilters = [];
 
     public function getTargets()
     {

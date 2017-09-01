@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Checks the existence of the class in Core or Base
+ * Checks the existence of the class in Core or Base.
+ *
  * @return name of class
  */
 if (!function_exists('bdClassExists')) {
@@ -21,7 +22,7 @@ if (!function_exists('bdClassExists')) {
     }
 }
 
-/**
+/*
  * Checks the existence of the class interface in Core or Base
  * @return name of class interface
  */
@@ -42,7 +43,7 @@ if (!function_exists('bdInterfaceExists')) {
     }
 }
 
-/**
+/*
  * @return the name of the repository interface
  */
 if (!function_exists('bdRepositoryInterfaceClass')) {
@@ -52,7 +53,7 @@ if (!function_exists('bdRepositoryInterfaceClass')) {
     }
 }
 
-/**
+/*
  * @return the name of the class
  */
 if (!function_exists('bdRepositoryClass')) {
@@ -62,7 +63,7 @@ if (!function_exists('bdRepositoryClass')) {
     }
 }
 
-/**
+/*
  * @return an instance of the class repository
  */
 if (!function_exists('bdRepository')) {
@@ -72,7 +73,7 @@ if (!function_exists('bdRepository')) {
     }
 }
 
-/**
+/*
  * @return the name of the service interface
  */
 if (!function_exists('bdServiceInterfaceClass')) {
@@ -82,7 +83,7 @@ if (!function_exists('bdServiceInterfaceClass')) {
     }
 }
 
-/**
+/*
  * @return the name of the service
  */
 if (!function_exists('bdServiceClass')) {
@@ -92,7 +93,7 @@ if (!function_exists('bdServiceClass')) {
     }
 }
 
-/**
+/*
  * @return an instance of the service
  */
 if (!function_exists('bdService')) {
@@ -102,7 +103,7 @@ if (!function_exists('bdService')) {
     }
 }
 
-/**
+/*
  * @return the name of the entity
  */
 if (!function_exists('bdEntityClass')) {
@@ -112,7 +113,7 @@ if (!function_exists('bdEntityClass')) {
     }
 }
 
-/**
+/*
  * @return an instance of the entity
  */
 if (!function_exists('bdEntity')) {
@@ -122,7 +123,7 @@ if (!function_exists('bdEntity')) {
     }
 }
 
-/**
+/*
  * @return the name of the contract
  */
 if (!function_exists('bdContractClass')) {
@@ -132,7 +133,7 @@ if (!function_exists('bdContractClass')) {
     }
 }
 
-/**
+/*
  * @return an instance of the contract
  */
 if (!function_exists('bdContract')) {
@@ -141,7 +142,7 @@ if (!function_exists('bdContract')) {
         return app(bdContractClass($className, $module, $version, $abort));
     }
 }
-/**
+/*
  * Verifica a existencia da interface
  */
 if (!function_exists('bdInterfaceClass')) {
@@ -151,7 +152,7 @@ if (!function_exists('bdInterfaceClass')) {
     }
 }
 
-/**
+/*
  * @return an instance of the EntityManager
  */
 if (!function_exists('em')) {
@@ -161,7 +162,7 @@ if (!function_exists('em')) {
     }
 }
 
-/**
+/*
  * Dump and die.
  */
 if (!function_exists('dd')) {
@@ -215,11 +216,11 @@ if (!function_exists('dr')) {
     }
 }
 
-/**
+/*
  * Retrieve all annotations of a giving object
  */
 if (!function_exists('get_class_annotations')) {
-    function get_class_annotations($element, $annotation=null)
+    function get_class_annotations($element, $annotation = null)
     {
         $class = $element;
         if (is_object($element)) {
@@ -228,15 +229,16 @@ if (!function_exists('get_class_annotations')) {
 
         $reflectClass = new \ReflectionClass($class);
         $reader = new \Doctrine\Common\Annotations\AnnotationReader();
+
         return $reader->getClassAnnotations($reflectClass, $annotation);
     }
 }
 
-/**
+/*
  * Retrieve annotations of a especific property of a giving object
  */
 if (!function_exists('get_property_annotations')) {
-    function get_property_annotations($element, $property=null, $annotation=null)
+    function get_property_annotations($element, $property = null, $annotation = null)
     {
         $class = $element;
         if (is_object($element) && !($element instanceof \ReflectionClass)) {
@@ -255,7 +257,7 @@ if (!function_exists('get_property_annotations')) {
         $reflectClass = new \ReflectionClass($class);
         $reflectProperties = $reflectClass->getProperties();
         $annotations = [];
-        foreach($reflectProperties as $property) {
+        foreach ($reflectProperties as $property) {
             $annotations[$property->getName()] = get_property_annotations($reflectClass, $property, $annotation);
         }
 
