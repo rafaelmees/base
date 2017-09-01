@@ -1,4 +1,5 @@
 <?php
+
 namespace Bludata\Common\Annotations\XML;
 
 /**

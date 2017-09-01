@@ -2,8 +2,6 @@
 
 namespace Bludata\Lumen\Traits\Tests\Services;
 
-use Bludata\Doctrine\ORM\Helpers\FilterHelper;
-
 trait DeleteTrait
 {
     /**

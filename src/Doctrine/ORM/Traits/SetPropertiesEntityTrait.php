@@ -5,7 +5,6 @@ namespace Bludata\Doctrine\ORM\Traits;
 use Bludata\Common\Helpers\FormatHelper;
 use Bludata\Doctrine\Common\Annotations\ToObject;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -78,7 +77,6 @@ trait SetPropertiesEntityTrait
                      * Caso seja um campo de data, utilizamos o método FormatHelper::parseDate para converter o valor enviado pelo usuário para um objeto DateTime.
                      */
                     if ($column instanceof Column && ($column->type == 'date' || $column->type == 'datetime' || $column->type == 'time')) {
-
                         if ($column->type == 'time' && (is_string($valueKey) && strlen($valueKey) == 5)) {
                             $valueKey .= ':00';
                         }
@@ -111,14 +109,13 @@ trait SetPropertiesEntityTrait
                             $targetEntity = new $targetEntityName();
                             $repositoryTargetEntity = $targetEntity->getRepository();
 
-
                             /**
                              * Caso seja encontrada a anotação Doctrine\ORM\Mapping\DiscriminatorMap em $targetEntity, setamos $repositoryTargetEntity com o repositório da entidade informada referente a $valueKey[$targetEntity->getDiscrName()].
                              */
                             $reflectionClassTargetEntity = new ReflectionClass($targetEntityName);
                             $targetEntityAnnotations = $annotationReader->getClassAnnotations($reflectionClassTargetEntity);
 
-                            $discriminatorMap = array_filter($targetEntityAnnotations, function ($annotation){
+                            $discriminatorMap = array_filter($targetEntityAnnotations, function ($annotation) {
                                 return $annotation instanceof DiscriminatorMap;
                             });
 
@@ -131,7 +128,6 @@ trait SetPropertiesEntityTrait
 
                                 if (!$targetEntityName) {
                                     throw new \InvalidArgumentException('Nenhuma entidade foi encontrada para \''.$targetEntity->getDiscrName().'\' = \''.$valueKey[$targetEntity->getDiscrName()].'\'');
-
                                 }
 
                                 $targetEntityName = $reflectionClass->getNamespaceName().'\\'.array_shift($targetEntityName);
@@ -187,14 +183,14 @@ trait SetPropertiesEntityTrait
                                          * Caso não seja encontrado, então significa que ele não será mais utilizado na lista, desse modo removemos da lista original.
                                          */
 
-                                        /**
+                                        /*
                                          * Removemos apenas o vinculo do registro
                                          */
                                         if ($ormMapping instanceof OneToMany && !$ormMapping->orphanRemoval) {
                                             $methodSetMappedBy = 'set'.ucfirst($ormMapping->mappedBy);
                                             $element->$methodSetMappedBy(null);
                                         } else {
-                                            /**
+                                            /*
                                              * Removemos apenas o registro (deletado)
                                              */
                                             $this->$methodGet()->removeElement($element);
@@ -208,7 +204,7 @@ trait SetPropertiesEntityTrait
                                 foreach ($valueKey as $value) {
                                     $this->$methodAdd($repositoryTargetEntity->findOrCreate($value));
                                 }
-                            } else if ($ormMapping instanceof OneToOne) {
+                            } elseif ($ormMapping instanceof OneToOne) {
                                 $this->$methodSet($repositoryTargetEntity->findOrCreate($valueKey));
                             }
                         }
@@ -225,4 +221,3 @@ trait SetPropertiesEntityTrait
         return $this;
     }
 }
-

@@ -30,7 +30,7 @@ class JWT implements JWTInterface
         $this->builder
              ->setIssuer(gethostname())
              ->setId(time(), true);
-             // ->setIssuedAt(time())
+        // ->setIssuedAt(time())
              // ->setNotBefore(time() + 60)
              // ->setExpiration(time() + 3600)
              // ->set('teste', 1);

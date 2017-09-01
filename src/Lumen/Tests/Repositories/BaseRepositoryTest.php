@@ -2,7 +2,6 @@
 
 namespace Bludata\Lumen\Tests\Repositories;
 
-use Bludata\Doctrine\ORM\Helpers\FilterHelper;
 use Bludata\Lumen\Tests\BaseTest;
 
 abstract class BaseRepositoryTest extends BaseTest

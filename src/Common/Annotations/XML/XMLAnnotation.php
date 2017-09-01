@@ -25,15 +25,15 @@ abstract class XMLAnnotation
     /**
      * @return Convert to string passing value
      */
-    public function toString($value=null)
+    public function toString($value = null)
     {
-        $toString = '<' . $this->getName() . '>';
+        $toString = '<'.$this->getName().'>';
 
         if (is_scalar($value)) {
             $toString .= $value;
         }
 
-        $toString .= '</' . $this->getName() . '>';
+        $toString .= '</'.$this->getName().'>';
 
         return $toString;
     }
@@ -45,5 +45,4 @@ abstract class XMLAnnotation
     {
         return $this->toString();
     }
-
 }

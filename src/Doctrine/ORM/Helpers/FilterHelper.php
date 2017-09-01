@@ -8,16 +8,14 @@ class FilterHelper
 {
     public static function disableSoftDeleteableFilter()
     {
-        if (EntityManager::getFilters()->isEnabled('soft-deleteable'))
-        {
+        if (EntityManager::getFilters()->isEnabled('soft-deleteable')) {
             EntityManager::getFilters()->disable('soft-deleteable');
         }
     }
 
     public static function enableSoftDeleteableFilter()
     {
-        if (!EntityManager::getFilters()->isEnabled('soft-deleteable'))
-        {
+        if (!EntityManager::getFilters()->isEnabled('soft-deleteable')) {
             EntityManager::getFilters()->enable('soft-deleteable');
         }
     }

@@ -203,6 +203,5 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
 
     public function isUsedByEntitys(BaseEntityInterface $entity)
     {
-
     }
 }
