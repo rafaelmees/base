@@ -11,17 +11,17 @@ trait UpdateTrait
     public function update(Request $request, $id)
     {
         $entity = $this->mainService
-                       ->update(
+                        ->update(
                             $id,
                             $this->filterRequest(
                                 $request->json()->all(),
                                 $this->mainService
-                                     ->getMainRepository()
-                                     ->createEntity()
-                                     ->getOnlyUpdate()
+                                        ->getMainRepository()
+                                        ->createEntity()
+                                        ->getOnlyUpdate()
                             )
-                       )
-                       ->flush();
+                        )
+                        ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayUpdate));
     }

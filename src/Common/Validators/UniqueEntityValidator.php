@@ -14,6 +14,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class UniqueEntityValidator extends ConstraintValidator
 {
+    /**
+     * @param Constraint $constraint
+     *
+     * @return string
+     */
     public function getMessage($entity, $constraint)
     {
         $entityName = $entity->getRepository()->getEntityName();
@@ -66,7 +71,6 @@ class UniqueEntityValidator extends ConstraintValidator
      * Busca as annotations de uma classe ou das propriedades da classe.
      *
      * @param string $type  [Class or Property]
-     * @param [type] $class [Name class]
      * @param [type] $field [Field to get annotations]
      *
      * @return [array]
@@ -133,8 +137,8 @@ class UniqueEntityValidator extends ConstraintValidator
 
             if ($results[0]->getId() != $entity->getId()) {
                 $this->context
-                     ->buildViolation($message)
-                     ->addViolation();
+                        ->buildViolation($message)
+                        ->addViolation();
             }
         }
 

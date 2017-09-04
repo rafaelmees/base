@@ -205,6 +205,9 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this->getOnlyStore();
     }
 
+    /**
+     * @param string $key
+     */
     final protected function checkOnyExceptInArray($key, array $options = null)
     {
         if (

@@ -7,8 +7,8 @@ trait CreateTrait
     public function testStore()
     {
         $entity = $this->getService()
-                       ->store($this->getRepositoryTest()->getMockArray())
-                       ->flush();
+                        ->store($this->getRepositoryTest()->getMockArray())
+                        ->flush();
 
         $repository = $this->getService()->getMainRepository();
 

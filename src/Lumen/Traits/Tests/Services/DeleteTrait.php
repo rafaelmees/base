@@ -10,8 +10,8 @@ trait DeleteTrait
     public function testRemove($entity)
     {
         $entityRemoved = $this->getService()
-             ->remove($entity->getId())
-             ->flush();
+                ->remove($entity->getId())
+                ->flush();
 
         $this->assertInstanceOf('DateTime', $entityRemoved->getDeletedAt());
         $this->assertNull($this->getService()->getMainRepository()->find($entity->getId(), false));

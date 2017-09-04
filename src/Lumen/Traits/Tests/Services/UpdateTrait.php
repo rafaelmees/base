@@ -21,8 +21,8 @@ trait UpdateTrait
         }
 
         $entity = $this->getService()
-                       ->update($flushedMockArray['id'], $flushedMockArray)
-                       ->flush();
+                        ->update($flushedMockArray['id'], $flushedMockArray)
+                        ->flush();
 
         $repository = $this->getService()->getMainRepository();
 

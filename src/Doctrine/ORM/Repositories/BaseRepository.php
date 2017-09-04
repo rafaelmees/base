@@ -186,7 +186,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     }
 
     /**
-     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
+     * @param BaseEntityInterface $entity
      *
      * @return self
      */
@@ -198,7 +198,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     }
 
     /**
-     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
+     * @param BaseEntityInterface $entity
      *
      * @return self
      */

@@ -189,7 +189,7 @@ class SoapClient
     /**
      * Retorna a instancia do SoapClient que foi incializada.
      *
-     * @return mixed
+     * @return SoapClient
      */
     public function getClient()
     {
@@ -199,7 +199,7 @@ class SoapClient
     /**
      * Recebe o SoapClient que sera utilizado.
      *
-     * @param SoapClient $client
+     * @param NativeSoapClient $client
      *
      * @return self
      */

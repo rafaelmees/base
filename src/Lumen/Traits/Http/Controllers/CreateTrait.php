@@ -11,16 +11,16 @@ trait CreateTrait
     public function store(Request $request)
     {
         $entity = $this->mainService
-                       ->store(
-                               $this->filterRequest(
-                                   $request->json()->all(),
+                        ->store(
+                                $this->filterRequest(
+                                    $request->json()->all(),
                                 $this->mainService
-                                     ->getMainRepository()
-                                     ->createEntity()
-                                     ->getOnlyStore()
+                                        ->getMainRepository()
+                                        ->createEntity()
+                                        ->getOnlyStore()
                             )
-                       )
-                       ->flush();
+                        )
+                        ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayStore));
     }

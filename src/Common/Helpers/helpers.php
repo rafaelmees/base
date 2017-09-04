@@ -6,6 +6,10 @@
  * @return name of class
  */
 if (!function_exists('bdClassExists')) {
+
+    /**
+     * @param string $folder
+     */
     function bdClassExists($folder, $className, $module = null, $version = 'v1', $abort = true)
     {
         $entityClass = app()->getBaseNamespace().app()->getMainModule($module).'\\'.$version.'\\'.$folder.'\\'.$className;
@@ -27,6 +31,11 @@ if (!function_exists('bdClassExists')) {
  * @return name of class interface
  */
 if (!function_exists('bdInterfaceExists')) {
+
+    /**
+     * @param string $folder
+     * @param string $className
+     */
     function bdInterfaceExists($folder, $className, $module = null, $version = 'v1', $abort = true)
     {
         $entityClass = app()->getBaseNamespace().app()->getMainModule($module).'\\'.$version.'\\'.$folder.'\\'.$className;
@@ -146,6 +155,10 @@ if (!function_exists('bdContract')) {
  * Verifica a existencia da interface
  */
 if (!function_exists('bdInterfaceClass')) {
+
+    /**
+     * @param string $className
+     */
     function bdInterfaceClass($className, $module = null, $version = 'v1', $abort = true)
     {
         return bdInterfaceExists('Interfaces', $className.'Interface', $module, $version, $abort);

@@ -18,10 +18,10 @@ trait UpdateTrait
         }
 
         $response = $this->curlHelper
-                         ->setPosFixUrl('/'.$flushedMockArray['id'])
-                         ->put($flushedMockArray)
-                         ->send()
-                         ->getResponse();
+                            ->setPosFixUrl('/'.$flushedMockArray['id'])
+                            ->put($flushedMockArray)
+                            ->send()
+                            ->getResponse();
 
         $this->assertEquals(200, $response['code']);
 

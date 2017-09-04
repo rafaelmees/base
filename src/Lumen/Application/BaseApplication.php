@@ -42,7 +42,7 @@ abstract class BaseApplication extends Application
     }
 
     /**
-     * @return Bludata\Lumen\Application\BaseApplication
+     * @return BaseApplication
      */
     public function resource($descriptionGroup, $prefix, $controller, array $except = [], Closure $routes = null)
     {
