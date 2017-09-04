@@ -25,14 +25,14 @@ interface JWTInterface
      *
      * @param string $token
      *
-     * @return Lcobucci\JWT\Token
+     * @return Token|null
      */
     public function decodeToken($token);
 
     /**
      * Verify is validate token in signature.
      *
-     * @param Lcobucci\JWT\Token $token
+     * @param Token $token
      *
      * @return bool
      */

@@ -14,7 +14,7 @@ trait ReadTrait
         $this->assertGreaterThan(0, count($findAll));
         $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $findAll[0]);
 
-        $filter = array_values(array_filter($findAll, function ($obj) use ($entity) {
+        $filter = array_values(array_filter($findAll, function($obj) use ($entity) {
             return $obj->getId() == $entity->getId();
         }));
 

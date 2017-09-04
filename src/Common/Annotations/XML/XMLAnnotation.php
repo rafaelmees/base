@@ -23,7 +23,7 @@ abstract class XMLAnnotation
     }
 
     /**
-     * @return Convert to string passing value
+     * @return string to string passing value
      */
     public function toString($value = null)
     {
@@ -39,7 +39,7 @@ abstract class XMLAnnotation
     }
 
     /**
-     * @return Convert to string
+     * @return string to string
      */
     public function __toString()
     {

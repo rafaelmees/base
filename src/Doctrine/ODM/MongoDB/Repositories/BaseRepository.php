@@ -34,6 +34,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         return $this;
     }
 
+    /**
+     * @return string
+     */
     abstract public function getMessageNotFound();
 
     public function validate(BaseEntityInterface $entity)
@@ -62,6 +65,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         return parent::getClassMetadata();
     }
 
+    /**
+     * @return string|null
+     */
     public function getEntityName()
     {
         return parent::getDocumentName();
@@ -101,6 +107,9 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
         return $entity;
     }
 
+    /**
+     * @return BaseEntityInterface
+     */
     public function find($id, $abort = true)
     {
         return is_object($id) ? $id : $this->findOneBy(['id' => $id], $abort);
@@ -173,7 +182,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
+     * @param BaseEntityInterface $entity
      *
      * @return self
      */
@@ -185,7 +194,7 @@ abstract class BaseRepository extends DocumentRepository implements BaseReposito
     }
 
     /**
-     * @param Bludata\Doctrine\Common\Interfaces\BaseEntityInterface $entity
+     * @param BaseEntityInterface $entity
      *
      * @return self
      */

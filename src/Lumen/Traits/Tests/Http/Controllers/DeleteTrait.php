@@ -9,10 +9,10 @@ trait DeleteTrait
         $entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper
-                         ->setPosFixUrl('/'.$entity->getId())
-                         ->delete()
-                         ->send()
-                         ->getResponse();
+                            ->setPosFixUrl('/'.$entity->getId())
+                            ->delete()
+                            ->send()
+                            ->getResponse();
 
         $this->assertEquals(200, $response['code']);
 

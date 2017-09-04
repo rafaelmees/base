@@ -9,8 +9,8 @@ trait DeleteTrait
     public function destroy($id)
     {
         $entity = $this->mainService
-                       ->remove($id)
-                       ->flush();
+                        ->remove($id)
+                        ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayDestroy));
     }
@@ -19,8 +19,8 @@ trait DeleteTrait
     {
         return response()->json(
             $this->mainService
-                 ->findAllDestroyed()
-                 ->toArray()
+                    ->findAllDestroyed()
+                    ->toArray()
         );
     }
 
@@ -28,9 +28,9 @@ trait DeleteTrait
     {
         return response()->json(
             $this->mainService
-                 ->restoreDestroyed($id)
-                 ->flush()
-                 ->toArray()
+                    ->restoreDestroyed($id)
+                    ->flush()
+                    ->toArray()
         );
     }
 }

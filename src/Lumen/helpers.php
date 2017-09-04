@@ -4,6 +4,10 @@
  * Get Enviorment variable.
  */
 if (!function_exists('env')) {
+
+    /**
+     * @param string $key
+     */
     function env($key, $defaultValue = '')
     {
         $env = getenv($key);
@@ -19,6 +23,10 @@ if (!function_exists('env')) {
  * Register a entierly directory of annotations
  */
 if (!function_exists('register_annotation_dir')) {
+
+    /**
+     * @param string $dir
+     */
     function register_annotation_dir($dir)
     {
         if (!is_dir($dir)) {
@@ -39,6 +47,10 @@ if (!function_exists('register_annotation_dir')) {
  * Register a single file annotation
  */
 if (!function_exists('register_annotation_file')) {
+
+    /**
+     * @param string $file
+     */
     function register_annotation_file($file)
     {
         if (!is_file($file)) {
@@ -55,7 +67,7 @@ if (!function_exists('register_annotation_file')) {
 if (!function_exists('bind_repository_interface')) {
     function bind_repository_interface($repositoryInterface, $repository, $entity)
     {
-        app()->bind($repositoryInterface, function ($app) use ($repository, $entity) {
+        app()->bind($repositoryInterface, function($app) use ($repository, $entity) {
             return new $repository(
                 $app['em'],
                 $app['em']->getClassMetaData($entity)

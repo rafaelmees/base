@@ -168,7 +168,7 @@ class QueryWorker
     }
 
     /**
-     * @return Doctrine\ORM\QueryWorker
+     * @return QueryWorker
      */
     public function setBuilder($builder)
     {
@@ -192,7 +192,7 @@ class QueryWorker
      *
      * @param array $filters
      *
-     * @return Bludata\Doctrine\ORM\Repositories\QueryWorker
+     * @return QueryWorker
      */
     public function withFilters(array $filters = null)
     {
@@ -378,7 +378,6 @@ class QueryWorker
      * Add a "or having" filter.
      *
      * @param string $field
-     * @param string $order
      */
     public function orHaving($field, $operation, $value = null)
     {
@@ -550,7 +549,7 @@ class QueryWorker
     /**
      * Get the classMetadata and alias from the current position in the field.
      *
-     * @return array
+     * @return string
      */
     private function getMetaAndAliases()
     {
@@ -646,6 +645,7 @@ class QueryWorker
      * @param array  $association
      * @param string $alias
      * @param array  $arr
+     * @return mix|null
      */
     private function setManyToManyValuedCondition($association, $alias, $arr)
     {
@@ -704,7 +704,7 @@ class QueryWorker
      * @param $meta
      * @param $value
      *
-     * @return array
+     * @return string
      */
     private function getSubClassFields($meta, $value)
     {
@@ -759,7 +759,7 @@ class QueryWorker
      * Search the field in the associations list.
      *
      * @param $associationsByTargetClass
-     * @param $parentTable
+     * @param string $parentTable
      * @param $value
      *
      * @return string

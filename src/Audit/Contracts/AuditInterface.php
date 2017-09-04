@@ -12,7 +12,7 @@ interface AuditInterface
     /**
      * Get one or more Audit registers.
      *
-     * @param mixed $params
+     * @param string $type
      */
     public function get($key, $id = null, $type = null);
 

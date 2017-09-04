@@ -15,8 +15,8 @@ abstract class BaseRepositoryTest extends BaseTest
         $entity = $this->getMockObject($except);
 
         $this->getRepository()
-             ->save($entity)
-             ->flush($entity);
+                ->save($entity)
+                ->flush($entity);
 
         return $entity;
     }
@@ -87,7 +87,7 @@ abstract class BaseRepositoryTest extends BaseTest
         $entity = $this->getFlushedMockObject();
 
         $repository->remove($entity)
-                   ->flush($entity);
+                    ->flush($entity);
 
         $repository->find($entity->getId());
     }

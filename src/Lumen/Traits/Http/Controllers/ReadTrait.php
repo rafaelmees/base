@@ -13,8 +13,8 @@ trait ReadTrait
     {
         return response()->json(
             $this->mainService
-                 ->findAll($this->translateFilters($request))
-                 ->toArray($this->optionsToArrayIndex)
+                    ->findAll($this->translateFilters($request))
+                    ->toArray($this->optionsToArrayIndex)
         );
     }
 
@@ -22,8 +22,8 @@ trait ReadTrait
     {
         return response()->json(
             $this->mainService
-                 ->find($id)
-                 ->toArray($this->optionsToArrayShow)
+                    ->find($id)
+                    ->toArray($this->optionsToArrayShow)
         );
     }
 }
