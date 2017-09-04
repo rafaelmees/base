@@ -26,7 +26,7 @@ class UniqueEntityValidator extends ConstraintValidator
         $message = $constraint->message;
 
         $classAnnotations = $this->getAnnotations('Class', $entityName);
-        $labelAnnotation = array_filter($classAnnotations, function($annotation) {
+        $labelAnnotation = array_filter($classAnnotations, function ($annotation) {
             return $annotation instanceof Label;
         });
 
@@ -48,7 +48,7 @@ class UniqueEntityValidator extends ConstraintValidator
         foreach ($fields as $field) {
             $propertyAnnotations = $this->getAnnotations('Property', $entityName, $field);
 
-            $labelAnnotation = array_filter($propertyAnnotations, function($annotation) {
+            $labelAnnotation = array_filter($propertyAnnotations, function ($annotation) {
                 return $annotation instanceof Label;
             });
 

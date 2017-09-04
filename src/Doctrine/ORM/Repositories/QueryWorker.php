@@ -645,6 +645,7 @@ class QueryWorker
      * @param array  $association
      * @param string $alias
      * @param array  $arr
+     *
      * @return mix|null
      */
     private function setManyToManyValuedCondition($association, $alias, $arr)

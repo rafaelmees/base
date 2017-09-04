@@ -50,7 +50,7 @@ trait SetPropertiesEntityTrait
                 /**
                  * Busca a anotação Doctrine\ORM\Mapping\Column.
                  */
-                $column = array_filter($propertyAnnotations, function($annotation) {
+                $column = array_filter($propertyAnnotations, function ($annotation) {
                     return $annotation instanceof Column;
                 });
 
@@ -62,7 +62,7 @@ trait SetPropertiesEntityTrait
                 /**
                  * Busca a anotação Bludata\Doctrine\Common\Annotations\ToObject.
                  */
-                $toObject = array_filter($propertyAnnotations, function($annotation) {
+                $toObject = array_filter($propertyAnnotations, function ($annotation) {
                     return $annotation instanceof ToObject;
                 });
 
@@ -88,7 +88,7 @@ trait SetPropertiesEntityTrait
                         /**
                          * Busca pelas anotações Doctrine\ORM\Mapping\ManyToOne || Doctrine\ORM\Mapping\OneToMany || Doctrine\ORM\Mapping\ManyToMany.
                          */
-                        $ormMapping = array_filter($propertyAnnotations, function($annotation) {
+                        $ormMapping = array_filter($propertyAnnotations, function ($annotation) {
                             return $annotation instanceof ManyToOne
                                    ||
                                    $annotation instanceof OneToMany
@@ -115,14 +115,14 @@ trait SetPropertiesEntityTrait
                             $reflectionClassTargetEntity = new ReflectionClass($targetEntityName);
                             $targetEntityAnnotations = $annotationReader->getClassAnnotations($reflectionClassTargetEntity);
 
-                            $discriminatorMap = array_filter($targetEntityAnnotations, function($annotation) {
+                            $discriminatorMap = array_filter($targetEntityAnnotations, function ($annotation) {
                                 return $annotation instanceof DiscriminatorMap;
                             });
 
                             if ($discriminatorMap && isset($valueKey[$targetEntity->getDiscrName()])) {
                                 $discriminatorMap = array_shift($discriminatorMap);
 
-                                $targetEntityName = array_filter($discriminatorMap->value, function($valueMap, $keyMap) use ($targetEntity, $valueKey) {
+                                $targetEntityName = array_filter($discriminatorMap->value, function ($valueMap, $keyMap) use ($targetEntity, $valueKey) {
                                     return $keyMap == $valueKey[$targetEntity->getDiscrName()];
                                 }, ARRAY_FILTER_USE_BOTH);
 
@@ -161,7 +161,7 @@ trait SetPropertiesEntityTrait
                                     /*
                                      * Buscamos no array enviado pelo usuário um elemento com o mesmo ID do original.
                                      */
-                                    $data = array_filter($valueKey, function($value, $key) use ($element) {
+                                    $data = array_filter($valueKey, function ($value, $key) use ($element) {
                                         return (is_array($value) && isset($value['id']) && $value['id'] == $element->getId())
                                                ||
                                                (is_numeric($value) && $value == $element->getId());

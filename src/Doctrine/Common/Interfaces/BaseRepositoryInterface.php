@@ -5,7 +5,7 @@ namespace Bludata\Doctrine\Common\Interfaces;
 interface BaseRepositoryInterface
 {
     /**
-     * @return boolean|null
+     * @return bool|null
      */
     public function validate(BaseEntityInterface $entity);
 

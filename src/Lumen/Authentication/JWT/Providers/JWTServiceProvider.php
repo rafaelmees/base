@@ -13,7 +13,7 @@ class JWTServiceProvider extends ServiceProvider
         $this->app->bind('Bludata\Lumen\Authentication\JWT\Interfaces\JWTInterface', 'Bludata\Lumen\Authentication\JWT\Libs\JWT');
 
         $this->app['auth']->viaRequest(
-            'api', function($request) {
+            'api', function ($request) {
                 if ($token = $request->header('authorization')) {
                     $auth = app('Bludata\Lumen\Authentication\JWT\Interfaces\AuthRepositoryInterface');
 

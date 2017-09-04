@@ -18,7 +18,7 @@ trait AttributesTrait
         return array_combine(
             $attributes,
             array_map(
-                function($attr) {
+                function ($attr) {
                     $getMethod = $this->getMethod($attr);
                     if (method_exists($this, $getMethod)) {
                         return $this->$getMethod();
@@ -85,7 +85,7 @@ trait AttributesTrait
 
     public function toArray()
     {
-        return array_map(function($attr) {
+        return array_map(function ($attr) {
             if (method_exists($attr, 'toArray')) {
                 return $attr->toArray();
             }
