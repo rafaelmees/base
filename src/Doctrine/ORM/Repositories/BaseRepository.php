@@ -241,7 +241,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                     $qb = $this->em()->createQueryBuilder();
                     $qb->select('COUNT(t)')
                         ->from($metadata->getName(), 't')
-                        ->andWhere('t.' . $metadata->getAssociationMapping($field)['fieldName'] . ' = ?1')
+                        ->andWhere('t.'.$metadata->getAssociationMapping($field)['fieldName'].' = ?1')
                         ->setParameter(1, $entity->getId());
 
                     //ignore deleted
@@ -253,8 +253,8 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                             $parentMetaData = $this->em()->getClassMetadata($parent);
                             if ($parentMetaData->hasField('deletedAt')) {
                                 $id = $parentMetaData->getIdentifierFieldNames()[0];
-                                $qb->join($parent, 't' . $count, 'WITH', 't' . $count . '.' . $id . ' = t.' . $id)
-                                    ->andWhere('t' . $count . '.deletedAt IS NULL');
+                                $qb->join($parent, 't'.$count, 'WITH', 't'.$count.'.'.$id.' = t.'.$id)
+                                    ->andWhere('t'.$count.'.deletedAt IS NULL');
                                 $count++;
                             }
                         }
@@ -267,7 +267,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
             }
         }
         if (count($entities)) {
-            abort(404, 'Esse registro está sendo utilizado por: ' . implode(', ', $entities) . '.');
+            abort(404, 'Esse registro está sendo utilizado por: '.implode(', ', $entities).'.');
         }
     }
 }
