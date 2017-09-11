@@ -1,4 +1,4 @@
-<p align="center"><img width="75px" src="https://cdn.rawgit.com/Bludata/base/e6da2a03/logo.png"></p>
+<p align="center"><img width="140px" src="https://cdn.rawgit.com/Bludata/base/e6da2a03/logo.png"></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/Bludata/base.svg?branch=master"></a>
