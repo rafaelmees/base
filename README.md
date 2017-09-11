@@ -14,7 +14,7 @@
 
 ### Prerequisites
 
-Install [docker](https://docker.com)
+[Docker](https://docker.com)
 
 ```
 $ curl -sSL https://get.docker.com/ | sh
