@@ -15,7 +15,5 @@ trait CreateTrait
         $this->assertInstanceOf($this->getService()->getMainRepository()->getEntityName(), $entity);
         $this->assertNotNull($entity->getId());
         $this->assertInstanceOf('DateTime', $entity->getCreatedAt());
-
-        return $entity;
     }
 }
