@@ -23,8 +23,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="guid", name="id")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     protected $id;
 
@@ -205,9 +205,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this->getOnlyStore();
     }
 
-    /**
-     * @param string $key
-     */
     final protected function checkOnyExceptInArray($key, array $options = null)
     {
         if (

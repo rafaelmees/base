@@ -10,9 +10,7 @@ abstract class BaseApplication extends Application
     protected $currentUser;
 
     abstract public function getRepositoryInterface($entity);
-
     abstract public function getBaseNamespace();
-
     abstract public function getMainModule($module = null);
 
     public function getCurrentUser()
@@ -42,7 +40,7 @@ abstract class BaseApplication extends Application
     }
 
     /**
-     * @return BaseApplication
+     * @return Bludata\Lumen\Application\BaseApplication
      */
     public function resource($descriptionGroup, $prefix, $controller, array $except = [], Closure $routes = null)
     {
@@ -64,7 +62,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('show', $except)) {
-                $this->get($prefix.'/{id:[0-9]+}', [
+                $this->get($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
                     'as'               => $asPrefix.'.show',
                     'uses'             => $controller.'@show',
                     'description'      => 'Buscar um',
@@ -82,7 +80,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('update', $except)) {
-                $this->put($prefix.'/{id:[0-9]+}', [
+                $this->put($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
                     'as'               => $asPrefix.'.update',
                     'uses'             => $controller.'@update',
                     'description'      => 'Editar',
@@ -91,7 +89,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('destroy', $except)) {
-                $this->delete($prefix.'/{id:[0-9]+}', [
+                $this->delete($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
                     'as'               => $asPrefix.'.destroy',
                     'uses'             => $controller.'@destroy',
                     'description'      => 'Excluir',
@@ -109,7 +107,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('restoreDestroyed', $except)) {
-                $this->post($prefix.'/destroyed/{id:[0-9]+}', [
+                $this->post($prefix.'/destroyed/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
                     'as'               => $asPrefix.'.restoreDestroyed',
                     'uses'             => $controller.'@restoreDestroyed',
                     'description'      => 'Restaurar excluído',

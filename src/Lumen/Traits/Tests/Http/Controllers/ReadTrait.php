@@ -15,7 +15,7 @@ trait ReadTrait
         $data = json_decode($response['data'], true);
 
         $this->assertGreaterThan(0, count($data));
-        $this->assertGreaterThan(0, $data[0]['id']);
+        $this->assertNotNull($data[0]['id']);
     }
 
     public function testShow()

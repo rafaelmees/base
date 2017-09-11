@@ -7,16 +7,16 @@ trait CreateTrait
     public function testStore()
     {
         $response = $this->curlHelper
-                            ->post(
+                         ->post(
                             $this->getServiceTest()->getRepositoryTest()->getMockArray()
-                            )
-                            ->send()
-                            ->getResponse();
+                         )
+                         ->send()
+                         ->getResponse();
 
         $this->assertEquals(200, $response['code']);
 
         $data = json_decode($response['data'], true);
 
-        $this->assertGreaterThan(0, $data['id']);
+        $this->assertNotNull($data['id']);
     }
 }
