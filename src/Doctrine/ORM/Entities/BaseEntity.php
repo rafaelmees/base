@@ -259,7 +259,11 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                         }
                         $array[$key] = $ids;
                     } else {
-                        $array[$key] = $this->$key->getId();
+                        if (method_exists($this->$key, 'getId')) {
+                            $array[$key] = $this->$key->getId();
+                        } else {
+                            $array[$key] = $this->$key;
+                        }
                     }
                 } else {
                     if ($metaDataKey['type'] == 'decimal') {
