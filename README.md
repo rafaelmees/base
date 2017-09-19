@@ -1,7 +1,7 @@
 <p align="center"><img width="140px" src="https://cdn.rawgit.com/Bludata/base/e6da2a03/logo.png"></p>
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/Bludata/base.svg?branch=master"></a>
+<a href="https://travis-ci.org/bludata/base"><img src="https://travis-ci.org/Bludata/base.svg?branch=master"></a>
 <a href="https://styleci.io/repos/102138603"><img src="https://styleci.io/repos/102138603/shield?branch=master" alt="StyleCI"></a>
 <a href="https://styleci.io/repos/102138603"><img src="https://scrutinizer-ci.com/g/Bludata/base/badges/quality-score.png?b=master" alt="StyleCI"></a>
 <a href="https://codecov.io/gh/bludata/base"><img src="https://codecov.io/gh/bludata/base/branch/master/graph/badge.svg" alt="Codecov" /></a>
