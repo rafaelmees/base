@@ -809,6 +809,8 @@ class QueryWorker
      */
     protected function makeExpression($field, $operation, $value = null, $alias = self::DEFAULT_TABLE_ALIAS)
     {
+        $originalValue = $value;
+
         if (!is_array($value)) {
             $value = $this->queryBuilder->expr()->literal($value);
         }
@@ -853,11 +855,9 @@ class QueryWorker
             case 'notin':
                 $expression = $this->queryBuilder->expr()->notIn($field, $value);
                 break;
-            case 'contains':
-                /*
-                 * @todo implementar o metodo contains
-                 */
-                // $expression = $this->queryBuilder->expr()->contains($field, $value);
+            case 'memberof':
+                $expression = ':memberId MEMBER OF '.$field;
+                $this->queryBuilder->setParameter('memberId', $originalValue);
                 break;
             case 'like':
                 $expression = $this->queryBuilder->expr()->like('LOWER('.$field.')', strtolower($value));
