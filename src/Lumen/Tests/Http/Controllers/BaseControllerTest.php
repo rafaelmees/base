@@ -15,8 +15,8 @@ abstract class BaseControllerTest extends BaseTest
 
     abstract public function getBaseRoute();
 
-    public function createApplication()
+    public function createApplication($headers = ['Content-Type: application/json'])
     {
-        $this->curlHelper = new CurlHelper(env('BASE_URL').$this->getBaseRoute(), ['Content-Type: application/json']);
+        $this->curlHelper = new CurlHelper(env('BASE_URL').$this->getBaseRoute(), $headers);
     }
 }
