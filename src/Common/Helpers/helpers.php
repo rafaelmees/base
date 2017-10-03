@@ -277,3 +277,33 @@ if (!function_exists('get_property_annotations')) {
         return $annotations;
     }
 }
+
+/*
+ * Retrieve the relative url from a route
+ */
+if (!function_exists('bdRoute')) {
+    function bdRoute($name, $parameters) {
+        if (! isset(app()->namedRoutes[$name])) {
+            throw new \InvalidArgumentException("Route [{$name}] not defined.");
+        }
+
+        $uri = app()->namedRoutes[$name];
+
+        $parameters = is_array($parameters) ? $parameters : [$parameters];
+
+        foreach ($parameters as $key => $parameter) {
+            if ($parameter instanceof UrlRoutable) {
+                $parameters[$key] = $parameter->getRouteKey();
+            }
+        }
+
+        $uri = preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
+            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+        }, $uri);
+
+        if (! empty($parameters)) {
+            $uri .= '?'.http_build_query($parameters);
+        }
+        return $uri;
+    }
+}
