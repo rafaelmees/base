@@ -282,8 +282,9 @@ if (!function_exists('get_property_annotations')) {
  * Retrieve the relative url from a route
  */
 if (!function_exists('bdRoute')) {
-    function bdRoute($name, $parameters) {
-        if (! isset(app()->namedRoutes[$name])) {
+    function bdRoute($name, $parameters)
+    {
+        if (!isset(app()->namedRoutes[$name])) {
             throw new \InvalidArgumentException("Route [{$name}] not defined.");
         }
 
@@ -301,9 +302,10 @@ if (!function_exists('bdRoute')) {
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
 
-        if (! empty($parameters)) {
+        if (!empty($parameters)) {
             $uri .= '?'.http_build_query($parameters);
         }
+
         return $uri;
     }
 }
