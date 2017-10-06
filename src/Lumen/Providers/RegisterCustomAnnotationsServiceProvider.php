@@ -10,6 +10,7 @@ class RegisterCustomAnnotationsServiceProvider extends ServiceProvider
     {
         register_annotation_dir(__DIR__.'/../../Common/Annotations');
         register_annotation_dir(__DIR__.'/../../Common/Annotations/XML');
+        register_annotation_dir(__DIR__.'/../../Common/Annotations/JSON');
         register_annotation_dir(__DIR__.'/../../Common/Validators');
         register_annotation_dir(__DIR__.'/../../Doctrine/Common/Annotations');
         register_annotation_dir(base_path().'/vendor/symfony/validator/Constraints');
