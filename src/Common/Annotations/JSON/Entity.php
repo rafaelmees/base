@@ -20,6 +20,7 @@ class Entity extends JSONAnnotation
         }
 
         $toString .= '}';
+
         return $toString;
     }
 }

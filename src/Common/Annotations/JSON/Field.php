@@ -52,9 +52,9 @@ class Field extends JSONAnnotation
 
     public function toString($value = null)
     {
-        $toString = '"' . $this->getName() . '":';
+        $toString = '"'.$this->getName().'":';
         if ($this->getType() == 'string') {
-            $toString .= '"' . $value . '"';
+            $toString .= '"'.$value.'"';
         }
         if ($this->getType() == 'integer' || $this->getType() == 'float') {
             if (!is_numeric($value)) {
@@ -63,7 +63,7 @@ class Field extends JSONAnnotation
             $toString .= ($this->getType() == 'float' && is_integer($value)) ? number_format($value, 1) : $value;
         }
         if ($this->getType() == 'boolean') {
-            $toString .= (boolean)$value;
+            $toString .= (bool) $value;
         }
 
         return $toString;
