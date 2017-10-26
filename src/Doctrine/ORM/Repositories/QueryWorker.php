@@ -487,6 +487,7 @@ class QueryWorker
                     if ($meta->isAssociationWithSingleJoinColumn($value)) {
                         //manyToOne
                         $association = $meta->getAssociationMapping($value);
+
                         $this->setLeftJoin(
                             $meta->getAssociationTargetClass($value),
                             $association['joinColumns'][0]['referencedColumnName'],
@@ -510,6 +511,7 @@ class QueryWorker
                             );
                         } else {
                             //oneToMany
+
                             $this->setLeftJoin(
                                 $meta->getAssociationTargetClass($value),
                                 $this->getTargetField($dados['meta'], $meta, $value),
@@ -521,6 +523,7 @@ class QueryWorker
                     } elseif ($meta->isSingleValuedAssociation($value)) {
                         //oneToOne
                         $association = $meta->getAssociationMapping($value);
+
                         $this->setLeftJoin(
                             $meta->getAssociationTargetClass($value),
                             $this->getTargetField($dados['meta'], $meta, $value),
