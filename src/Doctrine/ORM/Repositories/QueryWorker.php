@@ -483,6 +483,7 @@ class QueryWorker
                     } else {
                         $meta = $dados['parentMeta'];
                     }
+
                     if ($meta->isAssociationWithSingleJoinColumn($value)) {
                         //manyToOne
                         $association = $meta->getAssociationMapping($value);
@@ -570,6 +571,7 @@ class QueryWorker
 
         for ($i = 0; $i <= $this->position; $i++) {
             $metaAnterior = $meta;
+
             if ($meta->hasAssociation($arr[$i])) {
                 $class = $meta->getAssociationTargetClass($arr[$i]);
             } elseif (count($meta->subClasses) > 0) {
@@ -577,8 +579,6 @@ class QueryWorker
                 if (!empty($temp['meta'])) {
                     $class = $temp['table'];
                 }
-            } else if (true) {
-
             }
 
             $meta = $this->em->getClassMetadata($class);
