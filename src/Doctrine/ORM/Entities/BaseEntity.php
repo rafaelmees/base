@@ -205,7 +205,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this->getOnlyStore();
     }
 
-    final protected function checkOnyExceptInArray($key, array $options = null)
+    final protected function checkOnlyExceptInArray($key, array $options = null)
     {
         if (
             $options
@@ -230,7 +230,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         foreach ($this->getFillable() as $key) {
             $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
-            if ($this->checkOnyExceptInArray($key, $options)) {
+            if ($this->checkOnlyExceptInArray($key, $options)) {
                 if (is_object($this->$key)) {
                     if ($this->$key instanceof DateTime) {
                         if ($this->$key) {
