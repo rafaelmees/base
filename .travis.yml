@@ -23,7 +23,8 @@ before_install:
   - docker pull mongo
   - docker run -d -p 27017:27017 mongo
   - docker ps -a
-  - if [ "$TRAVIS_PHP_VERSION" != "7.2" ] && [ "$TRAVIS_PHP_VERSION" != "7.1" ]; then pecl install mongodb; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then pecl install mongodb; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then pecl install mongodb; fi
   - phpenv config-add ./travis/php.ini
 
 before_script:
