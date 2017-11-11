@@ -2,14 +2,14 @@
 
 namespace Bludata\Doctrine\ORM\Repositories;
 
+use Bludata\Common\Annotations\Label;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\ORM\Helpers\FilterHelper;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Validator\ValidatorBuilder;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\EntityRepository;
 use ReflectionClass;
-use Bludata\Common\Annotations\Label;
+use Symfony\Component\Validator\ValidatorBuilder;
 
 abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
 {
@@ -263,7 +263,6 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                         }
                     }
                     if ($qb->getQuery()->getSingleScalarResult() > 0) {
-
                         $annotationReader = new AnnotationReader();
                         $reflection = new ReflectionClass(app($metadata->getName()));
                         $classAnnotations = $annotationReader->getClassAnnotations($reflection);
