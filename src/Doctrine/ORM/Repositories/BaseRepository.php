@@ -7,6 +7,9 @@ use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\ORM\Helpers\FilterHelper;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\ValidatorBuilder;
+use Doctrine\Common\Annotations\AnnotationReader;
+use ReflectionClass;
+use Bludata\Common\Annotations\Label;
 
 abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
 {
@@ -121,10 +124,6 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
             $input = json_decode($input, true);
         }
 
-        if (is_numeric($input)) {
-            return $this->find($input);
-        }
-
         if (is_array($input)) {
             if (array_key_exists('id', $input) && $input['id']) {
                 $object = $this->find($input['id']);
@@ -137,7 +136,11 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
             return $object;
         }
 
-        throw new \InvalidArgumentException('O parâmetro $input pode ser um null | string | int | array');
+        if (is_numeric($input) || is_string($input)) {
+            return $this->find($input);
+        }
+
+        throw new \InvalidArgumentException('O parâmetro $input pode ser um null | string | array | numeric');
     }
 
     /**
@@ -260,8 +263,22 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                         }
                     }
                     if ($qb->getQuery()->getSingleScalarResult() > 0) {
-                        //@TODO pegar o label da classe nas annotations
-                        $entities[] = $metadata->getTableName();
+
+                        $annotationReader = new AnnotationReader();
+                        $reflection = new ReflectionClass(app($metadata->getName()));
+                        $classAnnotations = $annotationReader->getClassAnnotations($reflection);
+                        $labelAnnotation = array_filter($classAnnotations, function ($annotation) {
+                            return $annotation instanceof Label;
+                        });
+
+                        $labelTemp = null;
+
+                        if (is_array($labelAnnotation)) {
+                            $labelTemp = array_values($labelAnnotation);
+                        }
+
+                        $labelAnnotation = $labelTemp ? $labelTemp[0] : null;
+                        $entities[] = $labelAnnotation ? $labelAnnotation->value : $metadata->getTableName();
                     }
                 }
             }
