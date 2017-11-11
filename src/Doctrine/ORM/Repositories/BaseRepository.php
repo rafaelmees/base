@@ -2,10 +2,13 @@
 
 namespace Bludata\Doctrine\ORM\Repositories;
 
+use Bludata\Common\Annotations\Label;
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\BaseRepositoryInterface;
 use Bludata\Doctrine\ORM\Helpers\FilterHelper;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityRepository;
+use ReflectionClass;
 use Symfony\Component\Validator\ValidatorBuilder;
 
 abstract class BaseRepository extends EntityRepository implements BaseRepositoryInterface
@@ -260,8 +263,21 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
                         }
                     }
                     if ($qb->getQuery()->getSingleScalarResult() > 0) {
-                        //@TODO pegar o label da classe nas annotations
-                        $entities[] = $metadata->getTableName();
+                        $annotationReader = new AnnotationReader();
+                        $reflection = new ReflectionClass(app($metadata->getName()));
+                        $classAnnotations = $annotationReader->getClassAnnotations($reflection);
+                        $labelAnnotation = array_filter($classAnnotations, function ($annotation) {
+                            return $annotation instanceof Label;
+                        });
+
+                        $labelTemp = null;
+
+                        if (is_array($labelAnnotation)) {
+                            $labelTemp = array_values($labelAnnotation);
+                        }
+
+                        $labelAnnotation = $labelTemp ? $labelTemp[0] : null;
+                        $entities[] = $labelAnnotation ? $labelAnnotation->value : $metadata->getTableName();
                     }
                 }
             }
