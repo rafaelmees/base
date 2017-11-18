@@ -868,6 +868,9 @@ class QueryWorker
             case 'isinstanceof':
                 $expression = $alias.' INSTANCE OF '.$value;
                 break;
+            case 'notinstanceof':
+                $expression = $alias.' NOT INSTANCE OF '.$value;
+                break;
             case 'between':
                 $expression = $this->queryBuilder->expr()->between($field, $this->queryBuilder->expr()->literal($value[0]), $this->queryBuilder->expr()->literal($value[1]));
                 break;
