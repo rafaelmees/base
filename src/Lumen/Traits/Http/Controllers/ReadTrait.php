@@ -18,6 +18,18 @@ trait ReadTrait
         );
     }
 
+    public function count(Request $request)
+    {
+        return response()->json([
+            'count' => (int) $this->mainService
+                            ->findAll($this->translateFilters($request))
+                            ->getBuilder()
+                            ->select('COUNT(t) AS c')
+                            ->getQuery()
+                            ->getOneOrNullResult()['c']
+        ]);
+    }
+
     public function show($id)
     {
         return response()->json(

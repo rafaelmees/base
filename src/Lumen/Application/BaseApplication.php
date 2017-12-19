@@ -61,6 +61,12 @@ abstract class BaseApplication extends Application
                     'description'      => 'Buscar todos',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
+                $this->get($prefix.'/count', [
+                    'as'               => $asPrefix.'.count',
+                    'uses'             => $controller.'@count',
+                    'description'      => 'Retorna a quantidade total de registros',
+                    'descriptionGroup' => $descriptionGroup,
+                ]);
             }
 
             if (!in_array('show', $except)) {
