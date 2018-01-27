@@ -70,7 +70,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('show', $except)) {
-                $this->get($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
+                $this->get($prefix.'/{id}', [
                     'as'               => $asPrefix.'.show',
                     'uses'             => $controller.'@show',
                     'description'      => 'Buscar um',
@@ -88,7 +88,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('update', $except)) {
-                $this->put($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
+                $this->put($prefix.'/{id}', [
                     'as'               => $asPrefix.'.update',
                     'uses'             => $controller.'@update',
                     'description'      => 'Editar',
@@ -97,7 +97,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('destroy', $except)) {
-                $this->delete($prefix.'/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
+                $this->delete($prefix.'/{id}', [
                     'as'               => $asPrefix.'.destroy',
                     'uses'             => $controller.'@destroy',
                     'description'      => 'Excluir',
@@ -115,7 +115,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('restoreDestroyed', $except)) {
-                $this->post($prefix.'/destroyed/{id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}', [
+                $this->post($prefix.'/destroyed/{id}', [
                     'as'               => $asPrefix.'.restoreDestroyed',
                     'uses'             => $controller.'@restoreDestroyed',
                     'description'      => 'Restaurar excluído',
