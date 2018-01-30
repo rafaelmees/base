@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 trait ReadTrait
 {
-    protected $optionsToArrayIndex;
-    protected $optionsToArrayShow;
+    protected $optionsToArrayIndex = [];
+    protected $optionsToArrayShow = [];
 
     public function index(Request $request)
     {
