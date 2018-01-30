@@ -14,7 +14,7 @@ trait ReadTrait
         return response()->json(
             $this->mainService
                     ->findAll($this->translateFilters($request))
-                    ->toArray($this->optionsToArrayIndex)
+                    ->toArray($this->getToArray($request, $this->optionsToArrayIndex))
         );
     }
 
@@ -35,7 +35,7 @@ trait ReadTrait
         return response()->json(
             $this->mainService
                     ->find($id)
-                    ->toArray($this->optionsToArrayShow)
+                    ->toArray($this->getToArray($request, $this->optionsToArrayShow))
         );
     }
 }

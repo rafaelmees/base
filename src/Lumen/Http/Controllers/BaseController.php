@@ -34,4 +34,15 @@ abstract class BaseController extends Controller
     {
         return array_intersect_key($allInputs, array_flip($only));
     }
+
+    public function getToArray(Request $request, array $default = [])
+    {
+        if ($request->has('toArray')) {
+            if ($toArray = json_decode(base64_decode($request->get('toArray')), true)) {
+                $default = $toArray;
+            }
+        }
+
+        return $default;
+    }
 }
