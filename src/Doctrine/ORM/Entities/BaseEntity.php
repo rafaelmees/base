@@ -228,7 +228,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         $array = [];
 
         foreach ($this->getFillable() as $key) {
-            $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+            $metaDataKey    = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+            $optionsToArray = 'toArray'.ucfirst($key);
 
             if ($this->checkOnyExceptInArray($key, $options)) {
                 if (is_object($this->$key)) {
@@ -255,12 +256,12 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                     } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
                         $ids = [];
                         foreach ($this->$key->getValues() as $item) {
-                            $ids[] = $item->getId();
+                            $ids[] = isset($options[$optionsToArray]) ? $item->toArray($options[$optionsToArray]) : $item->getId();
                         }
                         $array[$key] = $ids;
                     } else {
                         if (method_exists($this->$key, 'getId')) {
-                            $array[$key] = $this->$key->getId();
+                            $array[$key] = isset($options[$optionsToArray]) ? $this->$key->toArray($options[$optionsToArray]) : $this->$key->getId();
                         } else {
                             $array[$key] = $this->$key;
                         }
