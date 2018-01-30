@@ -30,7 +30,7 @@ trait ReadTrait
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         return response()->json(
             $this->mainService
