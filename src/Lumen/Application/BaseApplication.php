@@ -9,6 +9,8 @@ abstract class BaseApplication extends Application
 {
     protected $currentUser;
 
+    protected $regexIdParamRoutes = ':[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+
     abstract public function getRepositoryInterface($entity);
 
     abstract public function getBaseNamespace();
@@ -70,7 +72,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('show', $except)) {
-                $this->get($prefix.'/{id}', [
+                $this->get($prefix.'/{id'.$this->regexIdParamRoutes.'}', [
                     'as'               => $asPrefix.'.show',
                     'uses'             => $controller.'@show',
                     'description'      => 'Buscar um',
@@ -88,7 +90,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('update', $except)) {
-                $this->put($prefix.'/{id}', [
+                $this->put($prefix.'/{id'.$this->regexIdParamRoutes.'}', [
                     'as'               => $asPrefix.'.update',
                     'uses'             => $controller.'@update',
                     'description'      => 'Editar',
@@ -97,7 +99,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('destroy', $except)) {
-                $this->delete($prefix.'/{id}', [
+                $this->delete($prefix.'/{id'.$this->regexIdParamRoutes.'}', [
                     'as'               => $asPrefix.'.destroy',
                     'uses'             => $controller.'@destroy',
                     'description'      => 'Excluir',
@@ -115,7 +117,7 @@ abstract class BaseApplication extends Application
             }
 
             if (!in_array('restoreDestroyed', $except)) {
-                $this->post($prefix.'/destroyed/{id}', [
+                $this->post($prefix.'/destroyed/{id'.$this->regexIdParamRoutes.'}', [
                     'as'               => $asPrefix.'.restoreDestroyed',
                     'uses'             => $controller.'@restoreDestroyed',
                     'description'      => 'Restaurar excluído',
