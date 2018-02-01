@@ -688,7 +688,7 @@ class QueryWorker
     {
         $campo = $this->getFullFieldName($value, $alias);
 
-        if ($meta->isSingleValuedAssociation($value)) {
+        if ($meta->isSingleValuedAssociation($value) && $value != $alias) {
             $targetField = $meta->getAssociationMapping($value)['joinColumns'][0]['referencedColumnName'];
             $alias = $alias == self::DEFAULT_TABLE_ALIAS ? substr($campo, strpos($campo, '.') + 1) : $alias.'_'.$targetField;
             $campo = 'IDENTITY('.$campo.') '.$alias;
