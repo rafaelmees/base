@@ -235,7 +235,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     /**
      * @param string $key
      */
-    final protected function checkOnyExceptInArray($key, array $options = null)
+    final protected function checkOnlyExceptInArray($key, array $options = null)
     {
         if (
             $options
@@ -258,7 +258,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         $array = [];
 
         foreach ($this->getFillable() as $key) {
-            if ($this->checkOnyExceptInArray($key, $options)) {
+            if ($this->checkOnlyExceptInArray($key, $options)) {
                 if (is_object($this->$key) && $this->$key instanceof \DateTime || $this->$key instanceof \MongoTimestamp) {
                     $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
 
