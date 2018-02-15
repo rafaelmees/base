@@ -228,7 +228,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         $array = [];
 
         foreach ($this->getFillable() as $key) {
-            $metaDataKey    = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
+            $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
             $optionsToArray = 'toArray'.ucfirst($key);
 
             if ($this->checkOnlyExceptInArray($key, $options)) {

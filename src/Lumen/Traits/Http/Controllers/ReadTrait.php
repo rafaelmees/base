@@ -26,7 +26,7 @@ trait ReadTrait
                             ->getBuilder()
                             ->select('COUNT(t) AS c')
                             ->getQuery()
-                            ->getOneOrNullResult()['c']
+                            ->getOneOrNullResult()['c'],
         ]);
     }
 
