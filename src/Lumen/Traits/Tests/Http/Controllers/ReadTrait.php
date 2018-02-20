@@ -22,7 +22,7 @@ trait ReadTrait
 
     public function testCount(BaseEntityInterface $entity = null)
     {
-        $entity =  $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->setPosFixUrl('/count')->send()->getResponse();
 
