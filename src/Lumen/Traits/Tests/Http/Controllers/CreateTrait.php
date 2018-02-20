@@ -2,14 +2,15 @@
 
 namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait CreateTrait
 {
-    public function testStore()
+    public function testStore(BaseEntityInterface $entity = null)
     {
+        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getMockObject();
         $response = $this->curlHelper
-                         ->post(
-                            $this->getServiceTest()->getRepositoryTest()->getMockArray()
-                         )
+                         ->post($entity->toArray())
                          ->send()
                          ->getResponse();
 

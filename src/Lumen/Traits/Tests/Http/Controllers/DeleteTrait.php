@@ -2,11 +2,13 @@
 
 namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait DeleteTrait
 {
-    public function testDestroy()
+    public function testDestroy(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper
                             ->setPosFixUrl('/'.$entity->getId())

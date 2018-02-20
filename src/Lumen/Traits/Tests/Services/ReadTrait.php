@@ -2,11 +2,15 @@
 
 namespace Bludata\Lumen\Traits\Tests\Services;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait ReadTrait
 {
-    public function testFindAll()
+    public function testFindAll(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity
+                    ? $entity
+                    : $this->getRepositoryTest()->getFlushedMockObject();
 
         $findAll = $this->getService()->findAll()->getResult();
 
@@ -20,9 +24,11 @@ trait ReadTrait
         $this->assertEquals($filter[0]->getId(), $entity->getId());
     }
 
-    public function testFind()
+    public function testFind(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity
+                    ? $entity
+                    : $this->getRepositoryTest()->getFlushedMockObject();
 
         $find = $this->getService()->find($entity->getId());
 

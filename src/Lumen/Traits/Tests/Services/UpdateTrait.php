@@ -2,11 +2,15 @@
 
 namespace Bludata\Lumen\Traits\Tests\Services;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait UpdateTrait
 {
-    public function testUpdate()
+    public function testUpdate(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity
+                    ? $entity
+                    : $this->getRepositoryTest()->getFlushedMockObject();
 
         $flushedMockArray = $entity->toArray();
         $mockArray = $this->getRepositoryTest()->getMockArray();

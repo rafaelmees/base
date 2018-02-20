@@ -2,11 +2,15 @@
 
 namespace Bludata\Lumen\Traits\Tests\Services;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait DeleteTrait
 {
-    public function testRemove()
+    public function testRemove(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity
+                    ? $entity
+                    : $this->getRepositoryTest()->getFlushedMockObject();
 
         $entityRemoved = $this->getService()
                 ->remove($entity->getId())

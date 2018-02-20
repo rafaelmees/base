@@ -2,11 +2,13 @@
 
 namespace Bludata\Lumen\Traits\Tests\Http\Controllers;
 
+use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
+
 trait ReadTrait
 {
-    public function testIndex()
+    public function testIndex(BaseEntityInterface $entity = null)
     {
-        $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->send()->getResponse();
 
@@ -18,9 +20,9 @@ trait ReadTrait
         $this->assertNotNull($data[0]['id']);
     }
 
-    public function testCount()
+    public function testCount(BaseEntityInterface $entity = null)
     {
-        $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity =  $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->setPosFixUrl('/count')->send()->getResponse();
 
@@ -32,9 +34,9 @@ trait ReadTrait
         $this->assertGreaterThan(0, $data['count']);
     }
 
-    public function testShow()
+    public function testShow(BaseEntityInterface $entity = null)
     {
-        $entity = $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->setPosFixUrl('/'.$entity->getId())->send()->getResponse();
 
