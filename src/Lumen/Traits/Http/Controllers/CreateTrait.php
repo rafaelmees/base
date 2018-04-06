@@ -10,6 +10,8 @@ trait CreateTrait
 
     public function store(Request $request)
     {
+        $this->defaultFilters($request);
+
         $entity = $this->mainService
                         ->store(
                                 $this->filterRequest(

@@ -2,6 +2,7 @@
 
 namespace Bludata\Lumen\Http\Controllers;
 
+use EntityManager;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
 
@@ -44,5 +45,22 @@ abstract class BaseController extends Controller
         }
 
         return $default;
+    }
+
+    public function defaultFilters(Request $request)
+    {
+        if ($request->has('defaultFilters') && $filters = json_decode(base64_decode($request->get('defaultFilters')), true)) {
+            foreach ($filters as $filter => $enable) {
+                if ($enable) {
+                    if (!EntityManager::getFilters()->isEnabled($filter)) {
+                        EntityManager::getFilters()->enable($filter);
+                    }
+                } else {
+                    if (EntityManager::getFilters()->isEnabled($filter)) {
+                        EntityManager::getFilters()->disable($filter);
+                    }
+                }
+            }
+        }
     }
 }

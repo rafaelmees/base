@@ -8,6 +8,8 @@ trait DeleteTrait
 
     public function destroy($id)
     {
+        $this->defaultFilters($request);
+
         $entity = $this->mainService
                         ->remove($id)
                         ->flush();
@@ -17,6 +19,8 @@ trait DeleteTrait
 
     public function destroyed()
     {
+        $this->defaultFilters($request);
+
         return response()->json(
             $this->mainService
                     ->findAllDestroyed()
@@ -26,6 +30,8 @@ trait DeleteTrait
 
     public function restoreDestroyed($id)
     {
+        $this->defaultFilters($request);
+
         return response()->json(
             $this->mainService
                     ->restoreDestroyed($id)

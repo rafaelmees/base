@@ -11,6 +11,8 @@ trait ReadTrait
 
     public function index(Request $request)
     {
+        $this->defaultFilters($request);
+
         return response()->json(
             $this->mainService
                     ->findAll($this->translateFilters($request))
@@ -20,6 +22,8 @@ trait ReadTrait
 
     public function count(Request $request)
     {
+        $this->defaultFilters($request);
+
         return response()->json([
             'count' => (int) $this->mainService
                             ->findAll($this->translateFilters($request))
@@ -32,6 +36,8 @@ trait ReadTrait
 
     public function show(Request $request, $id)
     {
+        $this->defaultFilters($request);
+
         return response()->json(
             $this->mainService
                     ->find($id)

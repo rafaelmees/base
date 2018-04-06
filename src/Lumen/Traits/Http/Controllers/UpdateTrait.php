@@ -10,6 +10,8 @@ trait UpdateTrait
 
     public function update(Request $request, $id)
     {
+        $this->defaultFilters($request);
+
         $entity = $this->mainService
                         ->update(
                             $id,
