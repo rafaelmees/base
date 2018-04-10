@@ -2,11 +2,13 @@
 
 namespace Bludata\Lumen\Traits\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 trait DeleteTrait
 {
     protected $optionsToArrayDestroy;
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $this->defaultFilters($request);
 
@@ -17,7 +19,7 @@ trait DeleteTrait
         return response()->json($entity->toArray($this->optionsToArrayDestroy));
     }
 
-    public function destroyed()
+    public function destroyed(Request $request)
     {
         $this->defaultFilters($request);
 
@@ -28,7 +30,7 @@ trait DeleteTrait
         );
     }
 
-    public function restoreDestroyed($id)
+    public function restoreDestroyed(Request $request, $id)
     {
         $this->defaultFilters($request);
 

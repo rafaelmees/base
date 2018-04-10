@@ -51,14 +51,30 @@ abstract class BaseController extends Controller
     {
         if ($request->has('defaultFilters') && $filters = json_decode(base64_decode($request->get('defaultFilters')), true)) {
             foreach ($filters as $filter => $enable) {
+                $classFilter = EntityManager::getFilters()->getFilter($filter);
+
+                $abort = false;
+
                 if ($enable) {
+                    if (method_exists($classFilter, 'canEnnable') && !$classFilter->canEnnable()) {
+                        $abort = "Você não tem permissão para habilitar o filtro '{$filter}'.";
+                    }
+
                     if (!EntityManager::getFilters()->isEnabled($filter)) {
                         EntityManager::getFilters()->enable($filter);
                     }
                 } else {
+                    if (method_exists($classFilter, 'canDisabled') && !$classFilter->canDisabled()) {
+                        $abort = "Você não tem permissão para desabilitar o filtro '{$filter}'.";
+                    }
+
                     if (EntityManager::getFilters()->isEnabled($filter)) {
                         EntityManager::getFilters()->disable($filter);
                     }
+                }
+
+                if ($abort) {
+                    abort(400, $abort);
                 }
             }
         }
