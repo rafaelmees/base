@@ -22,7 +22,7 @@ trait UpdateTrait
                      ->getOnlyUpdate()
             )
         );
-        
+
         $this->mainRepository
              ->preSave($entity)
              ->save($entity)
