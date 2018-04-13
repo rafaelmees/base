@@ -12,9 +12,9 @@ trait DeleteTrait
     {
         $this->defaultFilters($request);
 
-        $entity = $this->mainService
-                        ->remove($id)
-                        ->flush();
+        $entity = $this->mainRepository
+                       ->find($id)
+                       ->remove();
 
         return response()->json($entity->toArray($this->optionsToArrayDestroy));
     }
@@ -24,8 +24,8 @@ trait DeleteTrait
         $this->defaultFilters($request);
 
         return response()->json(
-            $this->mainService
-                    ->findAllDestroyed()
+            $this->mainRepository
+                    ->findAllRemoved()
                     ->toArray()
         );
     }
@@ -35,10 +35,11 @@ trait DeleteTrait
         $this->defaultFilters($request);
 
         return response()->json(
-            $this->mainService
-                    ->restoreDestroyed($id)
-                    ->flush()
-                    ->toArray()
+            $this->mainRepository
+                 ->findRemoved($id)
+                 ->restoreRemoved()
+                 ->flush()
+                 ->toArray()
         );
     }
 }

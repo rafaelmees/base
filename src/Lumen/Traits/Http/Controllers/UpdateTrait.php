@@ -12,18 +12,21 @@ trait UpdateTrait
     {
         $this->defaultFilters($request);
 
-        $entity = $this->mainService
-                        ->update(
-                            $id,
-                            $this->filterRequest(
-                                $request->json()->all(),
-                                $this->mainService
-                                        ->getMainRepository()
-                                        ->createEntity()
-                                        ->getOnlyUpdate()
-                            )
-                        )
-                        ->flush();
+        $entity = $this->mainRepository->find($id);
+
+        $entity->setPropertiesEntity(
+            $this->filterRequest(
+                $request->json()->all(),
+                $this->mainRepository
+                     ->createEntity()
+                     ->getOnlyUpdate()
+            )
+        );
+        
+        $this->mainRepository
+             ->preSave($entity)
+             ->save($entity)
+             ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayUpdate));
     }

@@ -8,7 +8,7 @@ trait DeleteTrait
 {
     public function testDestroy(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper
                             ->setPosFixUrl('/'.$entity->getId())

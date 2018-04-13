@@ -12,17 +12,21 @@ trait CreateTrait
     {
         $this->defaultFilters($request);
 
-        $entity = $this->mainService
-                        ->store(
-                                $this->filterRequest(
-                                    $request->json()->all(),
-                                $this->mainService
-                                        ->getMainRepository()
-                                        ->createEntity()
-                                        ->getOnlyStore()
-                            )
-                        )
-                        ->flush();
+        $entity = $this->mainRepository->createEntity();
+
+        $entity->setPropertiesEntity(
+            $this->filterRequest(
+                $request->json()->all(),
+                $this->mainRepository
+                     ->createEntity()
+                     ->getOnlyStore()
+            )
+        );
+
+        $this->mainRepository
+             ->preSave($entity)
+             ->save($entity)
+             ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayStore));
     }

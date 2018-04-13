@@ -14,9 +14,10 @@ trait ReadTrait
         $this->defaultFilters($request);
 
         return response()->json(
-            $this->mainService
-                    ->findAll($this->translateFilters($request))
-                    ->toArray($this->getToArray($request, $this->optionsToArrayIndex))
+            $this->mainRepository
+                 ->findAll()
+                 ->withFilters($this->translateFilters($request))
+                 ->toArray($this->getToArray($request, $this->optionsToArrayIndex))
         );
     }
 
@@ -25,8 +26,9 @@ trait ReadTrait
         $this->defaultFilters($request);
 
         return response()->json([
-            'count' => (int) $this->mainService
-                            ->findAll($this->translateFilters($request))
+            'count' => (int) $this->mainRepository
+                            ->findAll()
+                            ->withFilters($this->translateFilters($request))
                             ->getBuilder()
                             ->select('COUNT(t) AS c')
                             ->getQuery()
@@ -39,7 +41,7 @@ trait ReadTrait
         $this->defaultFilters($request);
 
         return response()->json(
-            $this->mainService
+            $this->mainRepository
                     ->find($id)
                     ->toArray($this->getToArray($request, $this->optionsToArrayShow))
         );

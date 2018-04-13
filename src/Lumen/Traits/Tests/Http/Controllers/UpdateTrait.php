@@ -8,12 +8,12 @@ trait UpdateTrait
 {
     public function testUpdate(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getRepositoryTest()->getFlushedMockObject();
 
         $flushedMockArray = $entity->toArray();
-        $mockArray = $this->getServiceTest()->getRepositoryTest()->getMockArray();
+        $mockArray = $this->getRepositoryTest()->getMockArray();
 
-        foreach ($this->getController()->getMainService()->getMainRepository()->createEntity()->getOnlyUpdate() as $key) {
+        foreach ($this->getController()->getMainRepository()->createEntity()->getOnlyUpdate() as $key) {
             if (is_bool($flushedMockArray[$key])) {
                 $flushedMockArray[$key] = !$flushedMockArray[$key];
             } else {

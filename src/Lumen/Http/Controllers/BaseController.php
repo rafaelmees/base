@@ -9,13 +9,13 @@ use Laravel\Lumen\Routing\Controller;
 abstract class BaseController extends Controller
 {
     /**
-     * @var Bludata\Lumen\Services\BaseService
+     * @var Bludata\Lumen\Repositories\BaseRepositorys
      */
-    protected $mainService;
+    protected $mainRepository;
 
-    public function getMainService()
+    public function getMainRepository()
     {
-        return $this->mainService;
+        return $this->mainRepository;
     }
 
     protected function translateFilters($filters)

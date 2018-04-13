@@ -8,7 +8,7 @@ trait ReadTrait
 {
     public function testIndex(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->send()->getResponse();
 
@@ -22,7 +22,7 @@ trait ReadTrait
 
     public function testCount(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->setPosFixUrl('/count')->send()->getResponse();
 
@@ -36,7 +36,7 @@ trait ReadTrait
 
     public function testShow(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getServiceTest()->getRepositoryTest()->getFlushedMockObject();
+        $entity = $entity ? $entity : $this->getRepositoryTest()->getFlushedMockObject();
 
         $response = $this->curlHelper->setPosFixUrl('/'.$entity->getId())->send()->getResponse();
 

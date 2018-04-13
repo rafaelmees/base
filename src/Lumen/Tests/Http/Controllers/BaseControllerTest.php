@@ -11,7 +11,7 @@ abstract class BaseControllerTest extends BaseTest
 
     abstract public function getController();
 
-    abstract public function getServiceTest();
+    abstract public function getRepositoryTest();
 
     abstract public function getBaseRoute();
 
