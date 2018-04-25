@@ -115,8 +115,8 @@ abstract class BaseApplication extends Application
                     'descriptionGroup' => $descriptionGroup,
                 ]);
                 $this->get($prefix.'/count', [
-                    'as'               => $asPrefix.'.destroyedCount',
-                    'uses'             => $controller.'@destroyedCount',
+                    'as'               => $asPrefix.'.count',
+                    'uses'             => $controller.'@count',
                     'description'      => 'Retorna a quantidade total de registros removidos',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
