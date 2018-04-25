@@ -30,7 +30,7 @@ trait DeleteTrait
         );
     }
 
-    public function count(Request $request)
+    public function destroyedCount(Request $request)
     {
         $this->defaultFilters($request);
 
