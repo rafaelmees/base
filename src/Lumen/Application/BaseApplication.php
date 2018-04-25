@@ -114,6 +114,13 @@ abstract class BaseApplication extends Application
                     'description'      => 'Buscar excluídos',
                     'descriptionGroup' => $descriptionGroup,
                 ]);
+                $this->get($prefix.'/count', [
+                    'as'               => $asPrefix.'.destroyedCount',
+                    'uses'             => $controller.'@destroyedCount',
+                    'description'      => 'Retorna a quantidade total de registros removidos',
+                    'descriptionGroup' => $descriptionGroup,
+                ]);
+
             }
 
             if (!in_array('restoreDestroyed', $except)) {

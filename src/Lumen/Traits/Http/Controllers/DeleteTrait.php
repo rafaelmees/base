@@ -30,6 +30,20 @@ trait DeleteTrait
         );
     }
 
+    public function count(Request $request)
+    {
+        $this->defaultFilters($request);
+
+        return response()->json([
+            'count' => (int) $this->mainService
+                            ->findAllDestroyed($this->translateFilters($request))
+                            ->getBuilder()
+                            ->select('COUNT(t) AS c')
+                            ->getQuery()
+                            ->getOneOrNullResult()['c'],
+        ]);
+    }
+
     public function restoreDestroyed(Request $request, $id)
     {
         $this->defaultFilters($request);
