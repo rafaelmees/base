@@ -14,7 +14,8 @@ trait DeleteTrait
 
         $entity = $this->mainRepository
                        ->find($id)
-                       ->remove();
+                       ->remove()
+                       ->flush();
 
         return response()->json($entity->toArray($this->optionsToArrayDestroy));
     }
@@ -28,6 +29,20 @@ trait DeleteTrait
                     ->findAllRemoved()
                     ->toArray()
         );
+    }
+
+    public function destroyedCount(Request $request)
+    {
+        $this->defaultFilters($request);
+        
+        return response()->json([
+            'count' => (int) $this->mainRepository
+                            ->findAllRemoved($this->translateFilters($request))
+                            ->getBuilder()
+                            ->select('COUNT(t) AS c')
+                            ->getQuery()
+                            ->getOneOrNullResult()['c'],
+        ]);
     }
 
     public function restoreDestroyed(Request $request, $id)
