@@ -22,7 +22,7 @@ abstract class BaseController extends Controller
     {
         if ($filters instanceof Request) {
             if ($filters->has('filters')) {
-                $filters = json_decode(base64_decode($filters->input('filters')), true);
+                $filters = json_decode(base64_decode(str_replace(' ', '+', $filters->input('filters'))), true);
             } else {
                 $filters = [];
             }
