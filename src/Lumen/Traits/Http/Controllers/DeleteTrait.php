@@ -34,7 +34,7 @@ trait DeleteTrait
     public function destroyedCount(Request $request)
     {
         $this->defaultFilters($request);
-        
+
         return response()->json([
             'count' => (int) $this->mainRepository
                             ->findAllRemoved($this->translateFilters($request))
