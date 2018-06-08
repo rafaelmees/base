@@ -8,9 +8,9 @@ trait CreateTrait
 {
     public function testStore(BaseEntityInterface $entity = null)
     {
-        $entity = $entity ? $entity : $this->getRepositoryTest()->getMockObject();
+        $entityArray = $entity ? $entity->toArray() : $this->getRepositoryTest()->getMockArray();
         $response = $this->curlHelper
-                         ->post($entity->toArray())
+                         ->post($entityArray)
                          ->send()
                          ->getResponse();
 
