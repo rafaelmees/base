@@ -28,12 +28,12 @@ class JWT implements JWTInterface
         $this->builder = new Builder();
 
         $this->builder
-                ->setIssuer(gethostname())
-                ->setId(time(), true);
-        // ->setIssuedAt(time())
-                // ->setNotBefore(time() + 60)
-                // ->setExpiration(time() + 3600)
-                // ->set('teste', 1);
+             ->setIssuer(gethostname())
+             ->setId(time(), true);
+             // ->setIssuedAt(time())
+             // ->setNotBefore(time() + 60)
+             // ->setExpiration(time() + 3600)
+             // ->set('teste', 1);
     }
 
     /**
@@ -56,7 +56,7 @@ class JWT implements JWTInterface
      *
      * @param string $token
      *
-     * @return Token|null
+     * @return Lcobucci\JWT\Token
      */
     public function decodeToken($token)
     {
@@ -76,7 +76,7 @@ class JWT implements JWTInterface
     /**
      * Verify is validate token in signature.
      *
-     * @param Token $token
+     * @param Lcobucci\JWT\Token $token
      *
      * @return bool
      */

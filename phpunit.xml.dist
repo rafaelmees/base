@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.3/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          backupGlobals="false"
-         backupStaticAttributes="false"
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
-         verbose="true"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         syntaxCheck="true">
-    <testsuites>
-        <testsuite name="Test Suite">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <php>
-        <env name="APP_DEBUG" value="true"/>
-        <env name="APP_ENV" value="test"/>
-        <env name="DB_MONGODB_HOST" value="localhost"/>
-    </php>
+         verbose="true">
+    <testsuite>
+        <directory suffix="Test.php">tests</directory>
+    </testsuite>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
 </phpunit>

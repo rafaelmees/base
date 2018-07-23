@@ -1,5 +1,5 @@
 {
-    "name": "bludata/base",
+    "name": "raivieira/base-api-php",
     "type": "library",
     "description": "Pacote com funcionalidades básicas para criar uma API PHP",
     "keywords": ["bludata", "api", "rest"],
@@ -20,7 +20,7 @@
     }],
     "require": {
         "php": ">=5.6.4",
-        "laravel/lumen-framework": "v5.2.*",
+        "laravel/lumen-framework": "5.2.*",
         "lcobucci/jwt": "^3.1",
         "vlucas/phpdotenv": "~2.2",
         "laravel-doctrine/orm": "1.2.*",
@@ -42,8 +42,7 @@
             "Bludata\\": "src/"
         },
         "files": [
-            "./src/Common/Helpers/helpers.php",
-            "./src/Lumen/helpers.php"
+            "./src/Common/Helpers/helpers.php"
         ]
     },
     "autoload-dev": {
@@ -52,9 +51,6 @@
         },
         "files": [
             "./tests/functions.php"
-        ],
-        "classmap": [
-            "./tests/Stubs/"
         ]
     },
     "suggest": {

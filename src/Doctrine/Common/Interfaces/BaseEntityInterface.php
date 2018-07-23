@@ -6,14 +6,9 @@ interface BaseEntityInterface
 {
     public function getId();
 
-    public function save();
+    public function save($flush = false);
 
-    public function remove($abort = true);
-
-    /**
-     * @return null|\Bludata\Doctrine\ORM\Entities\BaseEntity
-     */
-    public function restoreRemoved();
+    public function remove();
 
     public function flush($all = true);
 
@@ -21,30 +16,9 @@ interface BaseEntityInterface
 
     public function forcePersist();
 
-    /**
-     * @return void
-     */
     public function prePersist();
 
-    /**
-     * @return void
-     */
-    public function postPersist();
-
-    /**
-     * @return void
-     */
     public function preUpdate();
-
-    /**
-     * @return void
-     */
-    public function postUpdate();
-
-    /**
-     * @return void
-     */
-    public function preFlush();
 
     /**
      * Retona um array com o nome das propriedade que o cliente pode setar para realizar o store

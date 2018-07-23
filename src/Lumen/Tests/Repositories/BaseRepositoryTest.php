@@ -2,7 +2,6 @@
 
 namespace Bludata\Lumen\Tests\Repositories;
 
-use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Lumen\Tests\BaseTest;
 
 abstract class BaseRepositoryTest extends BaseTest
@@ -16,8 +15,8 @@ abstract class BaseRepositoryTest extends BaseTest
         $entity = $this->getMockObject($except);
 
         $this->getRepository()
-                ->save($entity)
-                ->flush($entity);
+             ->save($entity)
+             ->flush($entity);
 
         return $entity;
     }
@@ -32,9 +31,9 @@ abstract class BaseRepositoryTest extends BaseTest
         return $this->getFlushedMockObject($except)->toArray();
     }
 
-    public function testFindAll(BaseEntityInterface $entity = null)
+    public function testFindAll()
     {
-        $entity = $entity ? $entity : $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
         $findAll = $this->getRepository()->findAll()->getResult();
 
@@ -42,9 +41,9 @@ abstract class BaseRepositoryTest extends BaseTest
         $this->assertInstanceOf($this->getRepository()->getEntityName(), $findAll[0]);
     }
 
-    public function testFindBy(BaseEntityInterface $entity = null)
+    public function testFindBy()
     {
-        $entity = $entity ? $entity : $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
         $repository = $this->getRepository();
 
@@ -54,9 +53,9 @@ abstract class BaseRepositoryTest extends BaseTest
         $this->assertInstanceOf($repository->getEntityName(), $findBy[0]);
     }
 
-    public function testFindOneBy(BaseEntityInterface $entity = null)
+    public function testFindOneBy()
     {
-        $entity = $entity ? $entity : $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
         $repository = $this->getRepository();
 
@@ -66,9 +65,9 @@ abstract class BaseRepositoryTest extends BaseTest
         $this->assertEquals($entity->getId(), $findOneBy->getId());
     }
 
-    public function testFind(BaseEntityInterface $entity = null)
+    public function testFind()
     {
-        $entity = $entity ? $entity : $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
         $repository = $this->getRepository();
 
@@ -81,14 +80,14 @@ abstract class BaseRepositoryTest extends BaseTest
     /**
      * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function testRemove(BaseEntityInterface $entity = null)
+    public function testRemove()
     {
         $repository = $this->getRepository();
 
-        $entity = $entity ? $entity : $this->getFlushedMockObject();
+        $entity = $this->getFlushedMockObject();
 
         $repository->remove($entity)
-                    ->flush($entity);
+                   ->flush($entity);
 
         $repository->find($entity->getId());
     }

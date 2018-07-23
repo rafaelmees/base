@@ -25,7 +25,7 @@ class Format extends FunctionNode
      *
      * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker
      *
-     * @return string
+     * @return void
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {

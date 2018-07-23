@@ -6,4 +6,3 @@ vendor/
 node_modules/
 tests/Doctrine/ODM/MongoDB/Entities/Hydrators/
 tests/Doctrine/ODM/MongoDB/Entities/Proxies/
-.idea/

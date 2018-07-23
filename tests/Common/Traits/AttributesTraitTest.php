@@ -44,7 +44,7 @@ class AttributesTraitTest extends TestCase
     public function testGetWithoutGetMethod()
     {
         $mock = $this->mock(AttributesTrait::class);
-        $mock->get('attr3');
+        $mock->get('attr2');
     }
 
     public function testSetWithGetMethod()
@@ -62,7 +62,7 @@ class AttributesTraitTest extends TestCase
     public function testSetWithoutGetMethod()
     {
         $mock = $this->mock(AttributesTrait::class);
-        $mock->set('attr3', 'something');
+        $mock->set('attr2', 'something');
     }
 
     public function testToArray()

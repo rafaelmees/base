@@ -4,7 +4,7 @@ namespace Bludata\Doctrine\ORM\Entities;
 
 use Bludata\Doctrine\Common\Interfaces\BaseEntityInterface;
 use Bludata\Doctrine\Common\Interfaces\EntityTimestampInterface;
-use Bludata\Doctrine\ORM\Traits\SetPropertiesEntityTrait;
+use Bludata\Doctrine\Common\Traits\SetPropertiesEntityTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,8 +23,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="guid", name="id")
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
@@ -34,7 +34,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="createdAt")
      */
-    protected $createdAt;
+    private $createdAt;
 
     /**
      * @var \DateTime
@@ -42,12 +42,12 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", name="updatedAt")
      */
-    protected $updatedAt;
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true, name="deletedAt")
      */
-    protected $deletedAt;
+    private $deletedAt;
 
     public function getCreatedAt()
     {
@@ -67,8 +67,6 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
-
-        return $this;
     }
 
     public function getDiscr()
@@ -97,17 +95,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function prePersist()
     {
         $this->getRepository()
-            ->preSave($this)
-            ->validate($this);
-    }
-
-    /**
-     * @ORM\PostPersist
-     */
-    public function postPersist()
-    {
-        $this->getRepository()
-            ->postSave($this);
+             ->preSave($this)
+             ->validate($this);
     }
 
     /**
@@ -116,26 +105,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
     public function preUpdate()
     {
         $this->getRepository()
-            ->preSave($this)
-            ->validate($this);
-    }
-
-    /**
-     * @ORM\PostUpdate
-     */
-    public function postUpdate()
-    {
-        $this->getRepository()
-            ->postSave($this);
-    }
-
-    /**
-     * @ORM\PreFlush
-     */
-    public function preFlush()
-    {
-        $this->getRepository()
-            ->preFlush($this);
+             ->preSave($this)
+             ->validate($this);
     }
 
     public function getRepository()
@@ -143,22 +114,14 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return EntityManager::getRepository(get_class($this));
     }
 
-    public function remove($abort = true)
+    public function remove()
     {
-        $this->getRepository()->remove($this, $abort);
+        $this->getRepository()->remove($this);
 
         return $this;
     }
 
-    public function restoreRemoved()
-    {
-        $this->setDeletedAt(null)
-            ->save();
-
-        return $this;
-    }
-
-    public function save()
+    public function save($flush = false)
     {
         $this->getRepository()->save($this);
 
@@ -205,7 +168,7 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
         return $this->getOnlyStore();
     }
 
-    final protected function checkOnlyExceptInArray($key, array $options = null)
+    final protected function checkOnyExceptInArray($key, array $options = null)
     {
         if (
             $options
@@ -229,9 +192,8 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
 
         foreach ($this->getFillable() as $key) {
             $metaDataKey = $classMetadata->hasField($key) ? $classMetadata->getFieldMapping($key) : null;
-            $optionsToArray = 'toArray'.ucfirst($key);
 
-            if ($this->checkOnlyExceptInArray($key, $options)) {
+            if ($this->checkOnyExceptInArray($key, $options)) {
                 if (is_object($this->$key)) {
                     if ($this->$key instanceof DateTime) {
                         if ($this->$key) {
@@ -256,15 +218,11 @@ abstract class BaseEntity implements BaseEntityInterface, EntityTimestampInterfa
                     } elseif ($this->$key instanceof ArrayCollection || $this->$key instanceof PersistentCollection) {
                         $ids = [];
                         foreach ($this->$key->getValues() as $item) {
-                            $ids[] = isset($options[$optionsToArray]) ? $item->toArray($options[$optionsToArray]) : $item->getId();
+                            $ids[] = $item->getId();
                         }
                         $array[$key] = $ids;
                     } else {
-                        if (method_exists($this->$key, 'getId')) {
-                            $array[$key] = isset($options[$optionsToArray]) ? $this->$key->toArray($options[$optionsToArray]) : $this->$key->getId();
-                        } else {
-                            $array[$key] = $this->$key;
-                        }
+                        $array[$key] = $this->$key->getId();
                     }
                 } else {
                     if ($metaDataKey['type'] == 'decimal') {
