@@ -26,11 +26,16 @@ trait ReadTrait
 
         return response()->json([
             'count' => (int) $this->mainService
-                            ->findAll($this->translateFilters($request))
-                            ->getBuilder()
-                            ->select('COUNT(t) AS c')
-                            ->getQuery()
-                            ->getOneOrNullResult()['c'],
+                ->findAll(array_filter(
+                    $this->translateFilters($request),
+                    function ($filter) {
+                        return !in_array($filter['type'], ['select', 'addOrderBy', 'paginate']);
+                    }
+                ))
+                ->getBuilder()
+                ->select('COUNT(t) AS c')
+                ->getQuery()
+                ->getOneOrNullResult()['c'],
         ]);
     }
 
