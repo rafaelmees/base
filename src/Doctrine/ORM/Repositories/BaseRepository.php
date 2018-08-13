@@ -81,18 +81,55 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
         return $this->createQueryBuilder('t');
     }
 
+    public function defaultFilters($queryWorker)
+    {
+        return $queryWorker;
+    }
+
     /**
      * @return QueryWorker
      */
     public function findAll()
     {
-        return $this->createQueryWorker();
+        $queryWorker = $this->createQueryWorker();
+        $this->defaultFilters($queryWorker);
+
+        return $queryWorker;
+    }
+
+    public function findBy(array $filters, ?array $orderBy = null, $limit = null, $offset = null)
+    {
+        $queryWorker = $this->findAll();
+
+        foreach ($filters as $key => $value) {
+            $queryWorker->andWhere($key, '=', $value);
+        }
+
+        if ($orderBy) {
+            foreach ($orderBy as $field => $order) {
+                $queryWorker->addOrderBy($field, $order);
+            }
+        }
+
+        if ($limit) {
+            $queryWorker->paginate($limit);
+        }
+        if ($offset) {
+            $queryWorker->getBuilder()->setFirstResult($offset);
+        }
+
+        return $queryWorker->getResult();
     }
 
     public function findOneBy(array $filters, $abort = true)
     {
-        $entity = parent::findOneBy($filters);
+        $queryWorker = $this->findAll();
 
+        foreach ($filters as $key => $value) {
+            $queryWorker->andWhere($key, '=', $value);
+        }
+
+        $entity = $queryWorker->getOneResult();
         if (!$entity && $abort) {
             abort(404, $this->getMessageNotFound());
         }
@@ -102,7 +139,19 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
 
     public function find($id, $abort = true)
     {
-        return is_object($id) ? $id : $this->findOneBy(['id' => $id], $abort);
+        if (is_object($id)) {
+            return $id;
+        }
+
+        $entity = $this->findAll()
+            ->andWhere('id', '=', $id)
+            ->getOneResult();
+
+        if (!$entity && $abort) {
+            abort(404, $this->getMessageNotFound());
+        }
+
+        return $entity;
     }
 
     /**
@@ -167,7 +216,7 @@ abstract class BaseRepository extends EntityRepository implements BaseRepository
     {
         FilterHelper::disableSoftDeleteableFilter();
 
-        $removed = $this->createQueryWorker()
+        $removed = $this->findAll()
             ->andWhere('deletedAt', 'isnotnull');
 
         return $removed;
